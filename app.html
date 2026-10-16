@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="QuarterReady">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0B2545">
+<meta name="theme-color" content="#081630">
 <meta name="description" content="Keep Making Tax Digital records for self-employment and UK property in your browser: import bank statements, attach receipts, log mileage, and get quarterly totals per HMRC category.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,8 +21,8 @@
 /* Layout: navy app bar, white tab bar with icons, a "next deadline" strip, then one working area at a time. Classic navy and white; gold only for "next". */
 :root{
   --paper:#F4F6FA; --card:#FFFFFF; --ink:#0B2545; --text:#1B2B44; --muted:#5B6B82; --line:#DDE3EC; --line-2:#C7D0DD;
-  --accent:#1D4ED8; --accent-ink:#FFFFFF; --soft:#EAF0FD; --mark:#C9A227; --marksoft:#F7EFD5;
-  --hero:#0B2545; --hero-ink:#FFFFFF; --hero-muted:#A9B8CF; --hero-line:#26446E;
+  --accent:#0B1E3F; --accent-ink:#FFFFFF; --soft:#EEF1F7; --mark:#C9A227; --marksoft:#F7EFD5; --link:#1D4ED8;
+  --hero:#081630; --hero-ink:#FFFFFF; --hero-muted:#A8B6CC; --hero-line:#1F3B6B;
   --ok:#1F7A4D; --oksoft:#E3F3EA; --warn:#9A6400; --bad:#B42318; --badsoft:#FDECEA;
   --serif:"Source Serif 4",Georgia,serif;
   --body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -31,16 +31,16 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#0A1628; --card:#0F1F38; --ink:#EEF2F8; --text:#D5DDEA; --muted:#93A3BA; --line:#1E3150; --line-2:#2A4268;
-  --accent:#6B9BFF; --accent-ink:#071226; --soft:#14284A; --marksoft:#2E2710; --hero:#071226; --hero-line:#1E3150;
+  --accent:#E3C35A; --accent-ink:#1A1405; --soft:#14284A; --link:#E3C35A; --marksoft:#2E2710; --hero:#071226; --hero-line:#1E3150;
   --ok:#5CC48E; --oksoft:#12301F; --warn:#E3B54A; --bad:#F28B82; --badsoft:#3A1D1A; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#0A1628; --card:#0F1F38; --ink:#EEF2F8; --text:#D5DDEA; --muted:#93A3BA; --line:#1E3150; --line-2:#2A4268;
-  --accent:#6B9BFF; --accent-ink:#071226; --soft:#14284A; --marksoft:#2E2710; --hero:#071226; --hero-line:#1E3150;
+  --accent:#E3C35A; --accent-ink:#1A1405; --soft:#14284A; --link:#E3C35A; --marksoft:#2E2710; --hero:#071226; --hero-line:#1E3150;
   --ok:#5CC48E; --oksoft:#12301F; --warn:#E3B54A; --bad:#F28B82; --badsoft:#3A1D1A; --shadow:none; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--text);font-family:var(--body);font-size:16.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
-a{color:var(--accent)}
+a{color:var(--link)}
 :focus-visible{outline:3px solid var(--mark);outline-offset:2px;border-radius:4px}
 header.top{background:var(--hero);color:var(--hero-ink)}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px;flex-wrap:wrap}
@@ -61,7 +61,7 @@ nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs button{flex:none;background:transparent;color:var(--muted);border:0;border-bottom:3px solid transparent;border-radius:0;padding:14px 14px 11px;font:600 .97rem var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
 nav.tabs button svg{width:18px;height:18px;flex:none}
 nav.tabs button:hover{color:var(--ink);background:transparent}
-nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--mark)}
 .lock{font-size:.7rem;font-weight:700;color:var(--warn);background:var(--marksoft);padding:1px 6px;border-radius:99px;margin-left:2px;font-family:var(--body)}
 h1,h2,h3{font-family:var(--serif);color:var(--ink);line-height:1.2;margin:0;text-wrap:balance;font-weight:600}
 h2{font-size:1.4rem}
@@ -84,14 +84,15 @@ form.entry{display:grid;gap:12px}
 button,.btn{font:600 .97rem var(--body);border-radius:10px;padding:10px 16px;border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
 button:hover,.btn:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
 button:disabled{opacity:.45;cursor:not-allowed}
-button.ghost,.btn.ghost{background:transparent;color:var(--accent);border-color:var(--line-2)}
+button.ghost,.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
 button.ghost:hover,.btn.ghost:hover{border-color:var(--accent);background:transparent}
-button.gold,.btn.gold{background:var(--ink);border-color:var(--ink);color:var(--card)}
+button.gold,.btn.gold{background:var(--mark);border-color:var(--mark);color:#1A1405}
+button.gold:hover,.btn.gold:hover{background:#E3C35A;border-color:#E3C35A}
 button.danger{background:transparent;color:var(--bad);border-color:color-mix(in srgb,var(--bad) 50%,transparent)}
-button.link{background:none;border:0;color:var(--accent);padding:2px 4px;font-weight:600}
+button.link{background:none;border:0;color:var(--link);padding:2px 4px;font-weight:600}
 .btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .muted{color:var(--muted);font-size:.92rem;font-weight:400}
-.banner{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--card);border-radius:0 12px 12px 0;padding:12px 16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.banner{border:1px solid var(--line);border-left:4px solid var(--mark);background:var(--card);border-radius:0 12px 12px 0;padding:12px 16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
 .banner.bad{border-left-color:var(--bad);background:var(--badsoft)}
 .upsell{border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:8px;background:var(--soft)}
 .tablebox{overflow-x:auto}
@@ -160,7 +161,7 @@ body{margin:0}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="index.html" title="Back to the QuarterReady website">
-      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#13315C"/><circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="3.6" stroke-dasharray="12.14 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="9" fill="none" stroke="#C9A227" stroke-width="3.6" stroke-dasharray="12.14 44.41" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/></svg>
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect x=".5" y=".5" width="31" height="31" rx="8" fill="#0F2547" stroke="#C9A227" stroke-opacity=".55"/><circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="3.6" stroke-dasharray="12.14 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="9" fill="none" stroke="#C9A227" stroke-width="3.6" stroke-dasharray="12.14 44.41" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/></svg>
       QuarterReady <small>Records</small>
     </a>
     <div class="yearsel">

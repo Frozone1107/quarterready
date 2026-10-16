@@ -6,7 +6,7 @@
 <title>QuarterReady · Making Tax Digital records for sole traders and landlords</title>
 <meta name="google-site-verification" content="6szakVAYHVct2T3IG15Cf6G6Dmr2TTid5tqatXc87DY">
 <meta name="description" content="Check when Making Tax Digital for Income Tax starts for you, then keep your records in a simple app that adds them up for each quarterly update. For UK sole traders and landlords.">
-<meta name="theme-color" content="#0B2545">
+<meta name="theme-color" content="#081630">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -24,162 +24,195 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <script src="rules.js"></script>
+<script>document.documentElement.classList.add("js")</script>
 <style>
+/* Night blue and gold. White is kept for the working surfaces (checker, app preview) and for type. */
 :root{
-  --white:#FFFFFF; --mist:#F4F6FA; --ink:#0B2545; --navy:#0B2545; --navy-2:#13315C; --text:#1B2B44; --muted:#5B6B82;
-  --line:#DDE3EC; --line-2:#C7D0DD; --blue:#1D4ED8; --blue-ink:#FFFFFF; --blue-soft:#EAF0FD; --gold:#C9A227; --gold-soft:#F7EFD5;
-  --ok:#1F7A4D; --warn:#9A6400; --info:#1D4ED8; --card:#FFFFFF;
+  --night:#081630; --night-2:#0C1F40; --night-3:#132B55; --edge:#1F3B6B; --edge-2:#2C4C82;
+  --gold:#C9A227; --gold-2:#E3C35A; --gold-ink:#1A1405; --goldsoft:rgba(201,162,39,.14);
+  --white:#FFFFFF; --t:#E8EDF5; --t2:#A8B6CC; --t3:#7F91AE;
+  /* white surfaces */
+  --card:#FFFFFF; --ink:#0B1E3F; --text:#22314A; --muted:#5B6B82; --line:#DDE3EC; --line-2:#C7D0DD; --mist:#F4F6FA;
+  --ok:#1F7A4D; --warn:#8A5A00; --blue:#0B1E3F;
   --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
   --sans:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
-  color-scheme:light;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --white:#0A1628; --mist:#0E1C33; --ink:#EEF2F8; --text:#D5DDEA; --muted:#93A3BA; --line:#1E3150; --line-2:#2A4268;
-  --blue:#6B9BFF; --blue-ink:#071226; --blue-soft:#14284A; --gold-soft:#2E2710; --ok:#5CC48E; --warn:#E3B54A; --info:#6B9BFF; --card:#0F1F38; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --white:#0A1628; --mist:#0E1C33; --ink:#EEF2F8; --text:#D5DDEA; --muted:#93A3BA; --line:#1E3150; --line-2:#2A4268;
-  --blue:#6B9BFF; --blue-ink:#071226; --blue-soft:#14284A; --gold-soft:#2E2710; --ok:#5CC48E; --warn:#E3B54A; --info:#6B9BFF; --card:#0F1F38; color-scheme:dark}
 *{box-sizing:border-box}
-html{scroll-padding-top:80px}
-body{background:var(--white);color:var(--text);font-family:var(--sans);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-padding-top:80px;scroll-behavior:smooth}
+body{background:var(--night);color:var(--t);font-family:var(--sans);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 .wrap{max-width:1140px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
-a{color:var(--blue);text-underline-offset:3px}
+a{color:var(--gold-2);text-underline-offset:3px}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:4px}
-h1,h2,h3{font-family:var(--serif);color:var(--ink);margin:0;line-height:1.12;text-wrap:balance;font-weight:600}
-h1{font-size:clamp(2.5rem,5.6vw,4.3rem);letter-spacing:-.02em;font-weight:600}
+h1,h2,h3{font-family:var(--serif);color:var(--white);margin:0;line-height:1.12;text-wrap:balance;font-weight:600}
+h1{font-size:clamp(2.6rem,5.8vw,4.5rem);letter-spacing:-.02em}
 h2{font-size:clamp(1.85rem,3.4vw,2.6rem);letter-spacing:-.015em}
-h3{font-size:1.25rem;letter-spacing:-.005em}
+h3{font-size:1.25rem}
 p{margin:0}
-.lead{font-size:clamp(1.08rem,1.5vw,1.25rem);color:var(--muted);max-width:52ch}
-.small{font-size:.92rem;color:var(--muted)}
+.lead{font-size:clamp(1.08rem,1.5vw,1.25rem);color:var(--t2);max-width:52ch}
+.small{font-size:.92rem;color:var(--t2)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.gold{color:var(--gold-2)}
 
 /* buttons */
-.btn{font:600 1rem var(--sans);border-radius:10px;padding:13px 22px;border:1.5px solid var(--blue);background:var(--blue);color:var(--blue-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
-.btn:hover{background:color-mix(in srgb,var(--blue) 86%,#000)}
-.btn.line{background:transparent;color:var(--ink);border-color:var(--line-2)}
-.btn.line:hover{border-color:var(--ink);background:transparent}
-.btn.white{background:#fff;border-color:#fff;color:#0B2545}
-.btn.white:hover{background:#E9EEF6}
-.btn.ghostw{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
-.btn.ghostw:hover{border-color:#fff;background:transparent}
+.btn{font:600 1rem var(--sans);border-radius:10px;padding:13px 22px;border:1.5px solid var(--gold);background:var(--gold);color:var(--gold-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;position:relative;overflow:hidden;transition:background .2s,border-color .2s,color .2s,transform .2s var(--ease),box-shadow .2s}
+.btn:hover{background:var(--gold-2);border-color:var(--gold-2);transform:translateY(-1px);box-shadow:0 10px 26px -12px rgba(201,162,39,.7)}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%)}
+.btn:hover::after{transform:translateX(120%);transition:transform .7s var(--ease)}
+.btn.line{background:transparent;color:var(--white);border-color:rgba(255,255,255,.35)}
+.btn.line:hover{border-color:var(--white);box-shadow:none;background:rgba(255,255,255,.05)}
+.btn.line::after{display:none}
+.btn.navy{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.navy:hover{background:#13315C;border-color:#13315C;box-shadow:0 10px 26px -14px rgba(11,30,63,.7)}
+.btn.lined{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn.lined:hover{border-color:var(--ink);background:transparent;box-shadow:none}
+.btn.lined::after{display:none}
 .btn.sm{padding:9px 16px;font-size:.95rem}
 
 /* nav */
-.nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--white) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
-.nav.scrolled{border-bottom-color:var(--line)}
+.nav{position:sticky;top:0;z-index:40;background:rgba(8,22,48,.72);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+.nav.scrolled{border-bottom-color:var(--edge);background:rgba(8,22,48,.9)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-weight:700;font-size:1.25rem;letter-spacing:-.01em}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);font-family:var(--serif);font-weight:700;font-size:1.25rem}
 .links{display:flex;gap:26px}
-.links a{color:var(--text);text-decoration:none;font-size:.98rem}
-.links a:hover{color:var(--blue)}
+.links a{color:var(--t2);text-decoration:none;font-size:.98rem;position:relative;transition:color .2s}
+.links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.links a:hover{color:var(--white)}
+.links a:hover::after{transform:scaleX(1)}
 @media (max-width:880px){.links{display:none}}
 
 /* hero */
-.hero{padding-block:clamp(40px,7vw,84px) clamp(36px,5vw,56px)}
+.hero{position:relative;padding-block:clamp(40px,7vw,88px) clamp(48px,6vw,80px);overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;z-index:-2;background:radial-gradient(600px 380px at 80% 10%,rgba(201,162,39,.16),transparent 70%),radial-gradient(700px 500px at 10% 0%,rgba(44,76,130,.55),transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1.2px);background-size:28px 28px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 20%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at 50% 20%,#000 20%,transparent 75%)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:end}
 @media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.hero h1 .line2{display:block;color:var(--gold-2)}
 .hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.assure{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:18px;font-size:.95rem;color:var(--muted)}
+.assure{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:18px;font-size:.95rem;color:var(--t2)}
 .assure span{display:inline-flex;gap:8px;align-items:center}
-.assure svg{color:var(--ok);flex:none}
+.assure svg{color:var(--gold);flex:none}
 
 /* tax-year ribbon */
-.year{background:var(--navy);color:#E6ECF5;border-radius:20px;padding:clamp(22px,3.5vw,36px);position:relative;overflow:hidden}
-.year-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
-.year-top h2{color:#fff;font-size:clamp(1.4rem,2.4vw,1.8rem)}
-.year-top p{color:#A9B8CF;font-size:.98rem;margin-top:4px}
-.count{display:flex;gap:10px}
-.count div{min-width:64px;text-align:center;padding:8px 6px;border:1px solid rgba(255,255,255,.16);border-radius:10px}
-.count b{display:block;font-family:var(--serif);font-weight:600;font-size:1.7rem;color:#fff;font-variant-numeric:tabular-nums;line-height:1.1}
-.count span{font-size:.78rem;color:#A9B8CF}
+.year{background:linear-gradient(180deg,var(--night-3),var(--night-2));border:1px solid var(--edge);color:var(--t);border-radius:22px;padding:clamp(22px,3.5vw,36px);position:relative;overflow:hidden;box-shadow:0 40px 80px -50px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06)}
+.year::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
+.year-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:30px}
+.year-top h2{font-size:clamp(1.4rem,2.4vw,1.8rem)}
+.year-top p{color:var(--t2);font-size:.98rem;margin-top:4px}
+.count{display:flex;gap:8px}
+.count div{min-width:62px;text-align:center;padding:8px 6px;border:1px solid var(--edge-2);border-radius:12px;background:rgba(8,22,48,.5)}
+.count b{display:block;font-family:var(--serif);font-weight:600;font-size:1.7rem;color:var(--white);font-variant-numeric:tabular-nums;line-height:1.1}
+.count b.flip{animation:flip .45s var(--ease)}
+@keyframes flip{0%{transform:translateY(-35%);opacity:0}100%{transform:none;opacity:1}}
+.count div:last-child b{color:var(--gold-2)}
+.count span{font-size:.78rem;color:var(--t2)}
 .track{position:relative;height:56px;margin-top:6px}
-.track .q{position:absolute;top:0;height:40px;border-radius:8px;background:#1B3E6E;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;color:#DCE5F2;overflow:hidden;white-space:nowrap}
-.track .q.done{background:#2A5694;color:#fff}
-.track .q.now{background:#fff;color:#0B2545}
-.track .q .fill{position:absolute;inset:0 auto 0 0;background:#2A5694;z-index:0}
+.track .q{position:absolute;top:0;height:40px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid var(--edge);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;color:var(--t2);overflow:hidden;white-space:nowrap}
+.track .q .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#1E3D6E,#2C4C82);width:var(--w,0%);transition:width 1.1s var(--ease) var(--dly,0s)}
+.track .q.done{color:var(--white)}
+.track .q.now{border-color:var(--gold);color:var(--white)}
+.track .q.now .fill{background:linear-gradient(90deg,rgba(201,162,39,.35),rgba(201,162,39,.6))}
 .track .q span{position:relative;z-index:1}
-.track .dl{position:absolute;top:-6px;width:2px;height:52px;background:rgba(255,255,255,.55);transform:translateX(-1px)}
+.track .dl{position:absolute;top:-6px;width:2px;height:52px;background:rgba(255,255,255,.4);transform:translateX(-1px)}
 .track .dl.next{background:var(--gold)}
 .track .dl::after{content:"";position:absolute;bottom:-5px;left:-4px;width:10px;height:10px;border-radius:50%;background:inherit}
-.track .today{position:absolute;top:-14px;bottom:-4px;width:3px;background:var(--gold);border-radius:2px;transform:translateX(-1.5px);z-index:2}
-.track .today i{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.78rem;font-weight:700;color:var(--gold);white-space:nowrap}
-@media (prefers-reduced-motion:no-preference){.track .today{animation:slide 1.1s cubic-bezier(.2,.8,.2,1) both}@keyframes slide{from{left:0!important;opacity:0}}}
-.months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));font-size:.78rem;color:#8EA0BC;margin-top:2px}
-.dlist{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+.track .dl.next::after{animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(201,162,39,.6)}80%,100%{box-shadow:0 0 0 10px rgba(201,162,39,0)}}
+.track .today{position:absolute;top:-14px;bottom:-4px;width:3px;background:var(--gold-2);border-radius:2px;transform:translateX(-1.5px);z-index:2;transition:left 1.4s var(--ease) .2s}
+.track .today i{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.78rem;font-weight:700;color:var(--gold-2);white-space:nowrap}
+.months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));font-size:.78rem;color:var(--t3);margin-top:2px}
+.dlist{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--edge)}
 @media (max-width:720px){.dlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.dlist div{font-size:.92rem;color:#A9B8CF;line-height:1.4}
-.dlist strong{display:block;color:#fff;font-weight:600;font-size:1rem}
-.dlist .next strong{color:var(--gold)}
-.dlist .passed{opacity:.6}
+.dlist div{font-size:.92rem;color:var(--t2);line-height:1.4}
+.dlist strong{display:block;color:var(--white);font-weight:600;font-size:1rem}
+.dlist .next strong{color:var(--gold-2)}
+.dlist .passed{opacity:.55}
 
 /* sections */
-section{padding-block:clamp(64px,8vw,104px)}
-.mist{background:var(--mist);border-block:1px solid var(--line)}
+section{padding-block:clamp(64px,8vw,108px);position:relative}
+.alt{background:var(--night-2);border-block:1px solid var(--edge)}
 .head{max-width:700px;margin-bottom:40px;display:grid;gap:14px}
 .head .lead{max-width:60ch}
 .head.c{margin-inline:auto;text-align:center;justify-items:center}
+.rule{display:block;width:56px;height:2px;background:var(--gold);transform-origin:left}
+.head.c .rule{transform-origin:center}
 
 /* what's changed */
 .news{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:clamp(24px,5vw,64px);align-items:start}
 @media (max-width:860px){.news{grid-template-columns:1fr}}
-.feed{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.feed li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;padding:20px 0;border-bottom:1px solid var(--line)}
+.feed{list-style:none;margin:0;padding:0;border-top:1px solid var(--edge)}
+.feed li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;padding:22px 0;border-bottom:1px solid var(--edge);position:relative}
 @media (max-width:520px){.feed li{grid-template-columns:1fr;gap:4px}}
-.feed time{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
-.feed .tag{display:inline-block;font-size:.8rem;font-weight:600;padding:1px 9px;border-radius:99px;margin-left:8px;vertical-align:2px}
-.feed .tag.up{background:var(--gold-soft);color:var(--warn)}
-.feed .tag.in{background:var(--blue-soft);color:var(--blue)}
-.feed h3{font-size:1.12rem;margin-bottom:4px}
-.feed p{color:var(--muted);font-size:1rem}
-.checked{display:flex;gap:10px;align-items:flex-start;margin-top:22px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:.95rem;color:var(--muted)}
-.checked svg{flex:none;color:var(--ok);margin-top:3px}
+.feed time{font-weight:600;color:var(--gold-2);font-variant-numeric:tabular-nums}
+.feed .tag{display:inline-block;font-family:var(--sans);font-size:.78rem;font-weight:700;padding:1px 9px;border-radius:99px;margin-left:8px;vertical-align:3px}
+.feed .tag.up{background:var(--goldsoft);color:var(--gold-2);border:1px solid rgba(201,162,39,.4)}
+.feed .tag.in{background:rgba(255,255,255,.08);color:var(--t);border:1px solid var(--edge-2)}
+.feed h3{font-size:1.15rem;margin-bottom:4px}
+.feed p{color:var(--t2);font-size:1rem}
+.checked{display:flex;gap:10px;align-items:flex-start;margin-top:22px;padding:14px 16px;border:1px solid var(--edge-2);border-radius:12px;background:rgba(255,255,255,.04);font-size:.95rem;color:var(--t2)}
+.checked svg{flex:none;color:var(--gold);margin-top:3px}
 
 /* steps */
-.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;counter-reset:s;position:relative}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));counter-reset:s;position:relative}
 @media (max-width:860px){.steps{grid-template-columns:1fr}}
 .steps li{padding:0 28px 0 0;display:grid;gap:10px;align-content:start;counter-increment:s;position:relative}
-.steps li::before{content:counter(s);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.2rem;background:var(--navy);color:#fff;position:relative;z-index:1}
-.steps li.ext::before{background:var(--white);color:var(--muted);border:1.5px dashed var(--line-2)}
-.steps li:not(:last-child)::after{content:"";position:absolute;top:22px;left:52px;right:8px;height:2px;background:var(--line)}
-@media (max-width:860px){.steps li{padding:0 0 28px 64px}.steps li::before{position:absolute;left:0;top:0}.steps li:not(:last-child)::after{left:21px;top:52px;bottom:4px;right:auto;width:2px;height:auto}}
-.steps .who{font-size:.88rem;font-weight:600;color:var(--blue)}
-.steps li.ext .who{color:var(--muted)}
-.steps p{color:var(--muted)}
-.why{margin-top:36px;padding:18px 20px;border-left:3px solid var(--gold);background:var(--mist);border-radius:0;color:var(--text);max-width:820px}
+.steps li::before{content:counter(s);width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.2rem;background:var(--gold);color:var(--gold-ink);position:relative;z-index:1;box-shadow:0 0 0 6px var(--night)}
+.steps li.ext::before{background:var(--night);color:var(--t2);border:1.5px dashed var(--edge-2)}
+.steps li:not(:last-child)::after{content:"";position:absolute;top:23px;left:52px;right:8px;height:2px;background:linear-gradient(90deg,var(--gold),var(--edge-2));transform-origin:left;transform:scaleX(var(--draw,1));transition:transform 1s var(--ease) var(--dly,0s)}
+@media (max-width:860px){.steps li{padding:0 0 30px 66px}.steps li::before{position:absolute;left:0;top:0}.steps li:not(:last-child)::after{left:22px;top:54px;bottom:4px;right:auto;width:2px;height:auto;background:linear-gradient(180deg,var(--gold),var(--edge-2));transform-origin:top;transform:scaleY(var(--draw,1))}}
+.steps .who{font-size:.88rem;font-weight:700;color:var(--gold-2)}
+.steps li.ext .who{color:var(--t3)}
+.steps p{color:var(--t2)}
+.why{margin-top:36px;padding:18px 22px;border:1px solid var(--edge);border-left:3px solid var(--gold);background:rgba(255,255,255,.03);color:var(--t);max-width:820px;border-radius:0 12px 12px 0}
+
+/* white working surfaces */
+.white{background:var(--card);color:var(--text);border-radius:18px;border:1px solid rgba(255,255,255,.6);box-shadow:0 40px 80px -50px rgba(0,0,0,.85)}
+.white h1,.white h2,.white h3,.white legend{color:var(--ink)}
+.white{color-scheme:light}
+.white a:not(.btn){color:#1D4ED8}
+.white .btn.lined{color:var(--ink)}
+.white .small{color:var(--muted)}
 
 /* checker */
 .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
 @media (max-width:900px){.grid2{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,30px);min-width:0}
+.panel{padding:clamp(20px,3vw,30px);min-width:0}
 form{display:grid;gap:24px}
 fieldset{border:0;margin:0;padding:0;display:grid;gap:12px;min-width:0}
-legend{font-family:var(--serif);font-weight:600;font-size:1.15rem;color:var(--ink);margin-bottom:8px}
+legend{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin-bottom:8px}
 .yr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding-top:14px;border-top:1px solid var(--line)}
 .yr label{display:grid;gap:6px;font-size:.92rem;color:var(--muted)}
 .yrhead{grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-weight:600;color:var(--ink);font-size:.98rem}
 .yrhead span{font-weight:400;color:var(--muted);font-size:.9rem}
-.money{display:flex;align-items:center;border:1.5px solid var(--line-2);border-radius:10px;background:var(--white);transition:border-color .15s,box-shadow .15s}
-.money:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 15%,transparent)}
+.money{display:flex;align-items:center;border:1.5px solid var(--line-2);border-radius:10px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.money:focus-within{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,162,39,.22)}
 .money b{padding:0 4px 0 12px;color:var(--muted);font-weight:500}
 .money input{border:0;background:transparent;color:var(--ink);font:500 1.05rem var(--sans);padding:11px 10px 11px 0;width:100%;min-width:0;font-variant-numeric:tabular-nums;outline:none}
-.check{display:flex;gap:12px;align-items:flex-start;font-size:1rem}
-.check input{margin-top:5px;accent-color:var(--blue);width:18px;height:18px;flex:none}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:1rem;color:var(--text)}
+.check input{margin-top:5px;accent-color:var(--ink);width:18px;height:18px;flex:none}
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .result{display:grid;gap:16px;grid-template-columns:minmax(0,1fr);min-width:0}
-.stamp{border-radius:16px;padding:26px;display:grid;gap:8px;background:var(--navy);color:#DCE5F2}
-.stamp .label{font-size:.92rem;color:#A9B8CF;display:flex;gap:8px;align-items:center}
-.stamp .label::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--tone,#A9B8CF)}
-.stamp[data-tone="ok"]{--tone:#5CC48E} .stamp[data-tone="warn"]{--tone:var(--gold)} .stamp[data-tone="info"]{--tone:#8FB2FF}
+.stamp{border-radius:18px;padding:26px;display:grid;gap:8px;background:linear-gradient(160deg,var(--night-3),var(--night-2));border:1px solid var(--gold);color:var(--t);position:relative;overflow:hidden}
+.stamp::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(227,195,90,.18) 50%,transparent 65%);transform:translateX(-100%)}
+.stamp.pop::after{animation:sweep 1.1s var(--ease)}
+@keyframes sweep{to{transform:translateX(100%)}}
+.stamp .label{font-size:.92rem;color:var(--t2);display:flex;gap:8px;align-items:center}
+.stamp .label::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--tone,var(--t2))}
+.stamp[data-tone="ok"]{--tone:#5CC48E} .stamp[data-tone="warn"]{--tone:var(--gold-2)} .stamp[data-tone="info"]{--tone:#8FB2FF}
 .stamp .big{font-family:var(--serif);font-size:clamp(1.9rem,3.4vw,2.6rem);font-weight:600;color:#fff;letter-spacing:-.01em;line-height:1.1}
-.stamp.pop{animation:pop .35s ease}
-@keyframes pop{from{opacity:.75}to{opacity:1}}
-.sample{font-size:.9rem;color:var(--warn)}
+.stamp.pop .big{animation:rise .5s var(--ease)}
+@keyframes rise{from{transform:translateY(8px);opacity:.3}to{transform:none;opacity:1}}
+.stamp p{color:var(--t2)}
+.sample{font-size:.9rem;color:var(--gold-2)}
 .qi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.qi div{border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0;background:var(--card)}
-.qi small{display:block;font-size:.82rem;color:var(--muted)}
-.qi strong{font-variant-numeric:tabular-nums;color:var(--ink)}
-.qi .over{border-color:var(--gold);background:var(--gold-soft)}
+.qi div{border:1px solid var(--edge-2);border-radius:12px;padding:10px 12px 12px;min-width:0;background:rgba(255,255,255,.04)}
+.qi small{display:block;font-size:.8rem;color:var(--t2)}
+.qi strong{font-variant-numeric:tabular-nums;color:#fff}
+.qi .bar{display:block;height:5px;border-radius:99px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.qi .bar i{display:block;height:100%;width:var(--p,0%);background:var(--t3);border-radius:inherit;transition:width .8s var(--ease)}
+.qi .over{border-color:var(--gold)}
+.qi .over .bar i{background:var(--gold)}
 @media (max-width:480px){.qi{grid-template-columns:1fr}.yr{grid-template-columns:1fr}}
 table{border-collapse:collapse;width:100%;font-size:.97rem}
 .tablebox{overflow-x:auto}
@@ -187,87 +220,111 @@ th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line);verti
 tbody tr:last-child td{border-bottom:0}
 th{font-size:.86rem;color:var(--muted);font-weight:600}
 td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
-.pill{font-size:.8rem;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--mist);color:var(--muted);white-space:nowrap}
+.pill{font-size:.8rem;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--mist);color:var(--muted);white-space:nowrap}
 .pill.past{opacity:.7}
-.pill.next{background:var(--gold-soft);color:var(--warn)}
-.counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:40px}
+.pill.next{background:#F7EFD5;color:var(--warn)}
+.counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:44px}
 @media (max-width:820px){.counts{grid-template-columns:1fr;gap:18px}}
-.counts p{color:var(--muted);margin-top:6px}
-.sources{margin-top:28px;font-size:.92rem;color:var(--muted)}
+.counts > div{padding-top:16px;border-top:2px solid var(--gold)}
+.counts p{color:var(--t2);margin-top:6px}
+.sources{margin-top:28px;font-size:.92rem;color:var(--t2)}
 
 /* app preview */
-.window{border-radius:16px;background:var(--card);border:1px solid var(--line);overflow:hidden;box-shadow:0 30px 60px -36px rgba(11,37,69,.45)}
+.window{overflow:hidden}
 .wbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--mist);flex-wrap:wrap}
 .wbar .dots{display:flex;gap:6px}.wbar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
-.demo-tabs{display:flex;gap:2px;flex-wrap:wrap}
-.demo-tabs button{font:600 .94rem var(--sans);background:transparent;border:0;color:var(--muted);border-radius:8px;padding:7px 12px;cursor:pointer}
-.demo-tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-.demo-body{padding:18px}
-.in{color:var(--ok);font-size:.82rem;font-weight:600}
+.wbar .dots i:first-child{background:var(--gold)}
+.demo-tabs{display:flex;gap:2px;flex-wrap:wrap;position:relative}
+.demo-tabs button{font:600 .94rem var(--sans);background:transparent;border:0;color:var(--muted);border-radius:8px;padding:7px 12px;cursor:pointer;transition:color .2s,background .2s}
+.demo-tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line),0 -2px 0 var(--gold) inset}
+.demo-body{padding:18px;min-height:280px}
+.in{color:var(--ok);font-size:.82rem;font-weight:700}
 tr.total td{font-weight:700;background:var(--mist)}
+.demo-pane.play tbody tr{animation:row .5s var(--ease) both}
+.demo-pane.play tbody tr:nth-child(2){animation-delay:.08s}.demo-pane.play tbody tr:nth-child(3){animation-delay:.16s}.demo-pane.play tbody tr:nth-child(4){animation-delay:.24s}.demo-pane.play tbody tr:nth-child(5){animation-delay:.32s}
+@keyframes row{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.autoplay{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted)}
+.autoplay i{display:block;width:60px;height:3px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
+.autoplay i::after{content:"";position:absolute;inset:0;background:var(--gold);transform-origin:left;transform:scaleX(0)}
+.autoplay.run i::after{animation:prog 5s linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
 .below{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:28px}
 
 /* full version */
 .fv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:start}
 @media (max-width:900px){.fv{grid-template-columns:1fr}}
-.flist{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
-.flist li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
-.flist .ic{width:40px;height:40px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}
-.flist h3{font-size:1.1rem;margin-bottom:2px}
-.flist p{color:var(--muted);font-size:1rem}
+.flist{list-style:none;margin:0;padding:0;border-top:1px solid var(--edge)}
+.flist li{display:grid;grid-template-columns:42px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--edge);transition:background .25s}
+.flist li:hover .ic{background:var(--gold);color:var(--gold-ink);transform:rotate(-6deg)}
+.flist .ic{width:42px;height:42px;border-radius:12px;background:var(--goldsoft);color:var(--gold-2);display:grid;place-items:center;border:1px solid rgba(201,162,39,.35);transition:background .25s,color .25s,transform .25s var(--ease)}
+.flist h3{font-size:1.12rem;margin-bottom:2px}
+.flist p{color:var(--t2);font-size:1rem}
 .stmt{position:sticky;top:96px}
-.stmt .row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line)}
-.stmt .row:last-child{border-bottom:0}
-.stmt .cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line-2)}
-.stmt .cb.on{background:var(--blue);border-color:var(--blue);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:14px;background-position:center;background-repeat:no-repeat}
+.stmt .row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line);transition:opacity .4s}
+.stmt .row:last-of-type{border-bottom:0}
+.stmt .cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line-2);transition:background .25s,border-color .25s}
+.stmt .cb.on{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23E3C35A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--ink)}
 .stmt .d{min-width:0}
 .stmt .d b{display:block;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.stmt .d small{color:var(--blue);font-size:.88rem}
-.stmt .off{opacity:.5}.stmt .off small{color:var(--muted)}
+.stmt .d small{color:#1D4ED8;font-size:.88rem;transition:opacity .4s}
+.stmt .row:not(.picked) .d small{opacity:0}
+.stmt .off{opacity:.45}
 .stmt .a{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
 .stmt .cap{font-size:.88rem;color:var(--muted);padding:12px 4px 0}
+.stmt .done{display:flex;gap:8px;align-items:center;margin-top:12px;padding:10px 12px;border-radius:10px;background:#F7EFD5;color:var(--warn);font-weight:600;font-size:.95rem;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s var(--ease)}
+.stmt.finished .done{opacity:1;transform:none}
 
 /* pricing */
 .plans{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;max-width:980px;margin-inline:auto;align-items:stretch}
 @media (max-width:820px){.plans{grid-template-columns:1fr}}
-.plan{display:grid;gap:18px;align-content:start;border:1px solid var(--line);border-radius:18px;padding:clamp(24px,3.5vw,34px);background:var(--card)}
-.plan.full{background:var(--navy);border-color:var(--navy);color:#DCE5F2}
-.plan.full h3,.plan.full .price{color:#fff}
-.plan .price{font-family:var(--serif);font-size:3.2rem;font-weight:600;color:var(--ink);line-height:1}
-.plan .price small{display:block;font-family:var(--sans);font-size:.95rem;font-weight:400;color:var(--muted);margin-top:8px}
-.plan.full .price small{color:#A9B8CF}
+.plan{display:grid;gap:18px;align-content:start;border:1px solid var(--edge-2);border-radius:20px;padding:clamp(24px,3.5vw,34px);background:var(--night-2);position:relative;transition:transform .3s var(--ease),box-shadow .3s}
+.plan:hover{transform:translateY(-3px)}
+.plan.full{background:linear-gradient(var(--night-3),var(--night-2)) padding-box,linear-gradient(140deg,var(--gold-2),var(--gold) 40%,var(--edge-2) 80%) border-box;border:1.5px solid transparent;box-shadow:0 30px 70px -40px rgba(201,162,39,.45)}
+.plan .badge{position:absolute;top:-13px;left:28px;background:var(--gold);color:var(--gold-ink);font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:99px}
+.plan .price{font-family:var(--serif);font-size:3.3rem;font-weight:600;color:var(--white);line-height:1}
+.plan.full .price{color:var(--gold-2)}
+.plan .price small{display:block;font-family:var(--sans);font-size:.95rem;font-weight:400;color:var(--t2);margin-top:8px}
 .plan ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
-.plan li{position:relative;padding-left:30px}
-.plan li::before{content:"";position:absolute;left:0;top:4px;width:20px;height:20px;border-radius:50%;background:var(--blue-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%231D4ED8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
-.plan.full li::before{background-color:rgba(255,255,255,.12);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23C9A227' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.plan.full strong{color:#fff}
+.plan li{position:relative;padding-left:30px;color:var(--t)}
+.plan li::before{content:"";position:absolute;left:0;top:4px;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23E3C35A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.plan strong{color:var(--white)}
 .plan .btn{width:100%}
-.plan.full .small{color:#A9B8CF}
 
 /* faq */
-.faq{max-width:820px;margin-inline:auto;border-top:1px solid var(--line)}
-details{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-family:var(--serif);font-weight:600;font-size:1.15rem;color:var(--ink)}
+.faq{max-width:820px;margin-inline:auto;border-top:1px solid var(--edge)}
+details{border-bottom:1px solid var(--edge)}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-family:var(--serif);font-weight:600;font-size:1.15rem;color:var(--white);transition:color .2s}
+summary:hover{color:var(--gold-2)}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"";flex:none;width:12px;height:12px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-3px,-3px);transition:transform .2s}
+summary::after{content:"";flex:none;width:11px;height:11px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg) translate(-3px,-3px);transition:transform .3s var(--ease)}
 details[open] summary::after{transform:rotate(225deg) translate(-3px,-3px)}
-details p{padding:0 0 20px;color:var(--muted);max-width:70ch}
+details p{padding:0 0 20px;color:var(--t2);max-width:70ch}
+details[open] p{animation:rise .35s var(--ease)}
 
 /* closing */
-.closing{background:var(--navy);color:#DCE5F2;padding-block:clamp(56px,7vw,88px)}
+.closing{padding-block:clamp(56px,7vw,92px);position:relative;overflow:hidden;isolation:isolate;border-top:1px solid var(--edge)}
+.closing::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(600px 300px at 85% 50%,rgba(201,162,39,.16),transparent 70%)}
 .closing .wrap{display:grid;grid-template-columns:minmax(0,1.4fr) auto;gap:28px;align-items:center}
 @media (max-width:820px){.closing .wrap{grid-template-columns:1fr}}
-.closing h2{color:#fff}
-.closing p{color:#A9B8CF;margin-top:10px;max-width:52ch}
+.closing p{color:var(--t2);margin-top:10px;max-width:52ch}
 .closing .cta{display:flex;gap:12px;flex-wrap:wrap}
-footer{background:var(--navy);color:#A9B8CF;border-top:1px solid rgba(255,255,255,.1)}
+footer{background:#06112A;color:var(--t2);border-top:1px solid var(--edge)}
 footer .wrap{padding-block:30px 40px;display:grid;gap:16px;font-size:.92rem}
 footer .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
-footer .brand{color:#fff}
 footer nav{display:flex;gap:6px 22px;flex-wrap:wrap}
-footer a{color:#DCE5F2;text-decoration:none}
-footer a:hover{color:#fff;text-decoration:underline}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+footer a{color:var(--t);text-decoration:none}
+footer a:hover{color:var(--gold-2)}
+
+/* reveal on scroll (only when JS runs and motion is allowed) */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
+.js .rv.seen{opacity:1;transform:none}
+.js .rule.rv{transform:scaleX(0);opacity:1}
+.js .rule.rv.seen{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv{opacity:1;transform:none}
+}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -280,7 +337,7 @@ body{margin:0}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"QuarterReady Records","applicationCategory":"FinanceApplication","operatingSystem":"Web browser","description":"Keep Making Tax Digital for Income Tax records and see quarterly totals per HMRC category.","offers":[{"@type":"Offer","price":"0","priceCurrency":"GBP","name":"Free"},{"@type":"Offer","price":"19","priceCurrency":"GBP","name":"Full version"}]}</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="logo" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0B2545"/><circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="3.6" stroke-dasharray="12.14 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="9" fill="none" stroke="#C9A227" stroke-width="3.6" stroke-dasharray="12.14 44.41" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/></symbol>
+  <symbol id="logo" viewBox="0 0 32 32"><rect x=".5" y=".5" width="31" height="31" rx="8" fill="#0F2547" stroke="#C9A227" stroke-opacity=".55"/><circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="3.6" stroke-dasharray="12.14 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="9" fill="none" stroke="#C9A227" stroke-width="3.6" stroke-dasharray="12.14 44.41" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/></symbol>
   <symbol id="tick" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -302,21 +359,21 @@ body{margin:0}
   <div class="hero">
     <div class="wrap">
       <div class="hero-grid">
-        <h1>Making Tax Digital, kept simple.</h1>
+        <h1 class="rv">Making Tax Digital, <span class="line2">kept simple.</span></h1>
         <div>
-          <p class="lead">Check when MTD starts for you, then keep your income and expenses in an app that adds them up the way HMRC asks, quarter by quarter. For UK sole traders and landlords.</p>
-          <div class="cta">
+          <p class="lead rv" style="--d:.1s">Check when MTD starts for you, then keep your income and expenses in an app that adds them up the way HMRC asks, quarter by quarter. For UK sole traders and landlords.</p>
+          <div class="cta rv" style="--d:.18s">
             <a class="btn" href="app.html">Open the app for free</a>
             <a class="btn line" href="#checker">Check my start date</a>
           </div>
-          <div class="assure">
+          <div class="assure rv" style="--d:.24s">
             <span><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>No sign-up</span>
             <span><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>Your records stay on your device</span>
           </div>
         </div>
       </div>
 
-      <div class="year" style="margin-top:clamp(36px,5vw,56px)" aria-labelledby="yearTitle">
+      <div class="year rv" style="margin-top:clamp(36px,5vw,56px);--d:.3s" aria-labelledby="yearTitle">
         <div class="year-top">
           <div>
             <h2 id="yearTitle">Tax year 2026–27</h2>
@@ -326,6 +383,7 @@ body{margin:0}
             <div><b id="cd-d">–</b><span>days</span></div>
             <div><b id="cd-h">–</b><span>hours</span></div>
             <div><b id="cd-m">–</b><span>min</span></div>
+            <div><b id="cd-s">–</b><span>sec</span></div>
           </div>
         </div>
         <div class="track" id="track" aria-hidden="true"></div>
@@ -335,40 +393,43 @@ body{margin:0}
     </div>
   </div>
 
-  <section id="changes" class="mist">
+  <section id="changes" class="alt">
     <div class="wrap news">
-      <div class="head" style="margin:0">
+      <div class="head rv" style="margin:0">
+        <span class="rule rv" style="--d:.15s"></span>
         <h2>What's changed, and what's coming.</h2>
         <p class="lead">MTD rules change with each Budget. QuarterReady checks HMRC's guidance every month and updates the checker, the deadlines and the rates in the app.</p>
         <div class="checked"><svg width="18" height="18" aria-hidden="true"><use href="#tick"/></svg><span id="checkedNote">Rules last checked against GOV.UK on 16 October 2026.</span></div>
       </div>
-      <ul class="feed" id="feed"></ul>
+      <ul class="feed rv" id="feed" style="--d:.1s"></ul>
     </div>
   </section>
 
   <section id="how">
     <div class="wrap">
-      <div class="head">
+      <div class="head rv">
+        <span class="rule rv" style="--d:.15s"></span>
         <h2>Three jobs each quarter. QuarterReady does two of them.</h2>
         <p class="lead">Recording and adding up is where the hours go. Sending is a few minutes in software HMRC recognises.</p>
       </div>
-      <ol class="steps">
+      <ol class="steps" id="steps">
         <li><span class="who">In QuarterReady</span><h3>Record</h3><p>Type in each income and expense, or import your bank statement and tick the business lines. Attach receipts and log business miles.</p></li>
         <li><span class="who">In QuarterReady</span><h3>Add up</h3><p>Every line goes under the right HMRC category. You see year-to-date totals for each quarter, ready to send, with warnings for duplicates.</p></li>
         <li class="ext"><span class="who">In HMRC-recognised bridging software</span><h3>Send</h3><p>Copy in the totals or upload the CSV file. The bridging software submits them to HMRC. HMRC lists free options for simple affairs.</p></li>
       </ol>
-      <p class="why">Only software on HMRC's recognised list may connect to its systems. QuarterReady is independent, so it prepares your figures and leaves the sending to a recognised tool.</p>
+      <p class="why rv">Only software on HMRC's recognised list may connect to its systems. QuarterReady is independent, so it prepares your figures and leaves the sending to a recognised tool.</p>
     </div>
   </section>
 
-  <section id="checker" class="mist">
+  <section id="checker" class="alt">
     <div class="wrap">
-      <div class="head">
+      <div class="head rv">
+        <span class="rule rv" style="--d:.15s"></span>
         <h2>When does MTD start for you?</h2>
         <p class="lead">Enter your gross self-employment and property income for each tax year. The checker applies HMRC's published thresholds. Nothing you type leaves your browser.</p>
       </div>
       <div class="grid2">
-        <div class="panel">
+        <div class="panel white rv">
           <form id="f" novalidate>
             <fieldset>
               <legend>Your situation</legend>
@@ -396,11 +457,11 @@ body{margin:0}
             </fieldset>
             <div class="btnrow">
               <button type="submit" class="btn">Check my start date</button>
-              <button type="button" class="btn line" id="clear">Clear figures</button>
+              <button type="button" class="btn lined" id="clear">Clear figures</button>
             </div>
           </form>
         </div>
-        <div class="result" aria-live="polite">
+        <div class="result rv" style="--d:.1s" aria-live="polite">
           <p class="sample" id="sampleNote">Showing an example: £24,000 self-employment and £9,000 rent in 2025–26.</p>
           <div class="stamp" id="stamp" data-tone="warn">
             <span class="label">Your result</span>
@@ -408,22 +469,22 @@ body{margin:0}
             <p id="why">Your qualifying income for 2025–26 is £33,000, which is over £30,000.</p>
           </div>
           <div class="qi" id="qi"></div>
-          <div class="panel" id="deadlines">
+          <div class="panel white" id="deadlines">
             <h3 id="dlTitle">Your first year of quarterly updates</h3>
             <p class="small" style="margin:6px 0 10px">Standard quarters. With calendar quarters the periods end on the last day of the month; the deadlines are the same.</p>
             <div class="tablebox"><table>
               <thead><tr><th>Update</th><th>Covers</th><th>Send by</th><th><span class="sr">Status</span></th></tr></thead>
               <tbody id="dl"></tbody>
             </table></div>
-            <div class="btnrow" style="margin-top:16px"><a class="btn sm" href="app.html">Start my records</a><button type="button" class="btn line sm" id="copy">Copy these dates</button><span class="small" id="copied" hidden>Copied.</span></div>
+            <div class="btnrow" style="margin-top:16px"><a class="btn sm" href="app.html">Start my records</a><button type="button" class="btn lined sm" id="copy">Copy these dates</button><span class="small" id="copied" hidden>Copied.</span></div>
           </div>
           <p class="small">Not affiliated with HMRC, not tax advice. Confirm with <a href="https://tax.service.gov.uk/guidance/check-if-you-need-to-use-making-tax-digital-for-income-tax" rel="noopener" target="_blank">HMRC's own checker</a>.</p>
         </div>
       </div>
       <div class="counts">
-        <div><h3>What counts</h3><p>Self-employment turnover and property income, before expenses. Only your share of a jointly owned property.</p></div>
-        <div><h3>What doesn't</h3><p>Employment (PAYE), pensions, dividends, and your profit share as a partner in a partnership.</p></div>
-        <div><h3>Spreadsheets are allowed</h3><p>You can keep records outside MTD software, as long as HMRC-recognised bridging software sends your updates.</p></div>
+        <div class="rv"><h3>What counts</h3><p>Self-employment turnover and property income, before expenses. Only your share of a jointly owned property.</p></div>
+        <div class="rv" style="--d:.08s"><h3>What doesn't</h3><p>Employment (PAYE), pensions, dividends, and your profit share as a partner in a partnership.</p></div>
+        <div class="rv" style="--d:.16s"><h3>Spreadsheets are allowed</h3><p>You can keep records outside MTD software, as long as HMRC-recognised bridging software sends your updates.</p></div>
       </div>
       <p class="sources" id="sources"></p>
     </div>
@@ -431,11 +492,12 @@ body{margin:0}
 
   <section id="app">
     <div class="wrap">
-      <div class="head">
+      <div class="head rv">
+        <span class="rule rv" style="--d:.15s"></span>
         <h2>Your records, added up for each quarter.</h2>
         <p class="lead">Type in each income and expense once. The app files it under the right HMRC category and keeps a running total for every quarterly update.</p>
       </div>
-      <div class="window">
+      <div class="window white rv" id="window">
         <div class="wbar">
           <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
           <div class="demo-tabs" role="tablist" aria-label="App preview">
@@ -443,10 +505,10 @@ body{margin:0}
             <button role="tab" aria-selected="false" data-pane="summary">Quarterly summary</button>
             <button role="tab" aria-selected="false" data-pane="deadlines">Deadlines</button>
           </div>
-          <span class="small">Example data</span>
+          <span class="autoplay" id="autoplay"><i></i>Example data</span>
         </div>
         <div class="demo-body">
-          <div class="demo-pane" data-pane="records"><div class="tablebox"><table>
+          <div class="demo-pane play" data-pane="records"><div class="tablebox"><table>
             <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Quarter</th></tr></thead>
             <tbody>
               <tr><td class="num">28 Apr</td><td>Total rental income from property</td><td>Rent, 12 Mill Lane, April</td><td class="num"><span class="in">In</span> £950.00</td><td>Q1</td></tr>
@@ -468,21 +530,22 @@ body{margin:0}
             <tbody id="demoDl"></tbody></table></div></div>
         </div>
       </div>
-      <div class="below">
+      <div class="below rv">
         <a class="btn" href="app.html">Try it with example data</a>
         <span class="small">No sign-up. Clear the examples when you're ready to start.</span>
       </div>
     </div>
   </section>
 
-  <section id="features" class="mist">
+  <section id="features" class="alt">
     <div class="wrap fv">
       <div>
-        <div class="head">
+        <div class="head rv">
+          <span class="rule rv" style="--d:.15s"></span>
           <h2>The full version does the tedious parts.</h2>
           <p class="lead">The free version shows you how it all works. The full version saves you the hours.</p>
         </div>
-        <ul class="flist">
+        <ul class="flist" id="flist">
           <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><h3>Bank statement import</h3><p>Choose your bank's CSV file, tick the business lines and pick a category once. Next time the app remembers, and skips lines you already have.</p></div></li>
           <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h7l3.5 3.5v11.5h-10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10h5M8 13.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><h3>Receipts kept with each record</h3><p>Attach a photo or PDF, so it's there if HMRC ever asks.</p></div></li>
           <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10l4-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><h3>Mileage log</h3><p>Log business journeys. The app applies HMRC's flat rate, <span data-r="car1">55</span>p a mile for the first <span data-r="band">10,000</span> miles by car or van, then <span data-r="car2">25</span>p.</p></div></li>
@@ -491,12 +554,13 @@ body{margin:0}
           <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10c0-2.5 2-4 4-2.6L11 9c2 1.4 4 .1 4-2.5M5 13.5c0 2.6 2 4 4 2.6L11 14.5c2-1.4 4 0 4 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><h3>Unlimited records</h3><p>No limit, every tax year, on up to two browsers.</p></div></li>
         </ul>
       </div>
-      <div class="panel stmt" aria-label="Example of a bank statement import">
+      <div class="panel white stmt rv" id="stmt" aria-label="Example of a bank statement import">
         <h3 style="margin-bottom:6px">Import from your bank</h3>
         <p class="small" style="margin-bottom:8px">Example: three lines from a statement.</p>
-        <div class="row"><span class="cb on"></span><span class="d"><b>STRIPE PAYOUT</b><small>Turnover, takings, fees, sales</small></span><span class="a">+£640.00</span></div>
-        <div class="row"><span class="cb on"></span><span class="d"><b>TRAINLINE</b><small>Car, van and travel expenses</small></span><span class="a">−£48.20</span></div>
-        <div class="row off"><span class="cb"></span><span class="d"><b>SUPERMARKET</b><small>Personal, left out</small></span><span class="a">−£62.15</span></div>
+        <div class="row"><span class="cb"></span><span class="d"><b>STRIPE PAYOUT</b><small>Turnover, takings, fees, sales</small></span><span class="a">+£640.00</span></div>
+        <div class="row"><span class="cb"></span><span class="d"><b>TRAINLINE</b><small>Car, van and travel expenses</small></span><span class="a">−£48.20</span></div>
+        <div class="row skip"><span class="cb"></span><span class="d"><b>SUPERMARKET</b><small>Personal, left out</small></span><span class="a">−£62.15</span></div>
+        <div class="done" id="stmtDone"><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>2 lines added to your records</div>
         <p class="cap">The file is read in your browser and never uploaded.</p>
       </div>
     </div>
@@ -504,12 +568,13 @@ body{margin:0}
 
   <section id="pricing">
     <div class="wrap">
-      <div class="head c">
+      <div class="head c rv">
+        <span class="rule rv" style="--d:.15s"></span>
         <h2>Free to start. One payment for the full version.</h2>
         <p class="lead">No subscription and no account.</p>
       </div>
       <div class="plans">
-        <div class="plan">
+        <div class="plan rv">
           <h3>Free</h3>
           <div class="price">£0<small>No sign-up, no time limit</small></div>
           <ul>
@@ -521,7 +586,7 @@ body{margin:0}
           </ul>
           <a class="btn line" href="app.html">Open the app</a>
         </div>
-        <div class="plan full">
+        <div class="plan full rv" style="--d:.1s">
           <h3>Full version</h3>
           <div class="price">£19<small>One-time payment, VAT included where it applies</small></div>
           <ul>
@@ -533,7 +598,7 @@ body{margin:0}
             <li><strong>CSV exports</strong> and a <strong>year-end report</strong></li>
             <li>Every tax year, on up to two browsers</li>
           </ul>
-          <a class="btn white" id="buy" href="app.html#settings">Get the full version</a>
+          <a class="btn" id="buy" href="app.html#settings">Get the full version</a>
           <p class="small">Paid through our payment partner. Your licence key arrives by email straight away.</p>
         </div>
       </div>
@@ -541,10 +606,10 @@ body{margin:0}
     </div>
   </section>
 
-  <section id="faq" class="mist">
+  <section id="faq" class="alt">
     <div class="wrap">
-      <div class="head c"><h2>Questions</h2></div>
-      <div class="faq">
+      <div class="head c rv"><span class="rule rv" style="--d:.15s"></span><h2>Questions</h2></div>
+      <div class="faq rv">
         <details><summary>Will HMRC tell me if I need to start?</summary><p>HMRC reviews your Self Assessment return and writes to you if your qualifying income is over the threshold. If no letter arrives, it's still your responsibility to check and sign up.</p></details>
         <details><summary>Which year's income decides my start date?</summary><p>Over £50,000 in 2024–25 means 6 April 2026. Over £30,000 in 2025–26 means 6 April 2027. Over £20,000 in 2026–27 means 6 April 2028, according to current GOV.UK guidance.</p></details>
         <details><summary>What if I'm under £20,000?</summary><p>You don't need MTD while your qualifying income stays at £20,000 or less. Check again each year.</p></details>
@@ -561,13 +626,13 @@ body{margin:0}
 
   <div class="closing">
     <div class="wrap">
-      <div>
+      <div class="rv">
         <h2>Over £30,000 in 2025–26? Your first update is due on 7 August 2027.</h2>
         <p>Start your records now and the first quarter adds itself up.</p>
       </div>
       <div class="cta">
-        <a class="btn white" href="app.html">Open the app for free</a>
-        <a class="btn ghostw" href="#checker">Check my start date</a>
+        <a class="btn" href="app.html">Open the app for free</a>
+        <a class="btn line" href="#checker">Check my start date</a>
       </div>
     </div>
   </div>
@@ -589,6 +654,7 @@ body{margin:0}
   const BUY_URL = "";
 
   const RR = (window.QR_RULES) || {};
+  const reduce = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
   const RULES = RR.thresholds || [
     { year: 2024, limit: 50000, start: 2026 },
     { year: 2025, limit: 30000, start: 2027 },
@@ -655,7 +721,8 @@ body{margin:0}
     if (animate) { st.classList.remove("pop"); void st.offsetWidth; st.classList.add("pop"); }
     $("big").textContent = res.big;
     $("why").textContent = res.why + (input.exempt ? " You ticked a possible exemption: check HMRC's exemptions guidance before relying on this." : "");
-    $("qi").innerHTML = res.qi.map(r => `<div class="${r.total > r.limit ? "over" : ""}"><small>${yy(r.year)}, over ${gbp(r.limit)}?</small><strong>${gbp(r.total)}</strong></div>`).join("");
+    $("qi").innerHTML = res.qi.map(r => `<div class="${r.total > r.limit ? "over" : ""}"><small>${yy(r.year)}, over ${gbp(r.limit)}?</small><strong>${gbp(r.total)}</strong><span class="bar" aria-hidden="true"><i style="--p:0%" data-p="${Math.min(100, r.total / r.limit * 100).toFixed(1)}%"></i></span></div>`).join("");
+    requestAnimationFrame(() => requestAnimationFrame(() => $("qi").querySelectorAll(".bar i").forEach(i => i.style.setProperty("--p", i.dataset.p))));
     const start = res.start ?? RULES[RULES.length - 1].start;
     $("dlTitle").textContent = res.start ? "Your first year of quarterly updates, " + yy(start) : "If you start in April " + start + ", your first year looks like this";
     const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -693,7 +760,8 @@ body{margin:0}
   let html = "", prev = ys;
   qEnds.forEach((qe, i) => {
     const done = now >= qe, cur = now >= prev && now < qe;
-    const fill = cur ? `<i class="fill" style="width:${((now - prev) / (qe - prev) * 100).toFixed(1)}%"></i>` : "";
+    const w = done ? 100 : cur ? (now - prev) / (qe - prev) * 100 : 0;
+    const fill = `<i class="fill" data-w="${w.toFixed(1)}%" style="--dly:${(i * .25).toFixed(2)}s"></i>`;
     html += `<div class="q ${done ? "done" : cur ? "now" : ""}" style="left:calc(${pct(prev)}% + 2px);width:calc(${pct(qe) - pct(prev)}% - 4px)">${fill}<span>Q${i + 1}</span></div>`;
     prev = qe;
   });
@@ -709,7 +777,7 @@ body{margin:0}
   for (const y of [ty - 1, ty, ty + 1]) DL.forEach((md, qi) => all.push(dueDate(y, qi)));
   const nd = all.sort((a, b) => a - b).find(d => d > now);
   inYear.forEach(x => { html += `<span class="dl ${+x.d === +nd ? "next" : ""}" style="left:${pct(x.d)}%"></span>`; });
-  html += `<span class="today" style="left:${pct(now)}%"><i>Today</i></span>`;
+  html += `<span class="today" style="left:0%" data-left="${pct(now)}%"><i>Today</i></span>`;
   $("track").innerHTML = html;
   $("months").innerHTML = ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"].map(m => `<span>${m}</span>`).join("");
   const sd = { day: "numeric", month: "short" };
@@ -717,14 +785,21 @@ body{margin:0}
     { d: dueDate(ty, 0), l: "Q1 update" }, { d: dueDate(ty, 1), l: "Q2 update" },
     { d: dueDate(ty, 2), l: "Q3 update" }, { d: dueDate(ty, 3), l: "Q4 update" }];
   $("dlist").innerHTML = qdl.map(x => `<div class="${+x.d === +nd ? "next" : x.d < now ? "passed" : ""}"><strong>${x.d.toLocaleDateString("en-GB", sd)}${x.d.getFullYear() !== ty ? " " + x.d.getFullYear() : ""}</strong>${x.l}${+x.d === +nd ? ", next" : x.d < now ? ", passed" : ""}</div>`).join("");
+  const setN = (id, v) => { const e = $(id); if (e.textContent !== v) { e.textContent = v; e.classList.remove("flip"); void e.offsetWidth; e.classList.add("flip"); } };
   function tick() {
     const n = new Date(), ms = Math.max(0, nd - n);
-    $("cd-d").textContent = Math.floor(ms / 864e5);
-    $("cd-h").textContent = String(Math.floor(ms / 36e5) % 24).padStart(2, "0");
-    $("cd-m").textContent = String(Math.floor(ms / 6e4) % 60).padStart(2, "0");
+    setN("cd-d", String(Math.floor(ms / 864e5)));
+    setN("cd-h", String(Math.floor(ms / 36e5) % 24).padStart(2, "0"));
+    setN("cd-m", String(Math.floor(ms / 6e4) % 60).padStart(2, "0"));
+    setN("cd-s", String(Math.floor(ms / 1e3) % 60).padStart(2, "0"));
   }
+  // Fill the year once it is on screen: quarters fill in turn, then "Today" slides into place.
+  const playYear = () => {
+    $("track").querySelectorAll(".fill").forEach(f => f.style.setProperty("--w", f.dataset.w));
+    const t = $("track").querySelector(".today"); t.style.left = t.dataset.left;
+  };
   $("nextNote").textContent = "Next quarterly deadline: " + nd.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + ", for everyone already using MTD.";
-  tick(); setInterval(tick, 30000);
+  tick(); setInterval(tick, 1000);
 
   // ---------- What's changed ----------
   const longDate = s => new Date(s + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
@@ -740,13 +815,52 @@ body{margin:0}
   const mr = RR.mileage && (RR.mileage.find(m => m.from <= ty) || RR.mileage[0]);
   if (mr) document.querySelectorAll("[data-r]").forEach(e => { const v = mr[e.dataset.r]; if (v != null) e.textContent = v.toLocaleString("en-GB"); });
 
-  // ---------- App demo ----------
-  const tabs = document.querySelectorAll(".demo-tabs button"), panes = document.querySelectorAll(".demo-pane");
-  tabs.forEach(t => t.addEventListener("click", () => {
+  // ---------- App demo: plays through the three tabs while on screen, until the visitor picks one ----------
+  const tabs = [...document.querySelectorAll(".demo-tabs button")], panes = document.querySelectorAll(".demo-pane");
+  const pick = t => {
     tabs.forEach(x => x.setAttribute("aria-selected", String(x === t)));
-    panes.forEach(p => p.hidden = p.dataset.pane !== t.dataset.pane);
-  }));
+    panes.forEach(p => { const on = p.dataset.pane === t.dataset.pane; p.hidden = !on; if (on) { p.classList.remove("play"); void p.offsetWidth; p.classList.add("play"); } });
+  };
+  let auto = null, userPicked = false;
+  const ap = $("autoplay");
+  const step = () => { const i = tabs.findIndex(t => t.getAttribute("aria-selected") === "true"); pick(tabs[(i + 1) % tabs.length]); restartBar(); };
+  const restartBar = () => { ap.classList.remove("run"); void ap.offsetWidth; ap.classList.add("run"); };
+  const startAuto = () => { if (userPicked || auto || reduce) return; restartBar(); auto = setInterval(step, 5000); };
+  const stopAuto = () => { clearInterval(auto); auto = null; ap.classList.remove("run"); };
+  tabs.forEach(t => t.addEventListener("click", () => { userPicked = true; stopAuto(); pick(t); }));
   $("demoDl").innerHTML = quarters(ty).map(r => `<tr><td>${r.p}</td><td>${r.c}</td><td class="num">${fmt(r.due)}</td></tr>`).join("");
+
+  // ---------- Bank import example: lines get ticked one by one ----------
+  const playStmt = () => {
+    const rows = [...$("stmt").querySelectorAll(".row")];
+    rows.forEach((r, i) => setTimeout(() => {
+      if (r.classList.contains("skip")) r.classList.add("off");
+      else { r.querySelector(".cb").classList.add("on"); r.classList.add("picked"); }
+      if (i === rows.length - 1) setTimeout(() => $("stmt").classList.add("finished"), 400);
+    }, 500 + i * 650));
+  };
+
+  // ---------- Scroll reveals and one-off plays ----------
+  const once = new Map([[$("track"), playYear], [$("stmt"), playStmt]]);
+  if (reduce || !("IntersectionObserver" in window)) {
+    document.querySelectorAll(".rv").forEach(e => e.classList.add("seen"));
+    playYear(); $("stmt").querySelectorAll(".row").forEach(r => r.classList.contains("skip") ? r.classList.add("off") : (r.querySelector(".cb").classList.add("on"), r.classList.add("picked"))); $("stmt").classList.add("finished");
+  } else {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("seen"); io.unobserve(e.target);
+      const f = once.get(e.target); if (f) f();
+    }), { rootMargin: "0px 0px -10% 0px", threshold: .12 });
+    document.querySelectorAll(".rv").forEach(e => io.observe(e));
+    once.forEach((_, el) => io.observe(el));
+    // steps: the connecting line draws across as the section comes into view
+    const steps = [...$("steps").children];
+    steps.forEach((li, i) => { li.style.setProperty("--draw", 0); li.style.setProperty("--dly", (i * .35) + "s"); li.classList.add("rv"); li.style.setProperty("--d", (i * .15) + "s"); });
+    const so = new IntersectionObserver(es => { if (es[0].isIntersecting) { steps.forEach(li => { li.classList.add("seen"); li.style.setProperty("--draw", 1); }); so.disconnect(); } }, { threshold: .3 });
+    so.observe($("steps"));
+    const wo = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? startAuto() : stopAuto()), { threshold: .4 });
+    wo.observe($("window"));
+  }
 
   const nav = $("nav");
   const onScroll = () => nav.classList.toggle("scrolled", scrollY > 8);
