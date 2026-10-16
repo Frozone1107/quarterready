@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuarterReady Records</title>
+<meta name="description" content="Keep Making Tax Digital records for self-employment and UK property in your browser, see quarterly totals per HMRC category, and export them for bridging software.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: an app shell; tabs across the top, one working panel at a time, entry form beside the ledger on wide screens. */
+:root{
+  --paper:#F3F6F5; --card:#FFFFFF; --ink:#102624; --muted:#4F625F; --line:#D3DDDA;
+  --accent:#0E6B5C; --accent-ink:#FFFFFF; --mark:#E4A11B; --soft:#E3EEEB;
+  --ok:#1E7A46; --warn:#9A5B00; --bad:#B3261E; --badsoft:#F8E1DE;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
+  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
+  --ok:#5BCB8A; --warn:#F0B740; --bad:#F28B82; --badsoft:#3A1D1A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
+  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
+  --ok:#5BCB8A; --warn:#F0B740; --bad:#F28B82; --badsoft:#3A1D1A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+header.top{border-bottom:1px solid var(--line);background:var(--card)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:1.15rem;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+.yearsel{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.badge{font-family:var(--mono);font-size:.72rem;padding:3px 9px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
+.badge.full{border-color:var(--ok);color:var(--ok)}
+.badge.free{border-color:var(--mark)}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;padding-block:10px}
+nav.tabs button{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:8px;padding:7px 12px;font:600 .95rem var(--body);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--soft);color:var(--ink);border-color:var(--line)}
+h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0;text-wrap:balance}
+h2{font-size:1.35rem}
+h3{font-size:1.05rem}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:880px){.grid{grid-template-columns:1fr}}
+.stack{display:grid;gap:14px}
+form.entry{display:grid;gap:10px}
+form.entry label{display:grid;gap:4px;font-size:.88rem;color:var(--muted)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+button,.btn{font:600 .95rem var(--body);border-radius:9px;padding:9px 14px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+button.ghost,.btn.ghost{background:transparent;color:var(--accent)}
+button.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+button.link{background:none;border:0;color:var(--accent);padding:2px 4px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted);font-size:.88rem}
+.banner{border:1px solid var(--mark);background:var(--soft);border-radius:10px;padding:10px 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.banner.bad{border-color:var(--bad);background:var(--badsoft)}
+.tablebox{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:700;background:var(--soft)}
+tr.flag td{background:var(--badsoft)}
+.pill{font-family:var(--mono);font-size:.7rem;padding:2px 8px;border-radius:99px;background:var(--soft);white-space:nowrap}
+.pill.inc{color:var(--ok)}
+.pill.next{background:var(--mark);color:#1b1300}
+.pill.bad{background:var(--badsoft);color:var(--bad)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.sumhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--muted)}
+textarea{width:100%;min-height:120px;font:500 .8rem var(--mono)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-weight:600;z-index:9}
+footer{padding-block:24px;color:var(--muted);font-size:.85rem}
+
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="var(--accent)"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="var(--accent-ink)"/></svg>
+      QuarterReady Records
+    </a>
+    <div class="yearsel">
+      <label for="year">Tax year</label>
+      <select id="year"></select>
+      <span class="badge" id="plan">Free</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="t-records" aria-controls="p-records" aria-selected="true">Records</button>
+    <button role="tab" id="t-summary" aria-controls="p-summary" aria-selected="false">Quarterly summary</button>
+    <button role="tab" id="t-deadlines" aria-controls="p-deadlines" aria-selected="false">Deadlines</button>
+    <button role="tab" id="t-settings" aria-controls="p-settings" aria-selected="false">Settings &amp; backup</button>
+  </nav>
+
+  <div class="stack">
+    <div class="banner" id="sampleBanner" hidden>
+      <span><strong>You're looking at example records.</strong> They show how the app works. Clear them when you're ready to start your own.</span>
+      <button type="button" id="clearSample">Clear examples and start</button>
+    </div>
+    <div class="banner" id="limitBanner" hidden></div>
+  </div>
+
+  <!-- RECORDS -->
+  <section id="p-records" role="tabpanel" aria-labelledby="t-records" style="padding-block:14px">
+    <div class="grid">
+      <div class="panel">
+        <form class="entry" id="entry" novalidate>
+          <h2 id="formTitle">Add a record</h2>
+          <label for="f-source">Income source<select id="f-source"></select></label>
+          <label for="f-cat">Category<select id="f-cat"></select></label>
+          <div class="row2">
+            <label for="f-date">Date<input id="f-date" type="date" required></label>
+            <label for="f-amount">Amount (£)<input id="f-amount" inputmode="decimal" autocomplete="off" placeholder="0.00" required></label>
+          </div>
+          <label for="f-desc">Description<input id="f-desc" autocomplete="off" placeholder="e.g. Invoice 014, boiler service"></label>
+          <label for="f-ref">Receipt or invoice reference (optional)<input id="f-ref" autocomplete="off"></label>
+          <p class="muted" id="formError" role="alert" hidden></p>
+          <div class="btns">
+            <button type="submit" id="saveBtn">Add record</button>
+            <button type="button" class="ghost" id="cancelEdit" hidden>Cancel</button>
+          </div>
+          <p class="muted" id="catHint"></p>
+        </form>
+      </div>
+      <div class="panel stack">
+        <div class="sumhead">
+          <h2>Records</h2>
+          <span class="muted" id="recCount"></span>
+        </div>
+        <div class="filters">
+          <label class="sr" for="flt-source">Filter by source</label>
+          <select id="flt-source"></select>
+          <label class="sr" for="flt-q">Filter by quarter</label>
+          <select id="flt-q"><option value="">All quarters</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select>
+          <label class="sr" for="flt-text">Search</label>
+          <input id="flt-text" placeholder="Search description">
+        </div>
+        <div class="tablebox"><table>
+          <thead><tr><th>Date</th><th>Source · category</th><th>Description</th><th class="num">Amount</th><th>Qtr</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table></div>
+        <div class="empty" id="noRows" hidden>No records yet. Add your first income or expense with the form.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section id="p-summary" role="tabpanel" aria-labelledby="t-summary" hidden style="padding-block:14px">
+    <div class="stack">
+      <div class="banner" id="checkBanner" hidden></div>
+      <div id="summaries" class="stack"></div>
+      <div class="panel stack">
+        <h3>Send it to HMRC</h3>
+        <p class="muted" style="margin:0">QuarterReady keeps your records and works out the totals. To send a quarterly update you need HMRC-recognised bridging software that accepts a spreadsheet or CSV file. Export the summary, open it in Excel or Google Sheets if needed, and link or import it in your bridging software. <a href="https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Find software on GOV.UK</a>.</p>
+        <div class="btns">
+          <button type="button" id="dlSummary">Download summary (CSV)</button>
+          <button type="button" class="ghost" id="dlRecords">Download all records (CSV)</button>
+          <button type="button" class="ghost" id="cpSummary">Copy summary</button>
+        </div>
+        <p class="muted" id="exportNote" style="margin:0"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEADLINES -->
+  <section id="p-deadlines" role="tabpanel" aria-labelledby="t-deadlines" hidden style="padding-block:14px">
+    <div class="panel stack">
+      <h2 id="dlTitle">Deadlines</h2>
+      <div class="tablebox"><table>
+        <thead><tr><th>Update</th><th>Covers (year to date)</th><th>Send by</th><th></th></tr></thead>
+        <tbody id="dlRows"></tbody>
+      </table></div>
+      <p class="muted" style="margin:0">Send an update for each income source, even if nothing happened that quarter. Deadlines are the same for standard and calendar quarters. Source: <a href="https://makingtaxdigital.campaign.gov.uk/quarterly-updates/" target="_blank" rel="noopener">HMRC</a>.</p>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="p-settings" role="tabpanel" aria-labelledby="t-settings" hidden style="padding-block:14px">
+    <div class="grid">
+      <div class="panel stack">
+        <h2>This tax year</h2>
+        <label class="muted" for="s-name">Name shown on exports<input id="s-name" autocomplete="off"></label>
+        <label class="muted" for="s-qtype">Quarters
+          <select id="s-qtype"><option value="standard">Standard (end 5 Jul, 5 Oct, 5 Jan, 5 Apr)</option><option value="calendar">Calendar (end 30 Jun, 30 Sep, 31 Dec, 31 Mar)</option></select>
+        </label>
+        <h3>Income sources</h3>
+        <ul id="srcList" style="margin:0;padding-left:18px"></ul>
+        <div class="btns">
+          <label class="sr" for="s-newname">New self-employment name</label>
+          <input id="s-newname" placeholder="e.g. Web design">
+          <button type="button" class="ghost" id="addSe">Add self-employment</button>
+          <button type="button" class="ghost" id="addPr">Add UK property</button>
+        </div>
+        <p class="muted" style="margin:0">HMRC expects a quarterly update for each self-employment and for your UK property business.</p>
+      </div>
+      <div class="stack">
+        <div class="panel stack">
+          <h2>Full version</h2>
+          <p class="muted" style="margin:0" id="licState"></p>
+          <div class="btns" id="buyRow"><a class="btn" id="buyLink" href="index.html#pricing">Get the full version · £19</a></div>
+          <label class="muted" for="s-key">Licence key (from your receipt email)<input id="s-key" autocomplete="off" spellcheck="false"></label>
+          <div class="btns"><button type="button" id="activate">Activate</button><button type="button" class="ghost" id="deactivate" hidden>Remove from this browser</button></div>
+          <p class="muted" id="licMsg" role="status" style="margin:0"></p>
+        </div>
+        <div class="panel stack">
+          <h2>Your data</h2>
+          <p class="muted" style="margin:0">Your records are stored only in this browser, on this device. Nobody else can see them, including us. Clearing your browser data deletes them, so <strong>download a backup regularly</strong> and keep it with your other business records.</p>
+          <div class="btns">
+            <button type="button" id="backup">Download backup</button>
+            <label class="btn ghost" for="restore" style="cursor:pointer">Restore from backup</label>
+            <input type="file" id="restore" accept="application/json,.json" class="sr">
+          </div>
+          <details><summary class="muted">Backup without downloading</summary>
+            <p class="muted">Copy this text into a file you keep safe. Paste it back here to restore.</p>
+            <textarea id="backupText" spellcheck="false" aria-label="Backup text"></textarea>
+            <div class="btns"><button type="button" class="ghost" id="copyBackup">Copy</button><button type="button" class="ghost" id="pasteRestore">Restore from this text</button></div>
+          </details>
+          <div class="btns"><button type="button" class="danger" id="wipe">Delete all records for this tax year</button></div>
+          <p class="muted" id="wipeConfirm" hidden><strong>Delete every record for this tax year?</strong> This can't be undone unless you have a backup. <button type="button" class="danger" id="wipeYes">Yes, delete</button> <button type="button" class="link" id="wipeNo">Keep them</button></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    QuarterReady is independent and not affiliated with HM Revenue &amp; Customs. It keeps records and adds them up; it does not submit to HMRC or calculate your tax, and it is not tax advice.
+    <a href="help.html">Help</a> · <a href="legal.html#privacy">Privacy</a> · <a href="legal.html#terms">Terms</a>
+  </footer>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* ===== LOGIC START (pure functions, no DOM) ===== */
+const CATS = {
+  se: {
+    income: ["Turnover, takings, fees, sales or money earned", "Other business income"],
+    expense: ["Cost of goods bought for resale or goods used", "Payments to subcontractors",
+      "Wages, salaries and other staff costs", "Car, van and travel expenses",
+      "Rent, rates, power and insurance costs", "Repairs and renewals of property and equipment",
+      "Phone, fax, stationery and other office costs", "Advertising costs", "Entertainment expenses",
+      "Interest on bank and other loans", "Bank, credit card and other financial charges",
+      "Irrecoverable debts written off", "Accountancy, legal and other professional fees",
+      "Depreciation and loss or profit on sale of assets", "Other business expenses"],
+    separate: []
+  },
+  pr: {
+    income: ["Total rental income from property", "Premiums for the grant of a lease",
+      "Reverse premiums and inducements", "Other rental income", "Rent a Room income"],
+    expense: ["Rent, rates, insurance and ground rents", "Property repairs and maintenance",
+      "Non-residential property finance costs", "Legal, management and other professional fees",
+      "Costs of services provided, including wages", "Travelling costs",
+      "Other allowable property expenses", "Rent a Room expenses"],
+    separate: ["Residential property finance costs", "Tax deducted from any income"]
+  }
+};
+const FREE_LIMIT = 30;
+
+function d(y, m, day) { return new Date(Date.UTC(y, m - 1, day)); }
+function iso(dt) { return dt.toISOString().slice(0, 10); }
+function parseISO(s) { const [y, m, dd] = s.split("-").map(Number); return d(y, m, dd); }
+
+function yearBounds(year, qtype) {
+  return qtype === "calendar" ? { start: d(year, 4, 1), end: d(year + 1, 3, 31) } : { start: d(year, 4, 6), end: d(year + 1, 4, 5) };
+}
+function quarterEnds(year, qtype) {
+  return qtype === "calendar"
+    ? [d(year, 6, 30), d(year, 9, 30), d(year, 12, 31), d(year + 1, 3, 31)]
+    : [d(year, 7, 5), d(year, 10, 5), d(year + 1, 1, 5), d(year + 1, 4, 5)];
+}
+function deadlines(year) {
+  return [d(year, 8, 7), d(year, 11, 7), d(year + 1, 2, 7), d(year + 1, 5, 7), d(year + 2, 1, 31)];
+}
+function quarterOf(dateStr, year, qtype) {
+  const dt = parseISO(dateStr), b = yearBounds(year, qtype);
+  if (dt < b.start || dt > b.end) return null;
+  const ends = quarterEnds(year, qtype);
+  for (let i = 0; i < 4; i++) if (dt <= ends[i]) return "Q" + (i + 1);
+  return null;
+}
+function kindOf(srcType, cat) {
+  const c = CATS[srcType];
+  if (!c) return null;
+  if (c.income.includes(cat)) return "income";
+  if (c.expense.includes(cat)) return "expense";
+  if (c.separate.includes(cat)) return "separate";
+  return null;
+}
+function parseAmount(v) {
+  const s = String(v).trim().replace(/[£,\s]/g, "");
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return null;
+  return Math.round(parseFloat(s) * 100); // pence
+}
+function validateTx(tx, book) {
+  const src = book.sources.find(s => s.id === tx.source);
+  if (!src) return "Choose an income source.";
+  if (!tx.date) return "Enter the date.";
+  if (!quarterOf(tx.date, book.year, book.qtype)) return "That date is outside the " + book.year + "–" + String(book.year + 1).slice(2) + " tax year.";
+  if (!kindOf(src.type, tx.cat)) return "Choose a category.";
+  if (!Number.isInteger(tx.pence) || tx.pence <= 0) return "Enter an amount above zero, like 125.50.";
+  return null;
+}
+function findIssues(book) {
+  const seen = new Map(), issues = [];
+  for (const t of book.tx) {
+    const key = t.source + "|" + t.date + "|" + t.cat + "|" + t.pence;
+    if (seen.has(key)) issues.push({ id: t.id, type: "Possible duplicate" });
+    else seen.set(key, t.id);
+    if (!quarterOf(t.date, book.year, book.qtype)) issues.push({ id: t.id, type: "Outside tax year" });
+  }
+  return issues;
+}
+// Cumulative year-to-date totals per category for one source; pence.
+function summarise(book, srcId) {
+  const src = book.sources.find(s => s.id === srcId);
+  const c = CATS[src.type], ends = quarterEnds(book.year, book.qtype), start = yearBounds(book.year, book.qtype).start;
+  const blank = () => [0, 0, 0, 0];
+  const rows = {};
+  [...c.income, ...c.expense, ...c.separate].forEach(k => rows[k] = blank());
+  for (const t of book.tx) {
+    if (t.source !== srcId || rows[t.cat] === undefined) continue;
+    const dt = parseISO(t.date);
+    if (dt < start) continue;
+    for (let i = 0; i < 4; i++) if (dt <= ends[i]) rows[t.cat][i] += t.pence;
+  }
+  const sum = list => [0, 1, 2, 3].map(i => list.reduce((a, k) => a + rows[k][i], 0));
+  return { src, rows, income: sum(c.income), expenses: sum(c.expense), cats: c };
+}
+function csvCell(v) { const s = String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+function money(p) { return (p / 100).toFixed(2); }
+function summaryCSV(book) {
+  const out = [["QuarterReady summary", book.name || "", "Tax year " + book.year + "-" + String(book.year + 1).slice(2), book.qtype + " quarters"],
+               ["Source", "Category", "Q1 to date", "Q2 to date", "Q3 to date", "Q4 to date"]];
+  for (const s of book.sources) {
+    const r = summarise(book, s.id);
+    for (const k of [...r.cats.income]) out.push([s.name, k, ...r.rows[k].map(money)]);
+    out.push([s.name, "Total income", ...r.income.map(money)]);
+    for (const k of r.cats.expense) out.push([s.name, k, ...r.rows[k].map(money)]);
+    out.push([s.name, "Consolidated expenses", ...r.expenses.map(money)]);
+    for (const k of r.cats.separate) out.push([s.name, k, ...r.rows[k].map(money)]);
+  }
+  return out.map(r => r.map(csvCell).join(",")).join("\r\n");
+}
+function recordsCSV(book) {
+  const out = [["Date", "Source", "Category", "Type", "Amount", "Description", "Reference", "Quarter"]];
+  const name = id => (book.sources.find(s => s.id === id) || {}).name || "";
+  const type = t => { const s = book.sources.find(x => x.id === t.source); return s ? kindOf(s.type, t.cat) : ""; };
+  [...book.tx].sort((a, b) => a.date.localeCompare(b.date)).forEach(t =>
+    out.push([t.date, name(t.source), t.cat, type(t), money(t.pence), t.desc || "", t.ref || "", quarterOf(t.date, book.year, book.qtype) || ""]));
+  return out.map(r => r.map(csvCell).join(",")).join("\r\n");
+}
+/* ===== LOGIC END ===== */
+
+(() => {
+  // CONFIG: fill in after creating the product on Lemon Squeezy.
+  const CHECKOUT_URL = "";            // hosted checkout link
+  const LS_STORE_ID = 0;              // your store ID
+  const LS_PRODUCT_ID = 0;            // the product ID of "QuarterReady Records"
+  const LICENSE_PROXY = "";           // optional: URL of a proxy if the browser blocks direct calls (see README)
+  const KEY = "qr-records-v1";
+
+  const $ = id => document.getElementById(id);
+  const fmtGBP = p => "£" + (p / 100).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtDate = dt => dt.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function currentTaxYear() { const n = new Date(); const y = n.getUTCFullYear(); return n < d(y, 4, 6) ? y - 1 : y; }
+  function newBook(year) {
+    return { year, qtype: "standard", name: "", sources: [{ id: "se1", type: "se", name: "Self-employment" }, { id: "pr1", type: "pr", name: "UK property" }], tx: [] };
+  }
+  function sampleBook(year) {
+    const b = newBook(year); b.name = "Example";
+    const add = (src, m, day, cat, pounds, desc) => b.tx.push({ id: uid(), source: src, date: iso(d(m >= 4 ? year : year + 1, m, day)), cat, pence: Math.round(pounds * 100), desc, ref: "" });
+    add("se1", 4, 14, CATS.se.income[0], 2400, "Invoice 001 – website build");
+    add("se1", 4, 20, CATS.se.expense[5], 85, "Laptop repair");
+    add("se1", 5, 3, CATS.se.expense[12], 120, "Bookkeeping review");
+    add("se1", 7, 22, CATS.se.income[0], 1500, "Invoice 002 – maintenance retainer");
+    add("se1", 8, 1, CATS.se.expense[3], 46.8, "Train to client meeting");
+    add("pr1", 4, 28, CATS.pr.income[0], 950, "Rent – 12 Mill Lane, April");
+    add("pr1", 5, 2, CATS.pr.expense[3], 114, "Letting agent fee");
+    add("pr1", 5, 15, CATS.pr.expense[1], 90, "Boiler service");
+    add("pr1", 5, 28, CATS.pr.income[0], 950, "Rent – 12 Mill Lane, May");
+    add("pr1", 6, 1, CATS.pr.separate[0], 310, "Mortgage interest (residential)");
+    return b;
+  }
+
+  let memoryOnly = false;
+  function load() {
+    try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch (e) { memoryOnly = true; }
+    const y = Math.max(currentTaxYear(), 2026);
+    return { version: 1, active: y, books: { [y]: sampleBook(y) }, sample: true, licence: null };
+  }
+  let state = load();
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { memoryOnly = true; } }
+  const book = () => state.books[state.active];
+  const isFull = () => !!(state.licence && state.licence.valid);
+
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2200); }
+
+  // ---------- Header / year ----------
+  function renderYears() {
+    const sel = $("year"); const years = [2026, 2027, 2028, 2029];
+    Object.keys(state.books).map(Number).forEach(y => { if (!years.includes(y)) years.push(y); });
+    sel.innerHTML = years.sort().map(y => `<option value="${y}" ${y === state.active ? "selected" : ""}>${y}–${String(y + 1).slice(2)}</option>`).join("");
+    $("plan").textContent = isFull() ? "Full version" : "Free · up to " + FREE_LIMIT + " records";
+    $("plan").className = "badge " + (isFull() ? "full" : "free");
+  }
+  $("year").addEventListener("change", e => {
+    const y = Number(e.target.value);
+    if (!state.books[y]) state.books[y] = newBook(y);
+    state.active = y; save(); renderAll();
+  });
+
+  // ---------- Tabs ----------
+  const tabs = ["records", "summary", "deadlines", "settings"];
+  function show(name) {
+    tabs.forEach(t => { $("t-" + t).setAttribute("aria-selected", String(t === name)); $("p-" + t).hidden = t !== name; });
+    if (name === "summary") renderSummary();
+    if (name === "settings") renderSettings();
+  }
+  tabs.forEach(t => $("t-" + t).addEventListener("click", () => show(t)));
+  if (tabs.includes(location.hash.slice(1))) show(location.hash.slice(1));
+
+  // ---------- Banners ----------
+  function renderBanners() {
+    $("sampleBanner").hidden = !state.sample;
+    const n = book().tx.length, lb = $("limitBanner");
+    if (!isFull() && !state.sample && n >= FREE_LIMIT - 5) {
+      lb.hidden = false; lb.className = "banner" + (n >= FREE_LIMIT ? " bad" : "");
+      lb.innerHTML = `<span>${n >= FREE_LIMIT ? "You've reached the " + FREE_LIMIT + " free records for this tax year." : "You've used " + n + " of " + FREE_LIMIT + " free records."} The full version removes the limit for the whole tax year.</span><button type="button" id="goFull">Unlock for £19</button>`;
+      $("goFull").onclick = () => show("settings");
+    } else lb.hidden = true;
+    if (memoryOnly) { lb.hidden = false; lb.className = "banner bad"; lb.innerHTML = "<span>This browser isn't letting QuarterReady save. Records will be lost when you close the page. Download a backup, or use a normal (not private) window.</span>"; }
+  }
+  $("clearSample").addEventListener("click", () => {
+    const y = state.active; state.books = { [y]: newBook(y) }; state.sample = false; save(); renderAll(); toast("Examples cleared. Add your first record.");
+  });
+
+  // ---------- Entry form ----------
+  let editing = null;
+  function fillSources(sel, withAll) {
+    sel.innerHTML = (withAll ? '<option value="">All sources</option>' : "") + book().sources.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
+  }
+  function fillCats() {
+    const src = book().sources.find(s => s.id === $("f-source").value); if (!src) { $("f-cat").innerHTML = ""; return; }
+    const c = CATS[src.type], og = (label, list) => `<optgroup label="${label}">` + list.map(x => `<option>${esc(x)}</option>`).join("") + "</optgroup>";
+    $("f-cat").innerHTML = og("Income", c.income) + og("Expenses", c.expense) + (c.separate.length ? og("Reported separately", c.separate) : "");
+    hint();
+  }
+  function hint() {
+    const v = $("f-cat").value;
+    $("catHint").textContent = v === "Residential property finance costs" ? "Mortgage and loan interest on residential lets. Kept out of expenses: it gives a basic-rate tax reduction at year end."
+      : v === "Tax deducted from any income" ? "Tax already taken off your income before you received it." : "";
+  }
+  $("f-source").addEventListener("change", fillCats);
+  $("f-cat").addEventListener("change", hint);
+  function resetForm() {
+    editing = null; $("formTitle").textContent = "Add a record"; $("saveBtn").textContent = "Add record"; $("cancelEdit").hidden = true;
+    $("f-amount").value = ""; $("f-desc").value = ""; $("f-ref").value = ""; $("formError").hidden = true;
+  }
+  $("cancelEdit").addEventListener("click", resetForm);
+  $("entry").addEventListener("submit", e => {
+    e.preventDefault();
+    const b = book();
+    const tx = { id: editing || uid(), source: $("f-source").value, cat: $("f-cat").value, date: $("f-date").value,
+      pence: parseAmount($("f-amount").value), desc: $("f-desc").value.trim(), ref: $("f-ref").value.trim() };
+    let err = validateTx(tx, b);
+    if (!err && !editing && !isFull() && !state.sample && b.tx.length >= FREE_LIMIT) err = "The free version holds " + FREE_LIMIT + " records per tax year. Unlock the full version in Settings to add more.";
+    if (err) { $("formError").textContent = err; $("formError").hidden = false; return; }
+    if (state.sample) { editing = null; tx.id = uid(); state.sample = false; const y = state.active; state.books = { [y]: Object.assign(newBook(y), { sources: b.sources }) }; }
+    const nb = book();
+    if (editing) nb.tx = nb.tx.map(t => t.id === editing ? tx : t); else nb.tx.push(tx);
+    save(); toast(editing ? "Record updated." : "Record added."); resetForm(); renderRecords(); renderBanners();
+  });
+
+  // ---------- Records list ----------
+  function renderRecords() {
+    const b = book(), fs = $("flt-source").value, fq = $("flt-q").value, ft = $("flt-text").value.toLowerCase();
+    const dup = new Set(findIssues(b).map(i => i.id));
+    const list = [...b.tx].sort((x, y) => y.date.localeCompare(x.date))
+      .filter(t => (!fs || t.source === fs) && (!fq || quarterOf(t.date, b.year, b.qtype) === fq) && (!ft || (t.desc + " " + t.ref).toLowerCase().includes(ft)));
+    const name = id => (b.sources.find(s => s.id === id) || {}).name || "?";
+    $("rows").innerHTML = list.map(t => {
+      const src = b.sources.find(s => s.id === t.source), k = src ? kindOf(src.type, t.cat) : null;
+      return `<tr class="${dup.has(t.id) ? "flag" : ""}"><td class="num">${fmtDate(parseISO(t.date))}</td>
+      <td>${esc(name(t.source))}<br><span class="muted">${esc(t.cat)}</span></td>
+      <td>${esc(t.desc)}${t.ref ? `<br><span class="muted">Ref ${esc(t.ref)}</span>` : ""}${dup.has(t.id) ? '<br><span class="pill bad">Possible duplicate</span>' : ""}</td>
+      <td class="num">${k === "income" ? '<span class="pill inc">in</span> ' : ""}${fmtGBP(t.pence)}</td>
+      <td>${quarterOf(t.date, b.year, b.qtype) || "–"}</td>
+      <td><button type="button" class="link" data-edit="${t.id}">Edit</button><button type="button" class="link" data-del="${t.id}">Delete</button></td></tr>`;
+    }).join("");
+    $("noRows").hidden = b.tx.length > 0;
+    $("recCount").textContent = b.tx.length + (isFull() ? "" : " of " + FREE_LIMIT + " free") + " records" + (state.sample ? " (examples)" : "");
+  }
+  ["flt-source", "flt-q", "flt-text"].forEach(id => $(id).addEventListener("input", renderRecords));
+  $("rows").addEventListener("click", e => {
+    const ed = e.target.dataset.edit, del = e.target.dataset.del, b = book();
+    if (ed) {
+      const t = b.tx.find(x => x.id === ed); editing = ed;
+      $("f-source").value = t.source; fillCats(); $("f-cat").value = t.cat; $("f-date").value = t.date;
+      $("f-amount").value = money(t.pence); $("f-desc").value = t.desc; $("f-ref").value = t.ref;
+      $("formTitle").textContent = "Edit record"; $("saveBtn").textContent = "Save changes"; $("cancelEdit").hidden = false; hint();
+      $("f-amount").focus();
+    }
+    if (del) {
+      if (e.target.dataset.confirm !== "1") { e.target.dataset.confirm = "1"; e.target.textContent = "Confirm delete"; return; }
+      b.tx = b.tx.filter(x => x.id !== del); save(); renderRecords(); renderBanners(); toast("Record deleted.");
+    }
+  });
+
+  // ---------- Summary ----------
+  function renderSummary() {
+    const b = book(), ends = quarterEnds(b.year, b.qtype), issues = findIssues(b);
+    const cb = $("checkBanner");
+    cb.hidden = issues.length === 0; cb.className = "banner bad";
+    cb.innerHTML = `<span>${issues.length} record(s) need a look before you send: ${[...new Set(issues.map(i => i.type))].join(", ").toLowerCase()}. They're highlighted on the Records tab.</span>`;
+    $("summaries").innerHTML = b.sources.map(s => {
+      const r = summarise(b, s.id);
+      const head = `<tr><th>Category</th>${ends.map((e, i) => `<th class="num">Q${i + 1} to ${fmtDate(e).replace(/ \d{4}$/, "")}</th>`).join("")}</tr>`;
+      const line = (label, vals, cls) => `<tr class="${cls || ""}"><td>${esc(label)}</td>${vals.map(v => `<td class="num">${v ? fmtGBP(v) : "–"}</td>`).join("")}</tr>`;
+      let body = `<tr><td colspan="5"><strong>Income</strong></td></tr>` + r.cats.income.map(k => line(k, r.rows[k])).join("") + line("Total income", r.income, "total");
+      body += `<tr><td colspan="5"><strong>Expenses</strong></td></tr>` + r.cats.expense.map(k => line(k, r.rows[k])).join("") + line("Consolidated expenses (one figure, if turnover under £90,000)", r.expenses, "total");
+      if (r.cats.separate.length) body += `<tr><td colspan="5"><strong>Reported separately</strong></td></tr>` + r.cats.separate.map(k => line(k, r.rows[k])).join("");
+      return `<div class="panel stack"><div class="sumhead"><h2>${esc(s.name)}</h2><span class="muted">${s.type === "se" ? "Self-employment" : "UK property"} · year-to-date totals</span></div><div class="tablebox"><table><thead>${head}</thead><tbody>${body}</tbody></table></div></div>`;
+    }).join("") || '<div class="empty">Add an income source in Settings.</div>';
+    $("exportNote").textContent = isFull() ? "" : "Downloads and copying are part of the full version. You can still read every total here.";
+    ["dlSummary", "dlRecords", "cpSummary"].forEach(id => $(id).disabled = !isFull() && !state.sample);
+  }
+  function download(name, text, type) {
+    try {
+      const url = URL.createObjectURL(new Blob([text], { type }));
+      const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000); toast("Downloading " + name);
+    } catch (e) { toast("Download blocked. Use Copy instead."); }
+  }
+  const tag = () => book().year + "-" + String(book().year + 1).slice(2);
+  $("dlSummary").addEventListener("click", () => download("quarterready-summary-" + tag() + ".csv", summaryCSV(book()), "text/csv"));
+  $("dlRecords").addEventListener("click", () => download("quarterready-records-" + tag() + ".csv", recordsCSV(book()), "text/csv"));
+  $("cpSummary").addEventListener("click", () => {
+    const t = summaryCSV(book());
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(t).then(() => toast("Summary copied. Paste it into a spreadsheet."), () => toast("Copy blocked by the browser."));
+  });
+
+  // ---------- Deadlines ----------
+  function renderDeadlines() {
+    const b = book(), ends = quarterEnds(b.year, b.qtype), dls = deadlines(b.year), start = yearBounds(b.year, b.qtype).start;
+    const today = new Date(); const t0 = d(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const rows = [0, 1, 2, 3].map(i => ({ p: "Quarter " + (i + 1), c: fmtDate(start) + " – " + fmtDate(ends[i]), due: dls[i] }));
+    rows.push({ p: "Tax return", c: "Whole tax year " + b.year + "–" + String(b.year + 1).slice(2), due: dls[4] });
+    const next = rows.find(r => r.due >= t0);
+    $("dlTitle").textContent = "Deadlines for " + b.year + "–" + String(b.year + 1).slice(2);
+    $("dlRows").innerHTML = rows.map(r => `<tr><td>${r.p}</td><td>${r.c}</td><td class="num">${fmtDate(r.due)}</td><td>${r.due < t0 ? '<span class="pill">passed</span>' : r === next ? '<span class="pill next">next</span>' : ""}</td></tr>`).join("");
+  }
+
+  // ---------- Settings ----------
+  function renderSettings() {
+    const b = book();
+    $("s-name").value = b.name || ""; $("s-qtype").value = b.qtype;
+    $("srcList").innerHTML = b.sources.map(s => {
+      const n = b.tx.filter(t => t.source === s.id).length;
+      return `<li>${esc(s.name)} <span class="muted">(${s.type === "se" ? "self-employment" : "UK property"}, ${n} records)</span> ${n === 0 && b.sources.length > 1 ? `<button type="button" class="link" data-rm="${s.id}">Remove</button>` : ""}</li>`;
+    }).join("");
+    $("addPr").hidden = b.sources.some(s => s.type === "pr");
+    const L = state.licence;
+    $("licState").textContent = isFull() ? "Full version active in this browser" + (L.email ? " for " + L.email : "") + ". Unlimited records and exports for every tax year." : "Free version: up to " + FREE_LIMIT + " records per tax year, no exports. The full version is a one-time £19 payment.";
+    $("buyRow").hidden = isFull(); $("deactivate").hidden = !isFull(); $("s-key").value = L ? L.key : "";
+    if (CHECKOUT_URL) { $("buyLink").href = CHECKOUT_URL; $("buyLink").target = "_blank"; $("buyLink").rel = "noopener"; }
+    $("backupText").value = JSON.stringify(state);
+  }
+  $("s-name").addEventListener("input", e => { book().name = e.target.value; save(); });
+  $("s-qtype").addEventListener("change", e => { book().qtype = e.target.value; save(); renderAll(); toast("Quarters updated."); });
+  $("addSe").addEventListener("click", () => {
+    const n = $("s-newname").value.trim() || "Self-employment " + (book().sources.filter(s => s.type === "se").length + 1);
+    book().sources.push({ id: uid(), type: "se", name: n }); $("s-newname").value = ""; save(); renderAll(); renderSettings();
+  });
+  $("addPr").addEventListener("click", () => { book().sources.push({ id: uid(), type: "pr", name: "UK property" }); save(); renderAll(); renderSettings(); });
+  $("srcList").addEventListener("click", e => { const id = e.target.dataset.rm; if (!id) return; book().sources = book().sources.filter(s => s.id !== id); save(); renderAll(); renderSettings(); });
+
+  // Backup / restore
+  $("backup").addEventListener("click", () => download("quarterready-backup-" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify(state, null, 1), "application/json"));
+  function restoreFrom(text) {
+    try {
+      const s = JSON.parse(text);
+      if (!s || s.version !== 1 || !s.books) throw new Error("bad");
+      state = s; save(); renderAll(); renderSettings(); toast("Backup restored.");
+    } catch (e) { toast("That isn't a QuarterReady backup."); }
+  }
+  $("restore").addEventListener("change", e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => restoreFrom(r.result); r.readAsText(f); e.target.value = ""; });
+  $("copyBackup").addEventListener("click", () => navigator.clipboard?.writeText($("backupText").value).then(() => toast("Backup copied."), () => { $("backupText").select(); toast("Select all and copy."); }));
+  $("pasteRestore").addEventListener("click", () => restoreFrom($("backupText").value));
+  $("wipe").addEventListener("click", () => $("wipeConfirm").hidden = false);
+  $("wipeNo").addEventListener("click", () => $("wipeConfirm").hidden = true);
+  $("wipeYes").addEventListener("click", () => { book().tx = []; state.sample = false; save(); $("wipeConfirm").hidden = true; renderAll(); renderSettings(); toast("Records deleted."); });
+
+  // ---------- Licence (Lemon Squeezy License API) ----------
+  async function lsCall(path, params) {
+    const url = (LICENSE_PROXY || "https://api.lemonsqueezy.com") + "/v1/licenses/" + path;
+    const res = await fetch(url, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(params) });
+    return res.json();
+  }
+  function ownProduct(meta) { return meta && (!LS_STORE_ID || meta.store_id === LS_STORE_ID) && (!LS_PRODUCT_ID || meta.product_id === LS_PRODUCT_ID); }
+  $("activate").addEventListener("click", async () => {
+    const key = $("s-key").value.trim(); const msg = $("licMsg");
+    if (!/^[A-Za-z0-9-]{16,}$/.test(key)) { msg.textContent = "That doesn't look like a licence key. Copy it from your receipt email."; return; }
+    msg.textContent = "Checking your key…";
+    try {
+      const r = await lsCall("activate", { license_key: key, instance_name: "QuarterReady browser " + new Date().toISOString().slice(0, 10) });
+      if (r.activated && ownProduct(r.meta)) {
+        state.licence = { key, instance: r.instance && r.instance.id, valid: true, email: r.meta.customer_email || "", checked: Date.now() };
+        save(); msg.textContent = "Full version unlocked. Thank you!"; renderAll(); renderSettings();
+      } else msg.textContent = r.error ? "Not activated: " + r.error : "This key isn't for QuarterReady Records.";
+    } catch (e) { msg.textContent = "Couldn't reach the licence server. Check your connection and try again, or email us with your key."; }
+  });
+  $("deactivate").addEventListener("click", async () => {
+    const L = state.licence; if (!L) return;
+    try { if (L.instance) await lsCall("deactivate", { license_key: L.key, instance_id: L.instance }); } catch (e) {}
+    state.licence = null; save(); renderAll(); renderSettings(); $("licMsg").textContent = "Licence removed from this browser. You can use it on another device.";
+  });
+  async function revalidate() {
+    const L = state.licence; if (!L || !L.instance || Date.now() - (L.checked || 0) < 7 * 864e5) return;
+    try {
+      const r = await lsCall("validate", { license_key: L.key, instance_id: L.instance });
+      if (r && typeof r.valid === "boolean") { L.valid = r.valid && ownProduct(r.meta); L.checked = Date.now(); save(); renderAll(); }
+    } catch (e) { /* offline: keep current status */ }
+  }
+
+  // ---------- Init ----------
+  function renderAll() {
+    renderYears(); renderBanners();
+    const fsel = $("f-source"), prev = fsel.value; fillSources(fsel, false); if ([...fsel.options].some(o => o.value === prev)) fsel.value = prev; fillCats();
+    fillSources($("flt-source"), true);
+    if (!$("f-date").value) { const b = book(), t = new Date(); const ts = iso(d(t.getFullYear(), t.getMonth() + 1, t.getDate())); $("f-date").value = quarterOf(ts, b.year, b.qtype) ? ts : iso(yearBounds(b.year, b.qtype).start); }
+    renderRecords(); renderDeadlines(); if (!$("p-summary").hidden) renderSummary();
+  }
+  renderAll(); revalidate();
+})();
+</script>
+
+</body>
+</html>

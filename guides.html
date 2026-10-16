@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MTD Guides · QuarterReady</title>
+<meta name="description" content="Plain-English guides to Making Tax Digital for Income Tax: the April 2027 £30,000 threshold and using a spreadsheet with bridging software.">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--paper:#F3F6F5;--card:#FFFFFF;--ink:#102624;--muted:#4F625F;--line:#D3DDDA;--accent:#0E6B5C;--mark:#E4A11B;--soft:#E3EEEB;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#0C1817;--card:#132322;--ink:#E6EFED;--muted:#9DB2AE;--line:#24403C;--accent:#4FC2AC;--mark:#F0B740;--soft:#17302D;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0C1817;--card:#132322;--ink:#E6EFED;--muted:#9DB2AE;--line:#24403C;--accent:#4FC2AC;--mark:#F0B740;--soft:#17302D;color-scheme:dark}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 "Source Sans 3","Segoe UI",system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;line-height:1.2;text-wrap:balance}
+h2{margin-top:36px;padding-top:14px;border-top:1px solid var(--line)}
+a{color:var(--accent)}
+a:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.95rem}
+.note{background:var(--soft);border-radius:10px;padding:12px 14px}
+.small{font-size:.88rem;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.tablebox{overflow-x:auto}
+.cta{display:inline-block;background:var(--accent);color:var(--paper);padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:600}
+footer{max-width:760px;margin:0 auto;padding-block:20px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><a href="index.html">← QuarterReady</a><span><a href="index.html#checker">Start-date checker</a> · <a href="guides.html">Guides</a> · <a href="help.html">Help</a></span></div>
+
+<h1>Making Tax Digital guides</h1>
+<p class="small">Rules checked 15 October 2026. Each fact links to its GOV.UK or HMRC source.</p>
+
+<h2 id="april-2027">MTD from April 2027: are you in the £30,000 group?</h2>
+<p>If your qualifying income for the 2025–26 tax year was over £30,000, you need to use Making Tax Digital for Income Tax from <strong>6 April 2027</strong> (<a href="https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax" target="_blank" rel="noopener">GOV.UK</a>).</p>
+<p><strong>Qualifying income</strong> means your self-employment turnover plus your property income, before expenses. If you own a property jointly, count only your share. Wages, pensions, dividends and partnership profit shares don't count (<a href="https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">GOV.UK</a>).</p>
+<p>Example: £18,000 of freelance income and £14,000 of rent in 2025–26 gives £32,000. That's over £30,000, so MTD starts on 6 April 2027.</p>
+<h3>What changes on 6 April 2027</h3>
+<ul>
+<li>You keep digital records of income and expenses.</li>
+<li>You send a quarterly update by 7 August 2027, 7 November 2027, 7 February 2028 and 7 May 2028 (<a href="https://makingtaxdigital.campaign.gov.uk/quarterly-updates/" target="_blank" rel="noopener">HMRC</a>).</li>
+<li>You finalise the year and send your tax return from your software by 31 January 2029.</li>
+</ul>
+<h3>What to do now</h3>
+<ol>
+<li>Work out your 2025–26 qualifying income. <a href="index.html#checker">Our checker</a> does the sum for you.</li>
+<li>Choose software, or a spreadsheet plus bridging software.</li>
+<li><a href="https://www.gov.uk/guidance/sign-up-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Sign up</a> before 6 April 2027.</li>
+</ol>
+
+<h2 id="spreadsheet">Can I use a spreadsheet for Making Tax Digital?</h2>
+<p>Yes. HMRC says bridging software may suit you if you want to keep your digital records in a spreadsheet (<a href="https://www.gov.uk/guidance/choose-the-right-software-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">GOV.UK: choose the right software</a>). The spreadsheet holds your records; the bridging software reads the totals and sends them to HMRC.</p>
+<h3>What the spreadsheet needs</h3>
+<ul>
+<li>One row per transaction, with a date, a category and an amount.</li>
+<li>Categories that match what HMRC asks for in a quarterly update, for example "Rent, rates, insurance and ground rents" or "Car, van and travel expenses".</li>
+<li>Year-to-date totals per category for each quarter, which the bridging software links to.</li>
+<li>Mortgage interest on residential lets kept separate from other property expenses.</li>
+</ul>
+<h3>Spreadsheet or full software?</h3>
+<div class="tablebox"><table>
+<tr><th></th><th>Spreadsheet + bridging</th><th>Full MTD software</th></tr>
+<tr><td>Cost</td><td>Often low; some bridging tools are free</td><td>Free to monthly subscription</td></tr>
+<tr><td>Bank feeds and receipt scanning</td><td>Usually no</td><td>Often yes</td></tr>
+<tr><td>Control over your records</td><td>Full: it's your file</td><td>Records live in the provider's system</td></tr>
+<tr><td>Best for</td><td>Simple affairs, people already using spreadsheets</td><td>Many transactions, wanting automation</td></tr>
+</table></div>
+<h3>Or use a simple records app</h3>
+<p>QuarterReady Records works like a spreadsheet that already knows HMRC's categories: you type in each income and expense, and it shows your year-to-date totals per quarter, ready to export as CSV for your bridging software.</p>
+<p><a class="cta" href="app.html">Try QuarterReady Records free</a></p>
+
+</main>
+<footer>QuarterReady is independent and not affiliated with HM Revenue &amp; Customs. General information, not tax advice. <a href="legal.html#notice">Legal notice</a> · <a href="legal.html#privacy">Privacy</a> · <a href="legal.html#terms">Terms</a> · <a href="about.html">About</a></footer>
+</body>
+</html>

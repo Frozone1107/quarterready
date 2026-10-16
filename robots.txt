@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /thanks.html
+Sitemap: https://frozone1107.github.io/quarterready/sitemap.xml

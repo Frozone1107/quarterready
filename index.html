@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuarterReady</title>
+<meta name="description" content="Free Making Tax Digital for Income Tax start-date checker for UK sole traders and landlords. Find out if and when MTD applies to you, and see your first four quarterly deadlines.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a single working column; the checker sits beside its result like a form and its stamped reply. */
+:root{
+  --paper:#F3F6F5; --card:#FFFFFF; --ink:#102624; --muted:#4F625F; --line:#D3DDDA;
+  --accent:#0E6B5C; --accent-ink:#FFFFFF; --mark:#E4A11B; --soft:#E3EEEB;
+  --ok:#1E7A46; --warn:#9A5B00; --info:#2A5D8F;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
+  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
+  --ok:#5BCB8A; --warn:#F0B740; --info:#7FB2E5; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
+  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
+  --ok:#5BCB8A; --warn:#F0B740; --info:#7FB2E5; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:1.25rem;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:10px}
+.brand svg{flex:none}
+nav.links{display:flex;gap:18px;flex-wrap:wrap;font-size:.95rem}
+nav.links a{color:var(--muted);text-decoration:none}
+nav.links a:hover{color:var(--ink)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,4.6vw,3.1rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:700}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hero{padding-block:44px 24px;display:grid;gap:14px;max-width:760px}
+.hero p{margin:0;color:var(--muted);font-size:1.12rem;max-width:62ch}
+.notice{font-size:.9rem;color:var(--muted)}
+section{padding-block:36px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+form{display:grid;gap:18px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+legend{font-weight:600;margin-bottom:6px}
+.yr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.yr label{display:grid;gap:4px;font-size:.9rem;color:var(--muted)}
+.yrhead{font-family:var(--mono);font-size:.8rem;color:var(--ink);grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.yrhead span{color:var(--muted)}
+.money{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.money b{padding:0 8px 0 10px;color:var(--muted);font-weight:600}
+.money input{border:0;background:transparent;color:var(--ink);font:500 1rem var(--mono);padding:10px 10px 10px 0;width:100%;min-width:0;font-variant-numeric:tabular-nums}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}
+.check input{margin-top:4px;accent-color:var(--accent)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+button,.btn{font:600 1rem var(--body);border-radius:10px;padding:11px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+button.ghost,.btn.ghost{background:transparent;color:var(--accent)}
+.result{display:grid;gap:16px}
+.stamp{border:2px solid var(--accent);border-radius:12px;padding:16px 18px;display:grid;gap:6px}
+.stamp[data-tone="ok"]{border-color:var(--ok)}
+.stamp[data-tone="warn"]{border-color:var(--warn)}
+.stamp[data-tone="info"]{border-color:var(--info)}
+.stamp .label{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stamp .big{font-family:var(--display);font-size:1.7rem;font-weight:700}
+.stamp p{margin:0}
+.sample{font-size:.82rem;font-family:var(--mono);color:var(--warn)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+.tablebox{overflow-x:auto}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{font-family:var(--mono);font-size:.72rem;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--ink);white-space:nowrap}
+.pill.past{opacity:.6}
+.pill.next{background:var(--mark);color:#1b1300}
+.qi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.qi div{background:var(--soft);border-radius:8px;padding:8px 10px;min-width:0}
+.qi small{display:block;font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.qi strong{font-family:var(--mono);font-variant-numeric:tabular-nums}
+@media (max-width:480px){.qi{grid-template-columns:1fr}.yr{grid-template-columns:1fr}}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:820px){.cols3{grid-template-columns:1fr}}
+.cols3 p{margin:6px 0 0;color:var(--muted)}
+.kit{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;display:grid;gap:18px}
+.kit ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.shot{margin:0;display:grid;gap:6px;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--paper)}
+.status{display:inline-block;font-family:var(--mono);font-size:.78rem;padding:3px 10px;border-radius:99px;border:1px solid var(--mark);color:var(--ink)}
+details{border-bottom:1px solid var(--line);padding-block:12px}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 0;color:var(--muted);max-width:70ch}
+footer{border-top:1px solid var(--line);margin-top:24px}
+footer .wrap{padding-block:24px;display:grid;gap:8px;font-size:.88rem;color:var(--muted)}
+footer nav{display:flex;gap:16px;flex-wrap:wrap}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:no-preference){.stamp{transition:border-color .25s}}
+
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="QuarterReady home">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="var(--accent)"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="var(--accent-ink)"/></svg>
+      QuarterReady
+    </a>
+    <nav class="links" aria-label="Main">
+      <a href="#checker">Start-date checker</a>
+      <a href="#deadlines">Deadlines</a>
+      <a href="#pricing">Records app</a>
+      <a href="app.html">Open the app</a>
+      <a href="#faq">FAQ</a>
+      <a href="guides.html">Guides</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <div class="hero">
+      <span class="eyebrow">Making Tax Digital for Income Tax · UK</span>
+      <h1>Find your MTD start date, and your first four quarterly deadlines.</h1>
+      <p>For UK sole traders and landlords. Enter your gross self-employment and property income for each tax year. The checker applies HMRC's published thresholds and shows when quarterly updates begin.</p>
+      <p class="notice">Free. Nothing you type leaves your browser. Not affiliated with HMRC, and not tax advice: confirm your result with <a href="https://tax.service.gov.uk/guidance/check-if-you-need-to-use-making-tax-digital-for-income-tax" rel="noopener" target="_blank">HMRC's own checker</a>.</p>
+    </div>
+  </div>
+
+  <section id="checker">
+    <div class="wrap grid2">
+      <div class="panel">
+        <form id="f" novalidate>
+          <fieldset>
+            <legend>1. Your situation</legend>
+            <label class="check"><input type="checkbox" id="sa" checked> I'm a sole trader and/or landlord registered for Self Assessment</label>
+            <label class="check"><input type="checkbox" id="exempt"> I think an exemption may apply (no National Insurance number, digitally excluded, certain reliefs or supplementary pages)</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Gross income before expenses (your share)</legend>
+            <p class="notice" style="margin:0">Count self-employment turnover and property income only. Leave out PAYE wages, pensions, dividends and partnership profit shares.</p>
+            <div class="yr" data-y="2024">
+              <div class="yrhead">Tax year 2024–25 <span>£50,000 test → April 2026</span></div>
+              <label for="se2024">Self-employment<span class="money"><b>£</b><input id="se2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
+              <label for="pr2024">Property<span class="money"><b>£</b><input id="pr2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
+            </div>
+            <div class="yr" data-y="2025">
+              <div class="yrhead">Tax year 2025–26 <span>£30,000 test → April 2027</span></div>
+              <label for="se2025">Self-employment<span class="money"><b>£</b><input id="se2025" inputmode="numeric" autocomplete="off" value="24000"></span></label>
+              <label for="pr2025">Property<span class="money"><b>£</b><input id="pr2025" inputmode="numeric" autocomplete="off" value="9000"></span></label>
+            </div>
+            <div class="yr" data-y="2026">
+              <div class="yrhead">Tax year 2026–27 (estimate) <span>£20,000 test → April 2028</span></div>
+              <label for="se2026">Self-employment<span class="money"><b>£</b><input id="se2026" inputmode="numeric" autocomplete="off" value="25000"></span></label>
+              <label for="pr2026">Property<span class="money"><b>£</b><input id="pr2026" inputmode="numeric" autocomplete="off" value="9000"></span></label>
+            </div>
+          </fieldset>
+          <div class="btnrow">
+            <button type="submit">Check my start date</button>
+            <button type="button" class="ghost" id="clear">Clear figures</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <div class="sample" id="sampleNote">Showing an example: £24,000 self-employment + £9,000 rent in 2025–26.</div>
+        <div class="stamp" id="stamp" data-tone="warn">
+          <span class="label">Your result</span>
+          <span class="big" id="big">From 6 April 2027</span>
+          <p id="why">Your qualifying income for 2025–26 is £33,000, which is over £30,000.</p>
+        </div>
+        <div class="qi" id="qi"></div>
+        <div class="panel" id="deadlines">
+          <h3 id="dlTitle">Your first year of quarterly updates</h3>
+          <p class="notice" style="margin:6px 0 10px">Standard tax-year quarters. If you elect calendar quarters, the periods end on the last day of the month instead, with the same 7th-of-the-month deadlines.</p>
+          <div class="tablebox"><table>
+            <thead><tr><th>Period</th><th>Covers</th><th>Send by</th><th></th></tr></thead>
+            <tbody id="dl"></tbody>
+          </table></div>
+          <div class="btnrow" style="margin-top:12px"><button type="button" class="ghost" id="copy">Copy these dates</button><span class="notice" id="copied" hidden>Copied.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cols3">
+        <div>
+          <h3>What counts</h3>
+          <p>Self-employment turnover and property income, before expenses. For a jointly owned property, only your share. If you were UK resident, foreign property income counts too.</p>
+        </div>
+        <div>
+          <h3>What doesn't</h3>
+          <p>Employment (PAYE), pensions, dividends, and your profit share as a partner in a partnership. You may still need MTD for any self-employment or property income alongside them.</p>
+        </div>
+        <div>
+          <h3>Spreadsheets are allowed</h3>
+          <p>You can keep digital records in a spreadsheet, as long as you send quarterly updates through HMRC-recognised bridging software that connects to it.</p>
+        </div>
+      </div>
+      <p class="notice" style="margin-top:16px">Sources: <a href="https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Find out if and when you need to use MTD</a> · <a href="https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Work out your qualifying income</a> · <a href="https://www.gov.uk/guidance/find-out-if-you-can-get-an-exemption-from-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Exemptions</a> · <a href="https://makingtaxdigital.campaign.gov.uk/quarterly-updates/" target="_blank" rel="noopener">Quarterly updates</a>. Rules checked 15 October 2026.</p>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="kit">
+        <span class="status">Works in your browser · no account · no subscription</span>
+        <h2>QuarterReady Records</h2>
+        <p style="margin:0;max-width:64ch;color:var(--muted)">A simple web app for keeping your Making Tax Digital records. Type in each income and expense, pick the HMRC category from a list, and see your year-to-date totals for every quarterly update.</p>
+        <ul>
+          <li>Separate records for each self-employment and for your UK property business</li>
+          <li>Categories that match the totals HMRC asks for in a quarterly update, with mortgage interest on residential lets kept separate</li>
+          <li>Quarterly summary per source, plus a single consolidated expenses figure if your turnover is under £90,000</li>
+          <li>Warnings for possible duplicates and dates outside the tax year</li>
+          <li>Your deadlines for the year, and export to CSV for Excel, Google Sheets or bridging software</li>
+          <li>Your records stay on your device. Download a backup file whenever you like.</li>
+        </ul>
+        <figure class="shot" aria-label="Example of the quarterly summary">
+          <div class="tablebox"><table>
+            <thead><tr><th>UK property</th><th>Q1 to date</th><th>Q2 to date</th></tr></thead>
+            <tbody>
+              <tr><td>Total rental income from property</td><td class="num">£1,900.00</td><td class="num">£1,900.00</td></tr>
+              <tr><td>Property repairs and maintenance</td><td class="num">£90.00</td><td class="num">£90.00</td></tr>
+              <tr><td>Legal, management and other professional fees</td><td class="num">£114.00</td><td class="num">£114.00</td></tr>
+              <tr><td><strong>Consolidated expenses</strong></td><td class="num"><strong>£204.00</strong></td><td class="num"><strong>£204.00</strong></td></tr>
+              <tr><td>Residential property finance costs</td><td class="num">£310.00</td><td class="num">£310.00</td></tr>
+            </tbody>
+          </table></div>
+          <figcaption class="notice">The app's quarterly summary, using its built-in example records.</figcaption>
+        </figure>
+        <div class="tablebox"><table>
+          <thead><tr><th></th><th>Free</th><th>Full version · £19 one-time</th></tr></thead>
+          <tbody>
+            <tr><td>Records per tax year</td><td>Up to 30</td><td>Unlimited</td></tr>
+            <tr><td>Quarterly summary and deadlines</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Export to CSV (summary and records)</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Backup and restore</td><td>Yes</td><td>Yes</td></tr>
+          </tbody>
+        </table></div>
+        <div class="btnrow">
+          <a class="btn" href="app.html">Open the app free</a>
+          <a class="btn ghost" id="buy" href="app.html#settings">Get the full version · £19</a>
+        </div>
+        <p class="notice" style="margin:0">QuarterReady keeps records and adds them up. It does not submit to HMRC or calculate your tax. To send updates you'll also need HMRC-recognised bridging software; HMRC lists free options for simple affairs. Payment is handled by our payment partner, which includes VAT where it applies. Your licence key arrives by email straight away.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Questions</h2>
+      <details><summary>Will HMRC tell me if I need to start?</summary><p>HMRC reviews your Self Assessment return and writes to you if your qualifying income is over the threshold. If no letter arrives, it is still your responsibility to check and sign up.</p></details>
+      <details><summary>Which year's income decides my start date?</summary><p>Over £50,000 in 2024–25 means 6 April 2026. Over £30,000 in 2025–26 means 6 April 2027. Over £20,000 in 2026–27 means 6 April 2028, according to current GOV.UK guidance.</p></details>
+      <details><summary>What if I'm under £20,000?</summary><p>You're automatically exempt while your qualifying income stays at £20,000 or less. Check again each year, because your start date depends on each year's figures.</p></details>
+      <details><summary>Do quarterly updates replace my tax return?</summary><p>No. Quarterly updates are summaries of income and expenses. You still finalise the year with a tax return, sent from your MTD software, by 31 January after the tax year ends.</p></details>
+      <details><summary>What happens after I buy?</summary><p>Our payment partner emails you a receipt with your licence key straight away. Open the app, go to Settings, paste the key and press Activate. If anything goes wrong, see the <a href="help.html">help page</a>.</p></details>
+      <details><summary>Where are my records stored?</summary><p>Only in your browser, on your device. We never receive them. Download a backup from Settings regularly, and keep it with your business records, because clearing your browser data deletes them.</p></details>
+      <details><summary>Is this checker official?</summary><p>No. QuarterReady is independent and not affiliated with HMRC. It applies the published thresholds to the figures you enter. Your situation may involve rules it doesn't cover, such as exemptions, non-UK residence or accounting periods that aren't 12 months.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav aria-label="Legal"><a href="guides.html">Guides</a><a href="help.html">Help &amp; downloads</a><a href="about.html">About</a><a href="legal.html#notice">Legal notice</a><a href="legal.html#privacy">Privacy</a><a href="legal.html#terms">Terms</a><a href="legal.html#contact">Contact</a></nav>
+    <div>QuarterReady is an independent tool. Not affiliated with HM Revenue &amp; Customs. General information, not tax advice. Contains public sector information licensed under the Open Government Licence v3.0.</div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // CONFIG: paste the hosted checkout link once the product exists on Lemon Squeezy.
+  const BUY_URL = "";
+
+  const RULES = [
+    { year: 2024, limit: 50000, start: 2026 },
+    { year: 2025, limit: 30000, start: 2027 },
+    { year: 2026, limit: 20000, start: 2028 },
+  ];
+  const $ = id => document.getElementById(id);
+  const gbp = n => "£" + Math.round(n).toLocaleString("en-GB");
+  const num = v => { const n = parseFloat(String(v).replace(/[£,\s]/g, "")); return isFinite(n) && n > 0 ? n : 0; };
+  const fmt = d => d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+  // Pure function: figures in, decision out.
+  function decide(input) {
+    const qi = RULES.map(r => ({ ...r, total: (input[r.year]?.se || 0) + (input[r.year]?.pr || 0) }));
+    if (!input.registered) return { tone: "info", big: "Probably not yet", why: "MTD for Income Tax applies to sole traders and landlords registered for Self Assessment.", start: null, qi };
+    const hit = qi.find(r => r.total > r.limit);
+    if (hit) {
+      const yr = hit.year + "–" + String(hit.year + 1).slice(2);
+      const late = hit.start === 2026;
+      return {
+        tone: late ? "warn" : "ok",
+        big: "From 6 April " + hit.start,
+        why: "Your qualifying income for " + yr + " is " + gbp(hit.total) + ", which is over " + gbp(hit.limit) + "." +
+          (late ? " You should already be using MTD. You can still sign up." : " Sign up before that date."),
+        start: hit.start, qi
+      };
+    }
+    return { tone: "info", big: "Not required on these figures", why: "None of the years you entered is over its threshold. Check again each year: if 2026–27 goes over £20,000, you'd start in April 2028.", start: null, qi };
+  }
+
+  function quarters(startYear) {
+    const y = startYear;
+    return [
+      { p: "Quarter 1", c: "6 Apr – 5 Jul " + y, due: new Date(y, 7, 7) },
+      { p: "Quarter 2", c: "6 Jul – 5 Oct " + y, due: new Date(y, 10, 7) },
+      { p: "Quarter 3", c: "6 Oct " + y + " – 5 Jan " + (y + 1), due: new Date(y + 1, 1, 7) },
+      { p: "Quarter 4", c: "6 Jan – 5 Apr " + (y + 1), due: new Date(y + 1, 4, 7) },
+      { p: "Tax return", c: "Tax year " + y + "–" + String(y + 1).slice(2), due: new Date(y + 2, 0, 31) },
+    ];
+  }
+
+  function read() {
+    const o = { registered: $("sa").checked, exempt: $("exempt").checked };
+    RULES.forEach(r => { o[r.year] = { se: num($("se" + r.year).value), pr: num($("pr" + r.year).value) }; });
+    return o;
+  }
+
+  let lastRows = [];
+  function render(isSample) {
+    const input = read();
+    const res = decide(input);
+    $("sampleNote").hidden = !isSample;
+    $("stamp").dataset.tone = res.tone;
+    $("big").textContent = res.big;
+    $("why").textContent = res.why + (input.exempt ? " You ticked a possible exemption: check HMRC's exemptions guidance before relying on this." : "");
+    $("qi").innerHTML = res.qi.map(r => `<div><small>${r.year}–${String(r.year + 1).slice(2)} · over ${gbp(r.limit)}?</small><strong>${gbp(r.total)}</strong></div>`).join("");
+    const start = res.start ?? 2028;
+    $("dlTitle").textContent = res.start ? "Your first year of quarterly updates (" + start + "–" + String(start + 1).slice(2) + ")" : "If you start in April 2028, your first year looks like this";
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const rows = quarters(start);
+    const next = rows.find(r => r.due >= today);
+    lastRows = rows;
+    $("dl").innerHTML = rows.map(r => {
+      const tag = r.due < today ? '<span class="pill past">passed</span>' : r === next ? '<span class="pill next">next</span>' : "";
+      return `<tr><td>${r.p}</td><td>${r.c}</td><td class="num">${fmt(r.due)}</td><td>${tag}</td></tr>`;
+    }).join("");
+  }
+
+  $("f").addEventListener("submit", e => { e.preventDefault(); render(false); });
+  $("f").addEventListener("input", () => render(false));
+  $("clear").addEventListener("click", () => {
+    RULES.forEach(r => { $("se" + r.year).value = ""; $("pr" + r.year).value = ""; });
+    render(false);
+  });
+  $("copy").addEventListener("click", () => {
+    const text = lastRows.map(r => r.p + " (" + r.c + "): send by " + fmt(r.due)).join("\n");
+    const done = () => { $("copied").hidden = false; setTimeout(() => $("copied").hidden = true, 2000); };
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done).catch(() => {});
+  });
+  if (BUY_URL) { const b = $("buy"); b.href = BUY_URL; b.target = "_blank"; b.rel = "noopener"; }
+  window.__qrDecide = decide;
+  render(true);
+})();
+</script>
+
+</body>
+</html>
