@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QuarterReady</title>
 <meta name="description" content="Free Making Tax Digital for Income Tax start-date checker for UK sole traders and landlords, plus a simple records app that adds up your quarterly updates.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 28 28%27%3E%3Crect x=%271%27 y=%271%27 width=%2726%27 height=%2726%27 rx=%277%27 fill=%27%23E4A11B%27/%3E%3Cpath d=%27M14 5v9h9A9 9 0 1 1 14 5z%27 fill=%27%230B2B27%27/%3E%3C/svg%3E">
+<meta property="og:title" content="QuarterReady: your MTD start date and quarterly records">
+<meta property="og:description" content="Free Making Tax Digital checker for UK sole traders and landlords, plus a simple app that adds up your quarterly updates.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://frozone1107.github.io/quarterready/">
+<meta property="og:image" content="https://frozone1107.github.io/quarterready/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://frozone1107.github.io/quarterready/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -183,6 +191,7 @@ body{margin:0}
 <body>
 
 
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"QuarterReady Records","applicationCategory":"FinanceApplication","operatingSystem":"Web browser","description":"Keep Making Tax Digital for Income Tax records and see quarterly totals per HMRC category.","offers":[{"@type":"Offer","price":"0","priceCurrency":"GBP","name":"Free"},{"@type":"Offer","price":"19","priceCurrency":"GBP","name":"Full version"}]}</script>
 <header class="hero">
   <div class="wrap">
     <div class="topbar">
@@ -310,7 +319,7 @@ body{margin:0}
         <div class="step">
           <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="5" width="28" height="30" rx="5" fill="var(--soft)"/><path d="M13 14h14M13 20h14M13 26h8" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/></svg>
           <span class="n">STEP 1</span><h3>Record</h3>
-          <p>Date, amount and a category from HMRC's list. Separate books for each self-employment and your property business.</p>
+          <p>Type it in, or import your bank statement and tick the business lines. Attach the receipt, log business miles.</p>
         </div>
         <div class="step">
           <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="var(--soft)"/><path d="M20 5v15h15A15 15 0 0 0 20 5z" fill="var(--accent)"/></svg>
@@ -366,18 +375,18 @@ body{margin:0}
       <div class="head">
         <span class="eyebrow">Pricing</span>
         <h2>Free to start. One payment for the full year.</h2>
-        <p>No subscription, no account. Pay once when you need more than 30 records or want to export.</p>
+        <p>No subscription, no account. The free version shows you how it works; the full version saves you the hours.</p>
       </div>
       <div class="plans">
         <div class="plan">
           <h3>Free</h3>
           <div class="price">£0</div>
           <ul>
-            <li>Start-date checker and deadlines</li>
+            <li>Start-date checker</li>
             <li>Up to 30 records per tax year</li>
             <li>Quarterly summary per HMRC category</li>
+            <li>Deadlines, with a calendar file for reminders</li>
             <li>Backup and restore</li>
-            <li class="no">CSV export</li>
           </ul>
           <a class="ghost" href="app.html">Open the app</a>
         </div>
@@ -385,10 +394,13 @@ body{margin:0}
           <span class="tag">Full version</span>
           <div class="price">£19 <small>one-time, VAT included where it applies</small></div>
           <ul>
-            <li>Everything in Free</li>
-            <li>Unlimited records, every tax year</li>
-            <li>CSV export of the summary and all records</li>
-            <li>Use on up to 2 browsers</li>
+            <li>Everything in Free, with unlimited records</li>
+            <li><strong>Bank statement import</strong>: months of records in minutes, categories remembered</li>
+            <li><strong>Receipt attachments</strong>: a photo or PDF kept with each record</li>
+            <li><strong>Mileage log</strong>: HMRC flat rates (55p, then 25p a mile) worked out for you</li>
+            <li><strong>Per-property breakdown</strong> for landlords</li>
+            <li><strong>CSV exports</strong> for bridging software and a <strong>year-end report</strong> for your accountant</li>
+            <li>Every tax year, on up to 2 browsers</li>
           </ul>
           <a class="solid" id="buy" href="app.html#settings">Get the full version</a>
           <p class="notice" style="margin:0">Payment by our payment partner. Your licence key arrives by email straight away.</p>
@@ -407,6 +419,8 @@ body{margin:0}
       <details><summary>Do quarterly updates replace my tax return?</summary><p>No. Quarterly updates are summaries of income and expenses. You still finalise the year with a tax return from your MTD software by 31 January after the tax year ends.</p></details>
       <details><summary>Where are my records stored?</summary><p>Only in your browser, on your device. We never receive them. Download a backup from Settings regularly, because clearing your browser data deletes them.</p></details>
       <details><summary>What happens after I buy?</summary><p>Our payment partner emails you a receipt with your licence key straight away. In the app, open Settings, paste the key and press Activate. See the <a href="help.html">help page</a> if anything goes wrong.</p></details>
+      <details><summary>What's the difference between free and full?</summary><p>Free keeps up to 30 records a tax year and shows your quarterly totals and deadlines. The full version (£19 once) removes the limit and adds bank statement import, receipt attachments, the mileage log, a per-property breakdown, CSV exports and a year-end report.</p></details>
+      <details><summary>Is my bank statement uploaded anywhere?</summary><p>No. The file is read inside your browser and never leaves your device. Only the lines you tick become records.</p></details>
       <details><summary>Is this official?</summary><p>No. QuarterReady is independent and not affiliated with HMRC. It applies published rules to the figures you enter; your situation may involve rules it doesn't cover.</p></details>
     </div>
   </section>

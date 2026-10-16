@@ -4,15 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QuarterReady Records</title>
-<meta name="description" content="Keep Making Tax Digital records for self-employment and UK property in your browser, see quarterly totals per HMRC category, and export them for bridging software.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 28 28%27%3E%3Crect x=%271%27 y=%271%27 width=%2726%27 height=%2726%27 rx=%277%27 fill=%27%23E4A11B%27/%3E%3Cpath d=%27M14 5v9h9A9 9 0 1 1 14 5z%27 fill=%27%230B2B27%27/%3E%3C/svg%3E">
+<meta name="description" content="Keep Making Tax Digital records for self-employment and UK property in your browser: import bank statements, attach receipts, log mileage, and get quarterly totals per HMRC category.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Layout: an app shell; tabs across the top, one working panel at a time, entry form beside the ledger on wide screens. */
+/* Layout: deep-teal app bar like the site hero; tabs; one working panel at a time; entry form beside the ledger on wide screens. */
 :root{
   --paper:#F3F6F5; --card:#FFFFFF; --ink:#102624; --muted:#4F625F; --line:#D3DDDA;
   --accent:#0E6B5C; --accent-ink:#FFFFFF; --mark:#E4A11B; --soft:#E3EEEB;
+  --hero:#0B2B27; --hero-ink:#E8F3F0; --hero-muted:#9FC3BA; --hero-line:#22524A;
   --ok:#1E7A46; --warn:#9A5B00; --bad:#B3261E; --badsoft:#F8E1DE;
   --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
@@ -21,48 +23,55 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
   --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
+  --hero:#081C19; --hero-ink:#E8F3F0; --hero-muted:#8FB3AA; --hero-line:#1E423C;
   --ok:#5BCB8A; --warn:#F0B740; --bad:#F28B82; --badsoft:#3A1D1A; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
   --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
+  --hero:#081C19; --hero-ink:#E8F3F0; --hero-muted:#8FB3AA; --hero-line:#1E423C;
   --ok:#5BCB8A; --warn:#F0B740; --bad:#F28B82; --badsoft:#3A1D1A; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 a{color:var(--accent)}
 :focus-visible{outline:3px solid var(--mark);outline-offset:2px}
-header.top{border-bottom:1px solid var(--line);background:var(--card)}
-header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;flex-wrap:wrap}
-.brand{font-family:var(--display);font-weight:700;font-size:1.15rem;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
-.yearsel{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}
+header.top{background:var(--hero);color:var(--hero-ink)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--hero-ink);display:flex;align-items:center;gap:8px}
+.yearsel{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--hero-muted);flex-wrap:wrap}
+.yearsel select{background:var(--hero);color:var(--hero-ink);border-color:var(--hero-line)}
 select,input,textarea{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
-.badge{font-family:var(--mono);font-size:.72rem;padding:3px 9px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
-.badge.full{border-color:var(--ok);color:var(--ok)}
-.badge.free{border-color:var(--mark)}
-nav.tabs{display:flex;gap:4px;flex-wrap:wrap;padding-block:10px}
-nav.tabs button{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:8px;padding:7px 12px;font:600 .95rem var(--body);cursor:pointer}
-nav.tabs button[aria-selected="true"]{background:var(--soft);color:var(--ink);border-color:var(--line)}
+.badge{font-family:var(--mono);font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--hero-line);white-space:nowrap;color:var(--hero-ink)}
+.badge.full{border-color:var(--mark);background:var(--mark);color:#1b1300}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;padding-block:12px}
+nav.tabs button{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:9px;padding:8px 12px;font:600 .95rem var(--body);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);border-color:var(--line);box-shadow:0 2px 0 var(--accent)}
+.lock{font-size:.7rem;font-family:var(--mono);color:var(--warn);margin-left:4px}
 h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0;text-wrap:balance}
 h2{font-size:1.35rem}
 h3{font-size:1.05rem}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
-.grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);gap:18px;align-items:start}
 @media (max-width:880px){.grid{grid-template-columns:1fr}}
 .stack{display:grid;gap:14px}
 form.entry{display:grid;gap:10px}
-form.entry label{display:grid;gap:4px;font-size:.88rem;color:var(--muted)}
+.fld{display:grid;gap:4px;font-size:.88rem;color:var(--muted)}
 .row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media (max-width:420px){.row2{grid-template-columns:1fr}}
 button,.btn{font:600 .95rem var(--body);border-radius:9px;padding:9px 14px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+button:disabled{opacity:.5;cursor:not-allowed}
 button.ghost,.btn.ghost{background:transparent;color:var(--accent)}
+button.gold,.btn.gold{background:var(--mark);border-color:var(--mark);color:#1b1300}
 button.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
 button.link{background:none;border:0;color:var(--accent);padding:2px 4px;font-weight:600}
 .btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .muted{color:var(--muted);font-size:.88rem}
-.banner{border:1px solid var(--mark);background:var(--soft);border-radius:10px;padding:10px 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.banner{border:1px solid var(--mark);background:var(--soft);border-radius:12px;padding:10px 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .banner.bad{border-color:var(--bad);background:var(--badsoft)}
+.upsell{border:1px dashed var(--mark);border-radius:12px;padding:14px;display:grid;gap:8px;background:var(--soft)}
 .tablebox{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:.92rem}
-th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
 td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
 tr.total td{font-weight:700;background:var(--soft)}
@@ -76,8 +85,21 @@ tr.flag td{background:var(--badsoft)}
 .empty{border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--muted)}
 textarea{width:100%;min-height:120px;font:500 .8rem var(--mono)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-weight:600;z-index:9}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-weight:600;z-index:9;max-width:calc(100% - 32px)}
+.check{display:flex;gap:8px;align-items:center}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px}
+.feat div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.feat strong{display:block}
+.imp select{max-width:100%}
+.imp td select{width:100%;min-width:200px}
 footer{padding-block:24px;color:var(--muted);font-size:.85rem}
+#report{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  header.top,nav.tabs,main>*:not(#report),.toast{display:none!important}
+  #report{display:block!important}
+  #report table{font-size:10pt}
+}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -90,7 +112,7 @@ body{margin:0}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="index.html">
-      <svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="var(--accent)"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="var(--accent-ink)"/></svg>
+      <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" fill="var(--mark)"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="var(--hero)"/></svg>
       QuarterReady Records
     </a>
     <div class="yearsel">
@@ -104,6 +126,8 @@ body{margin:0}
 <main class="wrap">
   <nav class="tabs" role="tablist" aria-label="Sections">
     <button role="tab" id="t-records" aria-controls="p-records" aria-selected="true">Records</button>
+    <button role="tab" id="t-import" aria-controls="p-import" aria-selected="false">Bank import<span class="lock" data-lock>FULL</span></button>
+    <button role="tab" id="t-mileage" aria-controls="p-mileage" aria-selected="false">Mileage<span class="lock" data-lock>FULL</span></button>
     <button role="tab" id="t-summary" aria-controls="p-summary" aria-selected="false">Quarterly summary</button>
     <button role="tab" id="t-deadlines" aria-controls="p-deadlines" aria-selected="false">Deadlines</button>
     <button role="tab" id="t-settings" aria-controls="p-settings" aria-selected="false">Settings &amp; backup</button>
@@ -123,14 +147,17 @@ body{margin:0}
       <div class="panel">
         <form class="entry" id="entry" novalidate>
           <h2 id="formTitle">Add a record</h2>
-          <label for="f-source">Income source<select id="f-source"></select></label>
-          <label for="f-cat">Category<select id="f-cat"></select></label>
+          <label class="fld" for="f-source">Income source<select id="f-source"></select></label>
+          <label class="fld" for="f-cat">Category<select id="f-cat"></select></label>
           <div class="row2">
-            <label for="f-date">Date<input id="f-date" type="date" required></label>
-            <label for="f-amount">Amount (£)<input id="f-amount" inputmode="decimal" autocomplete="off" placeholder="0.00" required></label>
+            <label class="fld" for="f-date">Date<input id="f-date" type="date" required></label>
+            <label class="fld" for="f-amount">Amount (£)<input id="f-amount" inputmode="decimal" autocomplete="off" placeholder="0.00" required></label>
           </div>
-          <label for="f-desc">Description<input id="f-desc" autocomplete="off" placeholder="e.g. Invoice 014, boiler service"></label>
-          <label for="f-ref">Receipt or invoice reference (optional)<input id="f-ref" autocomplete="off"></label>
+          <label class="fld" for="f-desc">Description<input id="f-desc" autocomplete="off" placeholder="e.g. Invoice 014, boiler service"></label>
+          <label class="fld" for="f-prop" id="propWrap" hidden>Property (optional, for your per-property breakdown)<input id="f-prop" list="propList" autocomplete="off" placeholder="e.g. 12 Mill Lane"></label>
+          <datalist id="propList"></datalist>
+          <label class="fld" for="f-ref">Receipt or invoice reference (optional)<input id="f-ref" autocomplete="off"></label>
+          <label class="fld" for="f-file">Attach receipt photo or PDF <span class="lock" data-lock>FULL</span><input id="f-file" type="file" accept="image/*,application/pdf"></label>
           <p class="muted" id="formError" role="alert" hidden></p>
           <div class="btns">
             <button type="submit" id="saveBtn">Add record</button>
@@ -156,7 +183,74 @@ body{margin:0}
           <thead><tr><th>Date</th><th>Source · category</th><th>Description</th><th class="num">Amount</th><th>Qtr</th><th></th></tr></thead>
           <tbody id="rows"></tbody>
         </table></div>
-        <div class="empty" id="noRows" hidden>No records yet. Add your first income or expense with the form.</div>
+        <div class="empty" id="noRows" hidden>No records yet. Add your first income or expense with the form, or import a bank statement.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANK IMPORT -->
+  <section id="p-import" role="tabpanel" aria-labelledby="t-import" hidden style="padding-block:14px">
+    <div class="stack">
+      <div class="panel stack">
+        <h2>Import a bank statement</h2>
+        <p class="muted" style="margin:0">Download your statement from online banking as a CSV file, then choose it here. You pick which lines are business, and QuarterReady remembers your choices for next time. The file is read in your browser and never uploaded.</p>
+        <div class="row2">
+          <label class="fld" for="imp-file">Statement file (.csv)<input id="imp-file" type="file" accept=".csv,text/csv"></label>
+          <label class="fld" for="imp-source">Add the lines to<select id="imp-source"></select></label>
+        </div>
+        <div id="impMap" class="stack" hidden>
+          <div class="row2">
+            <label class="fld" for="map-date">Date column<select id="map-date"></select></label>
+            <label class="fld" for="map-desc">Description column<select id="map-desc"></select></label>
+          </div>
+          <div class="row2">
+            <label class="fld" for="map-amt">Amount column (+ in, − out)<select id="map-amt"></select></label>
+            <label class="fld" for="map-out">Or a separate "money out" column<select id="map-out"></select></label>
+          </div>
+          <label class="fld" for="map-fmt">Date format<select id="map-fmt"><option value="dmy">Day/month/year (31/05/2027)</option><option value="ymd">Year-month-day (2027-05-31)</option></select></label>
+        </div>
+        <p class="muted" id="impMsg" role="status" style="margin:0"></p>
+      </div>
+      <div class="panel stack" id="impPreview" hidden>
+        <div class="sumhead"><h3>Choose the business lines</h3><span class="muted" id="impCount"></span></div>
+        <div class="tablebox imp"><table>
+          <thead><tr><th><input type="checkbox" id="impAll" aria-label="Select all"></th><th>Date</th><th>Description</th><th class="num">Amount</th><th>Category</th></tr></thead>
+          <tbody id="impRows"></tbody>
+        </table></div>
+        <div class="btns"><button type="button" id="impGo">Import selected lines</button><span class="muted" id="impLock"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MILEAGE -->
+  <section id="p-mileage" role="tabpanel" aria-labelledby="t-mileage" hidden style="padding-block:14px">
+    <div class="grid">
+      <div class="panel">
+        <form class="entry" id="tripForm" novalidate>
+          <h2>Log a business journey</h2>
+          <label class="fld" for="m-source">Self-employment<select id="m-source"></select></label>
+          <div class="row2">
+            <label class="fld" for="m-date">Date<input id="m-date" type="date"></label>
+            <label class="fld" for="m-miles">Business miles<input id="m-miles" inputmode="decimal" placeholder="e.g. 34"></label>
+          </div>
+          <div class="row2">
+            <label class="fld" for="m-type">Vehicle<select id="m-type"><option value="car">Car or van</option><option value="moto">Motorcycle</option></select></label>
+            <label class="fld" for="m-vname">Which vehicle<input id="m-vname" placeholder="e.g. Golf" autocomplete="off"></label>
+          </div>
+          <label class="fld" for="m-purpose">Journey and purpose<input id="m-purpose" placeholder="e.g. Office to client site, Leeds" autocomplete="off"></label>
+          <p class="muted" id="tripError" role="alert" hidden></p>
+          <div class="btns"><button type="submit">Add journey</button></div>
+          <p class="muted" id="rateNote" style="margin:0"></p>
+        </form>
+      </div>
+      <div class="panel stack">
+        <div class="sumhead"><h2>Journeys</h2><span class="muted" id="tripTotal"></span></div>
+        <div class="tablebox"><table>
+          <thead><tr><th>Date</th><th>Journey</th><th>Vehicle</th><th class="num">Miles</th><th class="num">Allowance</th><th></th></tr></thead>
+          <tbody id="tripRows"></tbody>
+        </table></div>
+        <div class="empty" id="noTrips">No journeys yet. Each one adds the HMRC flat-rate allowance to "Car, van and travel expenses" in your quarterly summary.</div>
+        <p class="muted" style="margin:0">Flat rates can't be used for a vehicle you've claimed capital allowances on, and once you use them for a vehicle you must keep doing so. Parking, tolls and train fares are claimed separately as records. Source: <a href="https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles" target="_blank" rel="noopener">GOV.UK simplified expenses</a>.</p>
       </div>
     </div>
   </section>
@@ -164,15 +258,16 @@ body{margin:0}
   <!-- SUMMARY -->
   <section id="p-summary" role="tabpanel" aria-labelledby="t-summary" hidden style="padding-block:14px">
     <div class="stack">
-      <div class="banner" id="checkBanner" hidden></div>
+      <div class="banner bad" id="checkBanner" hidden></div>
       <div id="summaries" class="stack"></div>
       <div class="panel stack">
         <h3>Send it to HMRC</h3>
-        <p class="muted" style="margin:0">QuarterReady keeps your records and works out the totals. To send a quarterly update you need HMRC-recognised bridging software that accepts a spreadsheet or CSV file. Export the summary, open it in Excel or Google Sheets if needed, and link or import it in your bridging software. <a href="https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Find software on GOV.UK</a>.</p>
+        <p class="muted" style="margin:0">QuarterReady keeps your records and works out the totals. To send a quarterly update you need HMRC-recognised bridging software that accepts a spreadsheet or CSV file. <a href="https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Find software on GOV.UK</a>.</p>
         <div class="btns">
           <button type="button" id="dlSummary">Download summary (CSV)</button>
           <button type="button" class="ghost" id="dlRecords">Download all records (CSV)</button>
           <button type="button" class="ghost" id="cpSummary">Copy summary</button>
+          <button type="button" class="ghost" id="yearReport">Year-end report for your accountant</button>
         </div>
         <p class="muted" id="exportNote" style="margin:0"></p>
       </div>
@@ -187,6 +282,7 @@ body{margin:0}
         <thead><tr><th>Update</th><th>Covers (year to date)</th><th>Send by</th><th></th></tr></thead>
         <tbody id="dlRows"></tbody>
       </table></div>
+      <div class="btns"><button type="button" id="ics">Add deadlines to my calendar (.ics)</button></div>
       <p class="muted" style="margin:0">Send an update for each income source, even if nothing happened that quarter. Deadlines are the same for standard and calendar quarters. Source: <a href="https://makingtaxdigital.campaign.gov.uk/quarterly-updates/" target="_blank" rel="noopener">HMRC</a>.</p>
     </div>
   </section>
@@ -196,8 +292,8 @@ body{margin:0}
     <div class="grid">
       <div class="panel stack">
         <h2>This tax year</h2>
-        <label class="muted" for="s-name">Name shown on exports<input id="s-name" autocomplete="off"></label>
-        <label class="muted" for="s-qtype">Quarters
+        <label class="fld" for="s-name">Name shown on exports and reports<input id="s-name" autocomplete="off"></label>
+        <label class="fld" for="s-qtype">Quarters
           <select id="s-qtype"><option value="standard">Standard (end 5 Jul, 5 Oct, 5 Jan, 5 Apr)</option><option value="calendar">Calendar (end 30 Jun, 30 Sep, 31 Dec, 31 Mar)</option></select>
         </label>
         <h3>Income sources</h3>
@@ -211,33 +307,45 @@ body{margin:0}
         <p class="muted" style="margin:0">HMRC expects a quarterly update for each self-employment and for your UK property business.</p>
       </div>
       <div class="stack">
-        <div class="panel stack">
+        <div class="panel stack" id="licPanel">
           <h2>Full version</h2>
           <p class="muted" style="margin:0" id="licState"></p>
-          <div class="btns" id="buyRow"><a class="btn" id="buyLink" href="index.html#pricing">Get the full version · £19</a></div>
-          <label class="muted" for="s-key">Licence key (from your receipt email)<input id="s-key" autocomplete="off" spellcheck="false"></label>
+          <div class="feat" id="featList">
+            <div><strong>Unlimited records</strong><span class="muted">Free stops at 30 per tax year</span></div>
+            <div><strong>Bank statement import</strong><span class="muted">Months of records in minutes, with remembered categories</span></div>
+            <div><strong>Receipt attachments</strong><span class="muted">Photo or PDF kept with each record</span></div>
+            <div><strong>Mileage log</strong><span class="muted">HMRC flat rates worked out for you</span></div>
+            <div><strong>Per-property breakdown</strong><span class="muted">Profit for each let</span></div>
+            <div><strong>Exports and year-end report</strong><span class="muted">CSV for bridging software, a report for your accountant</span></div>
+          </div>
+          <div class="btns" id="buyRow"><a class="btn gold" id="buyLink" href="index.html#pricing">Get the full version · £19 one-time</a></div>
+          <label class="fld" for="s-key">Licence key (from your receipt email)<input id="s-key" autocomplete="off" spellcheck="false"></label>
           <div class="btns"><button type="button" id="activate">Activate</button><button type="button" class="ghost" id="deactivate" hidden>Remove from this browser</button></div>
           <p class="muted" id="licMsg" role="status" style="margin:0"></p>
         </div>
         <div class="panel stack">
           <h2>Your data</h2>
           <p class="muted" style="margin:0">Your records are stored only in this browser, on this device. Nobody else can see them, including us. Clearing your browser data deletes them, so <strong>download a backup regularly</strong> and keep it with your other business records.</p>
+          <label class="check muted"><input type="checkbox" id="bkReceipts" checked> Include receipt files in the backup</label>
           <div class="btns">
             <button type="button" id="backup">Download backup</button>
             <label class="btn ghost" for="restore" style="cursor:pointer">Restore from backup</label>
             <input type="file" id="restore" accept="application/json,.json" class="sr">
           </div>
           <details><summary class="muted">Backup without downloading</summary>
-            <p class="muted">Copy this text into a file you keep safe. Paste it back here to restore.</p>
-            <textarea id="backupText" spellcheck="false" aria-label="Backup text"></textarea>
+            <p class="muted">Copy this text into a file you keep safe. Paste it back here to restore. (Receipt files are not included in this text.)</p>
+            <label class="sr" for="backupText">Backup text</label>
+            <textarea id="backupText" spellcheck="false"></textarea>
             <div class="btns"><button type="button" class="ghost" id="copyBackup">Copy</button><button type="button" class="ghost" id="pasteRestore">Restore from this text</button></div>
           </details>
           <div class="btns"><button type="button" class="danger" id="wipe">Delete all records for this tax year</button></div>
-          <p class="muted" id="wipeConfirm" hidden><strong>Delete every record for this tax year?</strong> This can't be undone unless you have a backup. <button type="button" class="danger" id="wipeYes">Yes, delete</button> <button type="button" class="link" id="wipeNo">Keep them</button></p>
+          <p class="muted" id="wipeConfirm" hidden><strong>Delete every record and journey for this tax year?</strong> This can't be undone unless you have a backup. <button type="button" class="danger" id="wipeYes">Yes, delete</button> <button type="button" class="link" id="wipeNo">Keep them</button></p>
         </div>
       </div>
     </div>
   </section>
+
+  <section id="report" aria-label="Year-end report"></section>
 
   <footer>
     QuarterReady is independent and not affiliated with HM Revenue &amp; Customs. It keeps records and adds them up; it does not submit to HMRC or calculate your tax, and it is not tax advice.
@@ -271,6 +379,7 @@ const CATS = {
   }
 };
 const FREE_LIMIT = 30;
+const MILEAGE_CAT = "Car, van and travel expenses";
 
 function d(y, m, day) { return new Date(Date.UTC(y, m - 1, day)); }
 function iso(dt) { return dt.toISOString().slice(0, 10); }
@@ -326,21 +435,53 @@ function findIssues(book) {
   }
   return issues;
 }
-// Cumulative year-to-date totals per category for one source; pence.
+// HMRC simplified mileage rates, pence per mile. From 6 April 2026 the first-10,000-mile rate for cars and goods vehicles is 55p (previously 45p).
+function mileageRates(year) { return { car1: year >= 2026 ? 55 : 45, car2: 25, moto: 24 }; }
+// Allowance per trip, in date order; the 10,000-mile band is counted per vehicle across the tax year.
+function mileageClaims(trips, year) {
+  const r = mileageRates(year), used = {}, out = {};
+  [...trips].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id)).forEach(t => {
+    if (t.vehicle === "moto") { out[t.id] = Math.round(t.miles * r.moto); return; }
+    const k = (t.vname || "car").trim().toLowerCase();
+    const before = used[k] || 0, after = before + t.miles; used[k] = after;
+    const first = Math.max(0, Math.min(after, 10000) - before), rest = t.miles - first;
+    out[t.id] = Math.round(first * r.car1 + rest * r.car2);
+  });
+  return out;
+}
+// Cumulative year-to-date totals per category for one source; pence. Includes mileage for self-employment.
 function summarise(book, srcId) {
   const src = book.sources.find(s => s.id === srcId);
   const c = CATS[src.type], ends = quarterEnds(book.year, book.qtype), start = yearBounds(book.year, book.qtype).start;
-  const blank = () => [0, 0, 0, 0];
   const rows = {};
-  [...c.income, ...c.expense, ...c.separate].forEach(k => rows[k] = blank());
-  for (const t of book.tx) {
-    if (t.source !== srcId || rows[t.cat] === undefined) continue;
-    const dt = parseISO(t.date);
-    if (dt < start) continue;
-    for (let i = 0; i < 4; i++) if (dt <= ends[i]) rows[t.cat][i] += t.pence;
+  [...c.income, ...c.expense, ...c.separate].forEach(k => rows[k] = [0, 0, 0, 0]);
+  const addAt = (cat, dateStr, pence) => {
+    const dt = parseISO(dateStr); if (dt < start) return;
+    for (let i = 0; i < 4; i++) if (dt <= ends[i]) rows[cat][i] += pence;
+  };
+  for (const t of book.tx) if (t.source === srcId && rows[t.cat] !== undefined) addAt(t.cat, t.date, t.pence);
+  let mileage = [0, 0, 0, 0];
+  if (src.type === "se") {
+    const trips = (book.trips || []).filter(t => t.source === srcId), claims = mileageClaims(trips, book.year);
+    const before = rows[MILEAGE_CAT].slice();
+    trips.forEach(t => addAt(MILEAGE_CAT, t.date, claims[t.id]));
+    mileage = rows[MILEAGE_CAT].map((v, i) => v - before[i]);
   }
   const sum = list => [0, 1, 2, 3].map(i => list.reduce((a, k) => a + rows[k][i], 0));
-  return { src, rows, income: sum(c.income), expenses: sum(c.expense), cats: c };
+  return { src, rows, income: sum(c.income), expenses: sum(c.expense), cats: c, mileage };
+}
+// Full-year totals per property label for one property source.
+function byProperty(book, srcId) {
+  const out = {};
+  for (const t of book.tx) {
+    if (t.source !== srcId) continue;
+    const src = book.sources.find(s => s.id === srcId), k = kindOf(src.type, t.cat), p = (t.prop || "").trim() || "Not assigned";
+    out[p] = out[p] || { income: 0, expense: 0, rfc: 0 };
+    if (k === "income") out[p].income += t.pence;
+    else if (k === "expense") out[p].expense += t.pence;
+    else if (t.cat === "Residential property finance costs") out[p].rfc += t.pence;
+  }
+  return out;
 }
 function csvCell(v) { const s = String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
 function money(p) { return (p / 100).toFixed(2); }
@@ -349,7 +490,7 @@ function summaryCSV(book) {
                ["Source", "Category", "Q1 to date", "Q2 to date", "Q3 to date", "Q4 to date"]];
   for (const s of book.sources) {
     const r = summarise(book, s.id);
-    for (const k of [...r.cats.income]) out.push([s.name, k, ...r.rows[k].map(money)]);
+    for (const k of r.cats.income) out.push([s.name, k, ...r.rows[k].map(money)]);
     out.push([s.name, "Total income", ...r.income.map(money)]);
     for (const k of r.cats.expense) out.push([s.name, k, ...r.rows[k].map(money)]);
     out.push([s.name, "Consolidated expenses", ...r.expenses.map(money)]);
@@ -358,12 +499,82 @@ function summaryCSV(book) {
   return out.map(r => r.map(csvCell).join(",")).join("\r\n");
 }
 function recordsCSV(book) {
-  const out = [["Date", "Source", "Category", "Type", "Amount", "Description", "Reference", "Quarter"]];
+  const out = [["Date", "Source", "Category", "Type", "Amount", "Description", "Property", "Reference", "Quarter"]];
   const name = id => (book.sources.find(s => s.id === id) || {}).name || "";
   const type = t => { const s = book.sources.find(x => x.id === t.source); return s ? kindOf(s.type, t.cat) : ""; };
   [...book.tx].sort((a, b) => a.date.localeCompare(b.date)).forEach(t =>
-    out.push([t.date, name(t.source), t.cat, type(t), money(t.pence), t.desc || "", t.ref || "", quarterOf(t.date, book.year, book.qtype) || ""]));
+    out.push([t.date, name(t.source), t.cat, type(t), money(t.pence), t.desc || "", t.prop || "", t.ref || "", quarterOf(t.date, book.year, book.qtype) || ""]));
+  const claims = mileageClaims(book.trips || [], book.year);
+  [...(book.trips || [])].sort((a, b) => a.date.localeCompare(b.date)).forEach(t =>
+    out.push([t.date, name(t.source), MILEAGE_CAT, "expense (mileage " + t.miles + " mi)", money(claims[t.id]), t.purpose || "", "", t.vname || "", quarterOf(t.date, book.year, book.qtype) || ""]));
   return out.map(r => r.map(csvCell).join(",")).join("\r\n");
+}
+// ---- Bank statement import ----
+function parseCSV(text) {
+  const rows = []; let row = [], cell = "", q = false;
+  text = text.replace(/^﻿/, "");
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ",") { row.push(cell); cell = ""; }
+    else if (ch === "\n" || ch === "\r") { if (ch === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += ch;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ""));
+}
+const MONTHS = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+function parseBankDate(s, fmt) {
+  s = String(s).trim();
+  let m = s.match(/^(\d{1,2})\s+([A-Za-z]{3})[a-z]*\s+(\d{2,4})$/);
+  if (m && MONTHS[m[2].toLowerCase()]) { let y = +m[3]; if (y < 100) y += 2000; return iso(d(y, MONTHS[m[2].toLowerCase()], +m[1])); }
+  m = s.match(/^(\d{1,4})[\/\-.](\d{1,2})[\/\-.](\d{1,4})/);
+  if (!m) return null;
+  let y, mo, da;
+  if (fmt === "ymd" || m[1].length === 4) { y = +m[1]; mo = +m[2]; da = +m[3]; } else { da = +m[1]; mo = +m[2]; y = +m[3]; }
+  if (y < 100) y += 2000;
+  if (mo < 1 || mo > 12 || da < 1 || da > 31) return null;
+  const dt = d(y, mo, da); if (dt.getUTCDate() !== da) return null;
+  return iso(dt);
+}
+function parseSigned(s) {
+  s = String(s).trim(); if (!s) return null;
+  let neg = /^\(.*\)$/.test(s) || /^-/.test(s) || /\bDR\b/i.test(s);
+  s = s.replace(/[()£,\s]|CR|DR/gi, "").replace(/^-/, "").replace(/^\+/, "");
+  if (!/^\d+(\.\d+)?$/.test(s)) return null;
+  const p = Math.round(parseFloat(s) * 100);
+  return neg ? -p : p;
+}
+function ruleKey(desc) { return String(desc).toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(w => w && !/^\d+$/.test(w)).slice(0, 2).join(" "); }
+function suggestCategory(desc, rules) {
+  const k = ruleKey(desc);
+  return k && rules && rules[k] ? rules[k] : null;
+}
+function statementLines(rows, map, fmt) {
+  // rows[0] is the header row
+  return rows.slice(1).map((r, i) => {
+    const date = parseBankDate(r[map.date] ?? "", fmt);
+    let amt = map.amt >= 0 ? parseSigned(r[map.amt] ?? "") : null;
+    if (map.out >= 0) {
+      const outv = parseSigned(r[map.out] ?? ""), inv = map.amt >= 0 ? parseSigned(r[map.amt] ?? "") : null;
+      amt = outv ? -Math.abs(outv) : (inv ? Math.abs(inv) : null);
+    }
+    return { i, date, desc: String(r[map.desc] ?? "").trim(), pence: amt };
+  }).filter(l => l.date && l.pence);
+}
+function icsCalendar(year, name) {
+  const pad = n => String(n).padStart(2, "0");
+  const day = dt => dt.getUTCFullYear() + pad(dt.getUTCMonth() + 1) + pad(dt.getUTCDate());
+  const labels = ["MTD quarterly update 1", "MTD quarterly update 2", "MTD quarterly update 3", "MTD quarterly update 4", "MTD tax return (final declaration)"];
+  const ev = deadlines(year).map((dt, i) => {
+    const next = new Date(dt.getTime() + 864e5);
+    return ["BEGIN:VEVENT", "UID:qr-" + year + "-" + i + "@quarterready", "DTSTAMP:" + day(new Date()) + "T000000Z",
+      "DTSTART;VALUE=DATE:" + day(dt), "DTEND;VALUE=DATE:" + day(next),
+      "SUMMARY:" + labels[i] + " due (" + year + "-" + String(year + 1).slice(2) + ")" + (name ? " – " + name.replace(/[,;\\]/g, " ") : ""),
+      "BEGIN:VALARM", "TRIGGER:-P7D", "ACTION:DISPLAY", "DESCRIPTION:MTD deadline in 7 days", "END:VALARM", "END:VEVENT"].join("\r\n");
+  });
+  return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//QuarterReady//MTD deadlines//EN", ...ev, "END:VCALENDAR"].join("\r\n");
 }
 /* ===== LOGIC END ===== */
 
@@ -383,36 +594,60 @@ function recordsCSV(book) {
 
   function currentTaxYear() { const n = new Date(); const y = n.getUTCFullYear(); return n < d(y, 4, 6) ? y - 1 : y; }
   function newBook(year) {
-    return { year, qtype: "standard", name: "", sources: [{ id: "se1", type: "se", name: "Self-employment" }, { id: "pr1", type: "pr", name: "UK property" }], tx: [] };
+    return { year, qtype: "standard", name: "", sources: [{ id: "se1", type: "se", name: "Self-employment" }, { id: "pr1", type: "pr", name: "UK property" }], tx: [], trips: [] };
   }
   function sampleBook(year) {
     const b = newBook(year); b.name = "Example";
-    const add = (src, m, day, cat, pounds, desc) => b.tx.push({ id: uid(), source: src, date: iso(d(m >= 4 ? year : year + 1, m, day)), cat, pence: Math.round(pounds * 100), desc, ref: "" });
+    const dt = (m, day) => iso(d(m >= 4 ? year : year + 1, m, day));
+    const add = (src, m, day, cat, pounds, desc, prop) => b.tx.push({ id: uid(), source: src, date: dt(m, day), cat, pence: Math.round(pounds * 100), desc, ref: "", prop: prop || "" });
     add("se1", 4, 14, CATS.se.income[0], 2400, "Invoice 001 – website build");
     add("se1", 4, 20, CATS.se.expense[5], 85, "Laptop repair");
     add("se1", 5, 3, CATS.se.expense[12], 120, "Bookkeeping review");
     add("se1", 7, 22, CATS.se.income[0], 1500, "Invoice 002 – maintenance retainer");
     add("se1", 8, 1, CATS.se.expense[3], 46.8, "Train to client meeting");
-    add("pr1", 4, 28, CATS.pr.income[0], 950, "Rent – 12 Mill Lane, April");
-    add("pr1", 5, 2, CATS.pr.expense[3], 114, "Letting agent fee");
-    add("pr1", 5, 15, CATS.pr.expense[1], 90, "Boiler service");
-    add("pr1", 5, 28, CATS.pr.income[0], 950, "Rent – 12 Mill Lane, May");
-    add("pr1", 6, 1, CATS.pr.separate[0], 310, "Mortgage interest (residential)");
+    add("pr1", 4, 28, CATS.pr.income[0], 950, "Rent, April", "12 Mill Lane");
+    add("pr1", 5, 2, CATS.pr.expense[3], 114, "Letting agent fee", "12 Mill Lane");
+    add("pr1", 5, 15, CATS.pr.expense[1], 90, "Boiler service", "12 Mill Lane");
+    add("pr1", 5, 28, CATS.pr.income[0], 950, "Rent, May", "12 Mill Lane");
+    add("pr1", 6, 1, CATS.pr.separate[0], 310, "Mortgage interest (residential)", "12 Mill Lane");
+    b.trips.push({ id: uid(), source: "se1", date: dt(5, 12), miles: 42, vehicle: "car", vname: "Car", purpose: "Office to client site and back" });
     return b;
   }
 
   let memoryOnly = false;
   function load() {
-    try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch (e) { memoryOnly = true; }
+    try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); Object.values(s.books || {}).forEach(b => { b.trips = b.trips || []; }); s.rules = s.rules || {}; return s; } } catch (e) { memoryOnly = true; }
     const y = Math.max(currentTaxYear(), 2026);
-    return { version: 1, active: y, books: { [y]: sampleBook(y) }, sample: true, licence: null };
+    return { version: 1, active: y, books: { [y]: sampleBook(y) }, sample: true, licence: null, rules: {} };
   }
   let state = load();
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { memoryOnly = true; } }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { memoryOnly = true; renderBanners(); } }
   const book = () => state.books[state.active];
   const isFull = () => !!(state.licence && state.licence.valid);
+  const canUse = () => isFull() || state.sample;
 
-  function toast(msg) { const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2200); }
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+
+  // ---------- Receipts (IndexedDB) ----------
+  const idb = (() => {
+    let dbp = null;
+    function open() {
+      if (dbp) return dbp;
+      dbp = new Promise((res, rej) => {
+        try { const r = indexedDB.open("qr-receipts", 1); r.onupgradeneeded = () => r.result.createObjectStore("files"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); }
+      });
+      return dbp;
+    }
+    const tx = (mode, fn) => open().then(db => new Promise((res, rej) => { const t = db.transaction("files", mode); const st = t.objectStore("files"); const out = fn(st); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
+    return {
+      put: (id, file) => tx("readwrite", st => st.put({ name: file.name, type: file.type, blob: file }, id)),
+      get: id => tx("readonly", st => st.get(id)),
+      del: id => tx("readwrite", st => st.delete(id)).catch(() => {}),
+      all: () => open().then(db => new Promise((res, rej) => { const out = {}; const t = db.transaction("files"); const c = t.objectStore("files").openCursor(); c.onsuccess = () => { const cur = c.result; if (cur) { out[cur.key] = cur.value; cur.continue(); } else res(out); }; c.onerror = () => rej(c.error); }))
+    };
+  })();
+  const toB64 = blob => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+  const fromB64 = async (dataUrl) => (await fetch(dataUrl)).blob();
 
   // ---------- Header / year ----------
   function renderYears() {
@@ -420,7 +655,8 @@ function recordsCSV(book) {
     Object.keys(state.books).map(Number).forEach(y => { if (!years.includes(y)) years.push(y); });
     sel.innerHTML = years.sort().map(y => `<option value="${y}" ${y === state.active ? "selected" : ""}>${y}–${String(y + 1).slice(2)}</option>`).join("");
     $("plan").textContent = isFull() ? "Full version" : "Free · up to " + FREE_LIMIT + " records";
-    $("plan").className = "badge " + (isFull() ? "full" : "free");
+    $("plan").className = "badge " + (isFull() ? "full" : "");
+    document.querySelectorAll("[data-lock]").forEach(e => e.hidden = isFull());
   }
   $("year").addEventListener("change", e => {
     const y = Number(e.target.value);
@@ -429,64 +665,86 @@ function recordsCSV(book) {
   });
 
   // ---------- Tabs ----------
-  const tabs = ["records", "summary", "deadlines", "settings"];
+  const tabs = ["records", "import", "mileage", "summary", "deadlines", "settings"];
   function show(name) {
     tabs.forEach(t => { $("t-" + t).setAttribute("aria-selected", String(t === name)); $("p-" + t).hidden = t !== name; });
     if (name === "summary") renderSummary();
     if (name === "settings") renderSettings();
+    if (name === "mileage") renderTrips();
+    if (name === "import") renderImportLock();
   }
   tabs.forEach(t => $("t-" + t).addEventListener("click", () => show(t)));
-  if (tabs.includes(location.hash.slice(1))) show(location.hash.slice(1));
 
   // ---------- Banners ----------
+  function upsellHTML(what) {
+    return `<span>${what} The full version also adds bank statement import, receipt attachments, a mileage log and exports.</span><button type="button" class="gold" data-go-full>Unlock for £19</button>`;
+  }
   function renderBanners() {
     $("sampleBanner").hidden = !state.sample;
     const n = book().tx.length, lb = $("limitBanner");
+    if (memoryOnly) { lb.hidden = false; lb.className = "banner bad"; lb.innerHTML = "<span>This browser isn't letting QuarterReady save. Records will be lost when you close the page. Download a backup, or use a normal (not private) window.</span>"; return; }
     if (!isFull() && !state.sample && n >= FREE_LIMIT - 5) {
       lb.hidden = false; lb.className = "banner" + (n >= FREE_LIMIT ? " bad" : "");
-      lb.innerHTML = `<span>${n >= FREE_LIMIT ? "You've reached the " + FREE_LIMIT + " free records for this tax year." : "You've used " + n + " of " + FREE_LIMIT + " free records."} The full version removes the limit for the whole tax year.</span><button type="button" id="goFull">Unlock for £19</button>`;
-      $("goFull").onclick = () => show("settings");
+      lb.innerHTML = upsellHTML(n >= FREE_LIMIT ? "You've reached the " + FREE_LIMIT + " free records for this tax year." : "You've used " + n + " of " + FREE_LIMIT + " free records.");
     } else lb.hidden = true;
-    if (memoryOnly) { lb.hidden = false; lb.className = "banner bad"; lb.innerHTML = "<span>This browser isn't letting QuarterReady save. Records will be lost when you close the page. Download a backup, or use a normal (not private) window.</span>"; }
   }
+  document.addEventListener("click", e => { if (e.target.closest("[data-go-full]")) show("settings"); });
   $("clearSample").addEventListener("click", () => {
     const y = state.active; state.books = { [y]: newBook(y) }; state.sample = false; save(); renderAll(); toast("Examples cleared. Add your first record.");
   });
 
   // ---------- Entry form ----------
   let editing = null;
-  function fillSources(sel, withAll) {
-    sel.innerHTML = (withAll ? '<option value="">All sources</option>' : "") + book().sources.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
+  function fillSources(sel, withAll, onlyType) {
+    sel.innerHTML = (withAll ? '<option value="">All sources</option>' : "") + book().sources.filter(s => !onlyType || s.type === onlyType).map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
+  }
+  function catOptions(srcType, only) {
+    const c = CATS[srcType], og = (label, list) => `<optgroup label="${label}">` + list.map(x => `<option>${esc(x)}</option>`).join("") + "</optgroup>";
+    if (only === "income") return og("Income", c.income);
+    if (only === "expense") return og("Expenses", c.expense) + (c.separate.length ? og("Reported separately", c.separate) : "");
+    return og("Income", c.income) + og("Expenses", c.expense) + (c.separate.length ? og("Reported separately", c.separate) : "");
   }
   function fillCats() {
     const src = book().sources.find(s => s.id === $("f-source").value); if (!src) { $("f-cat").innerHTML = ""; return; }
-    const c = CATS[src.type], og = (label, list) => `<optgroup label="${label}">` + list.map(x => `<option>${esc(x)}</option>`).join("") + "</optgroup>";
-    $("f-cat").innerHTML = og("Income", c.income) + og("Expenses", c.expense) + (c.separate.length ? og("Reported separately", c.separate) : "");
+    $("f-cat").innerHTML = catOptions(src.type);
+    $("propWrap").hidden = src.type !== "pr";
+    const props = [...new Set(book().tx.map(t => t.prop).filter(Boolean))];
+    $("propList").innerHTML = props.map(p => `<option value="${esc(p)}">`).join("");
     hint();
   }
   function hint() {
     const v = $("f-cat").value;
     $("catHint").textContent = v === "Residential property finance costs" ? "Mortgage and loan interest on residential lets. Kept out of expenses: it gives a basic-rate tax reduction at year end."
-      : v === "Tax deducted from any income" ? "Tax already taken off your income before you received it." : "";
+      : v === "Tax deducted from any income" ? "Tax already taken off your income before you received it."
+      : v === MILEAGE_CAT ? "Using your own car? Log journeys on the Mileage tab instead and the HMRC flat rate is added for you." : "";
   }
   $("f-source").addEventListener("change", fillCats);
   $("f-cat").addEventListener("change", hint);
   function resetForm() {
     editing = null; $("formTitle").textContent = "Add a record"; $("saveBtn").textContent = "Add record"; $("cancelEdit").hidden = true;
-    $("f-amount").value = ""; $("f-desc").value = ""; $("f-ref").value = ""; $("formError").hidden = true;
+    $("f-amount").value = ""; $("f-desc").value = ""; $("f-ref").value = ""; $("f-file").value = ""; $("formError").hidden = true;
   }
   $("cancelEdit").addEventListener("click", resetForm);
-  $("entry").addEventListener("submit", e => {
+  $("entry").addEventListener("submit", async e => {
     e.preventDefault();
     const b = book();
+    const src = b.sources.find(s => s.id === $("f-source").value);
     const tx = { id: editing || uid(), source: $("f-source").value, cat: $("f-cat").value, date: $("f-date").value,
-      pence: parseAmount($("f-amount").value), desc: $("f-desc").value.trim(), ref: $("f-ref").value.trim() };
+      pence: parseAmount($("f-amount").value), desc: $("f-desc").value.trim(), ref: $("f-ref").value.trim(),
+      prop: src && src.type === "pr" ? $("f-prop").value.trim() : "" };
+    const prev = editing ? b.tx.find(t => t.id === editing) : null;
+    if (prev && prev.receipt) tx.receipt = prev.receipt;
     let err = validateTx(tx, b);
+    const file = $("f-file").files[0];
+    if (!err && file && !isFull()) err = "Receipt attachments are part of the full version. Remove the file or unlock the full version in Settings.";
+    if (!err && file && file.size > 8e6) err = "That file is over 8 MB. Use a smaller photo or PDF.";
     if (!err && !editing && !isFull() && !state.sample && b.tx.length >= FREE_LIMIT) err = "The free version holds " + FREE_LIMIT + " records per tax year. Unlock the full version in Settings to add more.";
     if (err) { $("formError").textContent = err; $("formError").hidden = false; return; }
     if (state.sample) { editing = null; tx.id = uid(); state.sample = false; const y = state.active; state.books = { [y]: Object.assign(newBook(y), { sources: b.sources }) }; }
+    if (file) { try { await idb.put(tx.id, file); tx.receipt = file.name; } catch (er) { toast("Couldn't store the receipt in this browser."); } }
     const nb = book();
     if (editing) nb.tx = nb.tx.map(t => t.id === editing ? tx : t); else nb.tx.push(tx);
+    if (tx.desc && tx.cat) state.rules[src.type + ":" + ruleKey(tx.desc)] = tx.cat;
     save(); toast(editing ? "Record updated." : "Record added."); resetForm(); renderRecords(); renderBanners();
   });
 
@@ -495,13 +753,13 @@ function recordsCSV(book) {
     const b = book(), fs = $("flt-source").value, fq = $("flt-q").value, ft = $("flt-text").value.toLowerCase();
     const dup = new Set(findIssues(b).map(i => i.id));
     const list = [...b.tx].sort((x, y) => y.date.localeCompare(x.date))
-      .filter(t => (!fs || t.source === fs) && (!fq || quarterOf(t.date, b.year, b.qtype) === fq) && (!ft || (t.desc + " " + t.ref).toLowerCase().includes(ft)));
+      .filter(t => (!fs || t.source === fs) && (!fq || quarterOf(t.date, b.year, b.qtype) === fq) && (!ft || (t.desc + " " + t.ref + " " + (t.prop || "")).toLowerCase().includes(ft)));
     const name = id => (b.sources.find(s => s.id === id) || {}).name || "?";
     $("rows").innerHTML = list.map(t => {
       const src = b.sources.find(s => s.id === t.source), k = src ? kindOf(src.type, t.cat) : null;
       return `<tr class="${dup.has(t.id) ? "flag" : ""}"><td class="num">${fmtDate(parseISO(t.date))}</td>
-      <td>${esc(name(t.source))}<br><span class="muted">${esc(t.cat)}</span></td>
-      <td>${esc(t.desc)}${t.ref ? `<br><span class="muted">Ref ${esc(t.ref)}</span>` : ""}${dup.has(t.id) ? '<br><span class="pill bad">Possible duplicate</span>' : ""}</td>
+      <td>${esc(name(t.source))}${t.prop ? " · " + esc(t.prop) : ""}<br><span class="muted">${esc(t.cat)}</span></td>
+      <td>${esc(t.desc)}${t.ref ? `<br><span class="muted">Ref ${esc(t.ref)}</span>` : ""}${t.receipt ? `<br><button type="button" class="link" data-receipt="${t.id}">📎 ${esc(t.receipt)}</button>` : ""}${dup.has(t.id) ? '<br><span class="pill bad">Possible duplicate</span>' : ""}</td>
       <td class="num">${k === "income" ? '<span class="pill inc">in</span> ' : ""}${fmtGBP(t.pence)}</td>
       <td>${quarterOf(t.date, b.year, b.qtype) || "–"}</td>
       <td><button type="button" class="link" data-edit="${t.id}">Edit</button><button type="button" class="link" data-del="${t.id}">Delete</button></td></tr>`;
@@ -510,44 +768,160 @@ function recordsCSV(book) {
     $("recCount").textContent = b.tx.length + (isFull() ? "" : " of " + FREE_LIMIT + " free") + " records" + (state.sample ? " (examples)" : "");
   }
   ["flt-source", "flt-q", "flt-text"].forEach(id => $(id).addEventListener("input", renderRecords));
-  $("rows").addEventListener("click", e => {
-    const ed = e.target.dataset.edit, del = e.target.dataset.del, b = book();
+  $("rows").addEventListener("click", async e => {
+    const ed = e.target.dataset.edit, del = e.target.dataset.del, rc = e.target.closest("[data-receipt]"), b = book();
+    if (rc) {
+      try {
+        const f = await idb.get(rc.dataset.receipt); if (!f) { toast("Receipt file not found in this browser."); return; }
+        const url = URL.createObjectURL(f.blob); const a = document.createElement("a"); a.href = url; a.target = "_blank"; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      } catch (er) { toast("Couldn't open the receipt."); }
+      return;
+    }
     if (ed) {
       const t = b.tx.find(x => x.id === ed); editing = ed;
       $("f-source").value = t.source; fillCats(); $("f-cat").value = t.cat; $("f-date").value = t.date;
-      $("f-amount").value = money(t.pence); $("f-desc").value = t.desc; $("f-ref").value = t.ref;
+      $("f-amount").value = money(t.pence); $("f-desc").value = t.desc; $("f-ref").value = t.ref; $("f-prop").value = t.prop || "";
       $("formTitle").textContent = "Edit record"; $("saveBtn").textContent = "Save changes"; $("cancelEdit").hidden = false; hint();
       $("f-amount").focus();
     }
     if (del) {
       if (e.target.dataset.confirm !== "1") { e.target.dataset.confirm = "1"; e.target.textContent = "Confirm delete"; return; }
-      b.tx = b.tx.filter(x => x.id !== del); save(); renderRecords(); renderBanners(); toast("Record deleted.");
+      b.tx = b.tx.filter(x => x.id !== del); idb.del(del); save(); renderRecords(); renderBanners(); toast("Record deleted.");
     }
+  });
+
+  // ---------- Bank import ----------
+  let impRows = null, impLines = [];
+  function renderImportLock() {
+    fillSources($("imp-source"), false);
+    $("impLock").textContent = canUse() ? "" : "Importing is part of the full version. You can preview your statement for free.";
+    $("impGo").disabled = !canUse();
+  }
+  function colOptions(header, withNone) {
+    return (withNone ? '<option value="-1">— none —</option>' : "") + header.map((h, i) => `<option value="${i}">${esc(h || "Column " + (i + 1))}</option>`).join("");
+  }
+  function guess(header, words) { const i = header.findIndex(h => words.some(w => h.toLowerCase().includes(w))); return i; }
+  $("imp-file").addEventListener("change", e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      const rows = parseCSV(String(r.result));
+      if (rows.length < 2) { $("impMsg").textContent = "That file has no lines to import. Make sure it's a CSV statement."; return; }
+      impRows = rows; const h = rows[0];
+      $("map-date").innerHTML = colOptions(h); $("map-desc").innerHTML = colOptions(h);
+      $("map-amt").innerHTML = colOptions(h, true); $("map-out").innerHTML = colOptions(h, true);
+      const gd = guess(h, ["date"]), gs = guess(h, ["description", "details", "narrative", "reference", "memo", "name"]),
+        gin = guess(h, ["paid in", "money in", "credit", "in"]), gout = guess(h, ["paid out", "money out", "debit", "out"]), ga = guess(h, ["amount", "value"]);
+      $("map-date").value = Math.max(0, gd); $("map-desc").value = Math.max(0, gs);
+      if (ga >= 0) { $("map-amt").value = ga; $("map-out").value = -1; } else { $("map-amt").value = gin; $("map-out").value = gout; }
+      $("impMap").hidden = false; buildPreview();
+    };
+    r.readAsText(f);
+  });
+  ["map-date", "map-desc", "map-amt", "map-out", "map-fmt", "imp-source"].forEach(id => $(id).addEventListener("change", buildPreview));
+  function buildPreview() {
+    if (!impRows) return;
+    const map = { date: +$("map-date").value, desc: +$("map-desc").value, amt: +$("map-amt").value, out: +$("map-out").value };
+    impLines = statementLines(impRows, map, $("map-fmt").value);
+    const b = book(), src = b.sources.find(s => s.id === $("imp-source").value);
+    if (!src) return;
+    const inYear = impLines.filter(l => quarterOf(l.date, b.year, b.qtype));
+    $("impMsg").textContent = impLines.length ? `${impLines.length} lines read, ${inYear.length} inside the ${b.year}–${String(b.year + 1).slice(2)} tax year.` : "No lines could be read. Check the columns and date format.";
+    $("impRows").innerHTML = inYear.map(l => {
+      const kind = l.pence > 0 ? "income" : "expense", sug = suggestCategory(l.desc, Object.fromEntries(Object.entries(state.rules).filter(([k]) => k.startsWith(src.type + ":")).map(([k, v]) => [k.slice(3), v])));
+      const ok = sug && kindOf(src.type, sug) && ((kind === "income") === (kindOf(src.type, sug) === "income"));
+      return `<tr data-i="${l.i}"><td><input type="checkbox" class="impSel" ${ok ? "checked" : ""} aria-label="Import this line"></td><td class="num">${fmtDate(parseISO(l.date))}</td><td>${esc(l.desc)}</td>
+        <td class="num">${l.pence > 0 ? '<span class="pill inc">in</span> ' : ""}${fmtGBP(Math.abs(l.pence))}</td>
+        <td><select class="impCat" aria-label="Category">${catOptions(src.type, kind)}</select></td></tr>`;
+    }).join("");
+    [...$("impRows").querySelectorAll("tr")].forEach(tr => {
+      const l = impLines.find(x => x.i === +tr.dataset.i), sug = state.rules[src.type + ":" + ruleKey(l.desc)];
+      if (sug) { const sel = tr.querySelector(".impCat"); if ([...sel.options].some(o => o.value === sug)) sel.value = sug; }
+    });
+    $("impPreview").hidden = inYear.length === 0; updImpCount(); renderImportLock();
+  }
+  function updImpCount() { $("impCount").textContent = $("impRows").querySelectorAll(".impSel:checked").length + " selected"; }
+  $("impRows").addEventListener("change", e => { if (e.target.classList.contains("impSel")) updImpCount(); if (e.target.classList.contains("impCat")) { e.target.closest("tr").querySelector(".impSel").checked = true; updImpCount(); } });
+  $("impAll").addEventListener("change", e => { $("impRows").querySelectorAll(".impSel").forEach(c => c.checked = e.target.checked); updImpCount(); });
+  $("impGo").addEventListener("click", () => {
+    if (!canUse()) { show("settings"); return; }
+    const b = book(), src = b.sources.find(s => s.id === $("imp-source").value);
+    const picked = [...$("impRows").querySelectorAll("tr")].filter(tr => tr.querySelector(".impSel").checked);
+    if (!picked.length) { toast("Tick the business lines you want to import."); return; }
+    if (state.sample) { state.sample = false; const y = state.active; state.books = { [y]: Object.assign(newBook(y), { sources: b.sources }) }; }
+    const nb = book(); let n = 0, skipped = 0;
+    picked.forEach(tr => {
+      const l = impLines.find(x => x.i === +tr.dataset.i), cat = tr.querySelector(".impCat").value;
+      const t = { id: uid(), source: src.id, date: l.date, cat, pence: Math.abs(l.pence), desc: l.desc, ref: "Bank import", prop: "" };
+      if (nb.tx.some(x => x.source === t.source && x.date === t.date && x.pence === t.pence && x.desc === t.desc)) { skipped++; return; }
+      nb.tx.push(t); n++; state.rules[src.type + ":" + ruleKey(l.desc)] = cat;
+    });
+    save(); renderAll(); toast(`${n} records imported${skipped ? `, ${skipped} already there skipped` : ""}.`);
+    impRows = null; $("impMap").hidden = true; $("impPreview").hidden = true; $("imp-file").value = ""; $("impMsg").textContent = "";
+    show("records");
+  });
+
+  // ---------- Mileage ----------
+  function renderTrips() {
+    const b = book(); fillSources($("m-source"), false, "se");
+    const r = mileageRates(b.year);
+    $("rateNote").textContent = `HMRC flat rates for ${b.year}–${String(b.year + 1).slice(2)}: cars and vans ${r.car1}p a mile for the first 10,000 business miles, then ${r.car2}p; motorcycles ${r.moto}p.`;
+    const claims = mileageClaims(b.trips, b.year);
+    const list = [...b.trips].sort((x, y) => y.date.localeCompare(x.date));
+    $("tripRows").innerHTML = list.map(t => `<tr><td class="num">${fmtDate(parseISO(t.date))}</td><td>${esc(t.purpose || "")}</td><td>${t.vehicle === "moto" ? "Motorcycle" : "Car/van"}${t.vname ? " · " + esc(t.vname) : ""}</td><td class="num">${t.miles}</td><td class="num">${fmtGBP(claims[t.id])}</td><td><button type="button" class="link" data-tdel="${t.id}">Delete</button></td></tr>`).join("");
+    $("noTrips").hidden = b.trips.length > 0;
+    const miles = b.trips.reduce((a, t) => a + t.miles, 0), total = Object.values(claims).reduce((a, v) => a + v, 0);
+    $("tripTotal").textContent = b.trips.length ? `${miles.toLocaleString("en-GB")} miles · ${fmtGBP(total)} allowance` : "";
+    if (!$("m-date").value) $("m-date").value = $("f-date").value;
+  }
+  $("tripForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const b = book(), miles = parseFloat(String($("m-miles").value).replace(",", "."));
+    const t = { id: uid(), source: $("m-source").value, date: $("m-date").value, miles: Math.round(miles * 10) / 10, vehicle: $("m-type").value, vname: $("m-vname").value.trim(), purpose: $("m-purpose").value.trim() };
+    let err = !t.source ? "Add a self-employment in Settings first." : !t.date || !quarterOf(t.date, b.year, b.qtype) ? "Enter a date inside this tax year." : !(t.miles > 0) ? "Enter the business miles, like 34." : !t.purpose ? "Say where you went and why. HMRC expects a record of each journey." : null;
+    if (!err && !canUse()) err = "The mileage log is part of the full version. Unlock it in Settings.";
+    if (err) { $("tripError").textContent = err; $("tripError").hidden = false; return; }
+    $("tripError").hidden = true;
+    if (state.sample) { state.sample = false; const y = state.active; state.books = { [y]: Object.assign(newBook(y), { sources: b.sources }) }; }
+    book().trips.push(t); save(); $("m-miles").value = ""; $("m-purpose").value = ""; renderTrips(); renderBanners(); toast("Journey added.");
+  });
+  $("tripRows").addEventListener("click", e => {
+    const id = e.target.dataset.tdel; if (!id) return;
+    if (e.target.dataset.confirm !== "1") { e.target.dataset.confirm = "1"; e.target.textContent = "Confirm"; return; }
+    book().trips = book().trips.filter(t => t.id !== id); save(); renderTrips(); toast("Journey deleted.");
   });
 
   // ---------- Summary ----------
   function renderSummary() {
     const b = book(), ends = quarterEnds(b.year, b.qtype), issues = findIssues(b);
     const cb = $("checkBanner");
-    cb.hidden = issues.length === 0; cb.className = "banner bad";
+    cb.hidden = issues.length === 0;
     cb.innerHTML = `<span>${issues.length} record(s) need a look before you send: ${[...new Set(issues.map(i => i.type))].join(", ").toLowerCase()}. They're highlighted on the Records tab.</span>`;
     $("summaries").innerHTML = b.sources.map(s => {
       const r = summarise(b, s.id);
       const head = `<tr><th>Category</th>${ends.map((e, i) => `<th class="num">Q${i + 1} to ${fmtDate(e).replace(/ \d{4}$/, "")}</th>`).join("")}</tr>`;
       const line = (label, vals, cls) => `<tr class="${cls || ""}"><td>${esc(label)}</td>${vals.map(v => `<td class="num">${v ? fmtGBP(v) : "–"}</td>`).join("")}</tr>`;
       let body = `<tr><td colspan="5"><strong>Income</strong></td></tr>` + r.cats.income.map(k => line(k, r.rows[k])).join("") + line("Total income", r.income, "total");
-      body += `<tr><td colspan="5"><strong>Expenses</strong></td></tr>` + r.cats.expense.map(k => line(k, r.rows[k])).join("") + line("Consolidated expenses (one figure, if turnover under £90,000)", r.expenses, "total");
+      body += `<tr><td colspan="5"><strong>Expenses</strong></td></tr>` + r.cats.expense.map(k => line(k + (k === MILEAGE_CAT && r.mileage.some(Boolean) ? " (includes mileage)" : ""), r.rows[k])).join("") + line("Consolidated expenses (one figure, if turnover under £90,000)", r.expenses, "total");
       if (r.cats.separate.length) body += `<tr><td colspan="5"><strong>Reported separately</strong></td></tr>` + r.cats.separate.map(k => line(k, r.rows[k])).join("");
-      return `<div class="panel stack"><div class="sumhead"><h2>${esc(s.name)}</h2><span class="muted">${s.type === "se" ? "Self-employment" : "UK property"} · year-to-date totals</span></div><div class="tablebox"><table><thead>${head}</thead><tbody>${body}</tbody></table></div></div>`;
+      let extra = "";
+      if (s.type === "pr") {
+        const bp = byProperty(b, s.id), names = Object.keys(bp);
+        extra = canUse()
+          ? (names.length ? `<h3>By property, whole year so far</h3><div class="tablebox"><table><thead><tr><th>Property</th><th class="num">Income</th><th class="num">Expenses</th><th class="num">Income − expenses</th><th class="num">Residential finance costs</th></tr></thead><tbody>${names.map(n => `<tr><td>${esc(n)}</td><td class="num">${fmtGBP(bp[n].income)}</td><td class="num">${fmtGBP(bp[n].expense)}</td><td class="num">${fmtGBP(bp[n].income - bp[n].expense)}</td><td class="num">${fmtGBP(bp[n].rfc)}</td></tr>`).join("")}</tbody></table></div><p class="muted" style="margin:0">For your own tracking. HMRC receives one combined update for all your UK properties.</p>` : "")
+          : `<div class="upsell"><strong>See profit for each property</strong><span class="muted">The full version breaks your UK property totals down by let, so you know which one earns its keep.</span><div><button type="button" class="gold" data-go-full>Unlock for £19</button></div></div>`;
+      }
+      return `<div class="panel stack"><div class="sumhead"><h2>${esc(s.name)}</h2><span class="muted">${s.type === "se" ? "Self-employment" : "UK property"} · year-to-date totals</span></div><div class="tablebox"><table><thead>${head}</thead><tbody>${body}</tbody></table></div>${extra}</div>`;
     }).join("") || '<div class="empty">Add an income source in Settings.</div>';
-    $("exportNote").textContent = isFull() ? "" : "Downloads and copying are part of the full version. You can still read every total here.";
-    ["dlSummary", "dlRecords", "cpSummary"].forEach(id => $(id).disabled = !isFull() && !state.sample);
+    $("exportNote").textContent = canUse() ? "" : "Downloads, copying and the year-end report are part of the full version. You can still read every total here.";
+    ["dlSummary", "dlRecords", "cpSummary", "yearReport"].forEach(id => $(id).disabled = !canUse());
   }
   function download(name, text, type) {
     try {
-      const url = URL.createObjectURL(new Blob([text], { type }));
+      const url = URL.createObjectURL(text instanceof Blob ? text : new Blob([text], { type }));
       const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000); toast("Downloading " + name);
+      setTimeout(() => URL.revokeObjectURL(url), 4000); toast("Downloading " + name);
     } catch (e) { toast("Download blocked. Use Copy instead."); }
   }
   const tag = () => book().year + "-" + String(book().year + 1).slice(2);
@@ -556,6 +930,18 @@ function recordsCSV(book) {
   $("cpSummary").addEventListener("click", () => {
     const t = summaryCSV(book());
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(t).then(() => toast("Summary copied. Paste it into a spreadsheet."), () => toast("Copy blocked by the browser."));
+  });
+  $("yearReport").addEventListener("click", () => {
+    const b = book(), yr = b.year + "–" + String(b.year + 1).slice(2);
+    const parts = b.sources.map(s => {
+      const r = summarise(b, s.id), L = (k, v, bold) => `<tr><td>${bold ? "<strong>" + esc(k) + "</strong>" : esc(k)}</td><td class="num">${bold ? "<strong>" + fmtGBP(v) + "</strong>" : fmtGBP(v)}</td></tr>`;
+      const all = [...r.cats.income, ...r.cats.expense, ...r.cats.separate].filter(k => r.rows[k][3]);
+      return `<h2 style="margin-top:18px">${esc(s.name)} (${s.type === "se" ? "self-employment" : "UK property"})</h2><table>${all.map(k => L(k, r.rows[k][3])).join("")}${L("Total income", r.income[3], 1)}${L("Total expenses", r.expenses[3], 1)}${L("Income minus expenses (before adjustments)", r.income[3] - r.expenses[3], 1)}</table>`;
+    }).join("");
+    const trips = b.trips.length ? `<p>Business mileage: ${b.trips.reduce((a, t) => a + t.miles, 0)} miles over ${b.trips.length} journeys, flat-rate allowance ${fmtGBP(Object.values(mileageClaims(b.trips, b.year)).reduce((a, v) => a + v, 0))} (included above).</p>` : "";
+    $("report").innerHTML = `<h1>Year-end summary ${yr}</h1><p>${esc(b.name || "")} · prepared with QuarterReady Records on ${new Date().toLocaleDateString("en-GB")}. Records: ${b.tx.length}. Totals to ${fmtDate(yearBounds(b.year, b.qtype).end)}.</p>${parts}${trips}<p style="font-size:9pt">Totals of the records entered. Not a tax computation: accounting adjustments, allowances and other income are not included. Not affiliated with HMRC.</p>`;
+    try { window.print(); } catch (e) {}
+    toast("Opening the print dialog. Choose 'Save as PDF' to keep a copy.");
   });
 
   // ---------- Deadlines ----------
@@ -568,18 +954,19 @@ function recordsCSV(book) {
     $("dlTitle").textContent = "Deadlines for " + b.year + "–" + String(b.year + 1).slice(2);
     $("dlRows").innerHTML = rows.map(r => `<tr><td>${r.p}</td><td>${r.c}</td><td class="num">${fmtDate(r.due)}</td><td>${r.due < t0 ? '<span class="pill">passed</span>' : r === next ? '<span class="pill next">next</span>' : ""}</td></tr>`).join("");
   }
+  $("ics").addEventListener("click", () => download("mtd-deadlines-" + tag() + ".ics", icsCalendar(book().year, book().name), "text/calendar"));
 
   // ---------- Settings ----------
   function renderSettings() {
     const b = book();
     $("s-name").value = b.name || ""; $("s-qtype").value = b.qtype;
     $("srcList").innerHTML = b.sources.map(s => {
-      const n = b.tx.filter(t => t.source === s.id).length;
-      return `<li>${esc(s.name)} <span class="muted">(${s.type === "se" ? "self-employment" : "UK property"}, ${n} records)</span> ${n === 0 && b.sources.length > 1 ? `<button type="button" class="link" data-rm="${s.id}">Remove</button>` : ""}</li>`;
+      const n = b.tx.filter(t => t.source === s.id).length + b.trips.filter(t => t.source === s.id).length;
+      return `<li>${esc(s.name)} <span class="muted">(${s.type === "se" ? "self-employment" : "UK property"}, ${n} entries)</span> ${n === 0 && b.sources.length > 1 ? `<button type="button" class="link" data-rm="${s.id}">Remove</button>` : ""}</li>`;
     }).join("");
     $("addPr").hidden = b.sources.some(s => s.type === "pr");
     const L = state.licence;
-    $("licState").textContent = isFull() ? "Full version active in this browser" + (L.email ? " for " + L.email : "") + ". Unlimited records and exports for every tax year." : "Free version: up to " + FREE_LIMIT + " records per tax year, no exports. The full version is a one-time £19 payment.";
+    $("licState").textContent = isFull() ? "Full version active in this browser" + (L.email ? " for " + L.email : "") + ". Everything below is unlocked for every tax year." : "You're on the free version: up to " + FREE_LIMIT + " records per tax year. The full version is a one-time £19 payment and adds:";
     $("buyRow").hidden = isFull(); $("deactivate").hidden = !isFull(); $("s-key").value = L ? L.key : "";
     if (CHECKOUT_URL) { $("buyLink").href = CHECKOUT_URL; $("buyLink").target = "_blank"; $("buyLink").rel = "noopener"; }
     $("backupText").value = JSON.stringify(state);
@@ -594,12 +981,22 @@ function recordsCSV(book) {
   $("srcList").addEventListener("click", e => { const id = e.target.dataset.rm; if (!id) return; book().sources = book().sources.filter(s => s.id !== id); save(); renderAll(); renderSettings(); });
 
   // Backup / restore
-  $("backup").addEventListener("click", () => download("quarterready-backup-" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify(state, null, 1), "application/json"));
-  function restoreFrom(text) {
+  $("backup").addEventListener("click", async () => {
+    const out = JSON.parse(JSON.stringify(state));
+    if ($("bkReceipts").checked) {
+      try { const files = await idb.all(); out.receipts = {}; for (const [k, v] of Object.entries(files)) out.receipts[k] = { name: v.name, type: v.type, data: await toB64(v.blob) }; } catch (e) {}
+    }
+    download("quarterready-backup-" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify(out), "application/json");
+  });
+  async function restoreFrom(text) {
     try {
       const s = JSON.parse(text);
       if (!s || s.version !== 1 || !s.books) throw new Error("bad");
-      state = s; save(); renderAll(); renderSettings(); toast("Backup restored.");
+      const rec = s.receipts; delete s.receipts;
+      Object.values(s.books).forEach(b => { b.trips = b.trips || []; }); s.rules = s.rules || {};
+      state = s; save();
+      if (rec) for (const [k, v] of Object.entries(rec)) { try { const blob = await fromB64(v.data); await idb.put(k, new File([blob], v.name, { type: v.type })); } catch (e) {} }
+      renderAll(); renderSettings(); toast("Backup restored.");
     } catch (e) { toast("That isn't a QuarterReady backup."); }
   }
   $("restore").addEventListener("change", e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => restoreFrom(r.result); r.readAsText(f); e.target.value = ""; });
@@ -607,7 +1004,7 @@ function recordsCSV(book) {
   $("pasteRestore").addEventListener("click", () => restoreFrom($("backupText").value));
   $("wipe").addEventListener("click", () => $("wipeConfirm").hidden = false);
   $("wipeNo").addEventListener("click", () => $("wipeConfirm").hidden = true);
-  $("wipeYes").addEventListener("click", () => { book().tx = []; state.sample = false; save(); $("wipeConfirm").hidden = true; renderAll(); renderSettings(); toast("Records deleted."); });
+  $("wipeYes").addEventListener("click", () => { book().tx.forEach(t => idb.del(t.id)); book().tx = []; book().trips = []; state.sample = false; save(); $("wipeConfirm").hidden = true; renderAll(); renderSettings(); toast("Records deleted."); });
 
   // ---------- Licence (Lemon Squeezy License API) ----------
   async function lsCall(path, params) {
@@ -646,10 +1043,14 @@ function recordsCSV(book) {
     renderYears(); renderBanners();
     const fsel = $("f-source"), prev = fsel.value; fillSources(fsel, false); if ([...fsel.options].some(o => o.value === prev)) fsel.value = prev; fillCats();
     fillSources($("flt-source"), true);
-    if (!$("f-date").value) { const b = book(), t = new Date(); const ts = iso(d(t.getFullYear(), t.getMonth() + 1, t.getDate())); $("f-date").value = quarterOf(ts, b.year, b.qtype) ? ts : iso(yearBounds(b.year, b.qtype).start); }
-    renderRecords(); renderDeadlines(); if (!$("p-summary").hidden) renderSummary();
+    if (!$("f-date").value || !quarterOf($("f-date").value, book().year, book().qtype)) { const b = book(), t = new Date(); const ts = iso(d(t.getFullYear(), t.getMonth() + 1, t.getDate())); $("f-date").value = quarterOf(ts, b.year, b.qtype) ? ts : iso(yearBounds(b.year, b.qtype).start); }
+    renderRecords(); renderDeadlines();
+    if (!$("p-summary").hidden) renderSummary();
+    if (!$("p-mileage").hidden) renderTrips();
+    if (!$("p-import").hidden) renderImportLock();
   }
   renderAll(); revalidate();
+  if (tabs.includes(location.hash.slice(1))) show(location.hash.slice(1));
 })();
 </script>
 
