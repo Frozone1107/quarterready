@@ -4,106 +4,147 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QuarterReady Records</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 28 28%27%3E%3Crect x=%271%27 y=%271%27 width=%2726%27 height=%2726%27 rx=%277%27 fill=%27%23E4A11B%27/%3E%3Cpath d=%27M14 5v9h9A9 9 0 1 1 14 5z%27 fill=%27%230B2B27%27/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="rules.js"></script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="QuarterReady">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#06130F">
+<meta name="theme-color" content="#0B2545">
 <meta name="description" content="Keep Making Tax Digital records for self-employment and UK property in your browser: import bank statements, attach receipts, log mileage, and get quarterly totals per HMRC category.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: deep-teal app bar like the site hero; tabs; one working panel at a time; entry form beside the ledger on wide screens. */
+/* Layout: navy app bar, white tab bar with icons, a "next deadline" strip, then one working area at a time. Classic navy and white; gold only for "next". */
 :root{
-  --paper:#F3F6F5; --card:#FFFFFF; --ink:#102624; --muted:#4F625F; --line:#D3DDDA;
-  --accent:#0E6B5C; --accent-ink:#FFFFFF; --mark:#E4A11B; --soft:#E3EEEB;
-  --hero:#0B2B27; --hero-ink:#E8F3F0; --hero-muted:#9FC3BA; --hero-line:#22524A;
-  --ok:#1E7A46; --warn:#9A5B00; --bad:#B3261E; --badsoft:#F8E1DE;
-  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
-  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --paper:#F4F6FA; --card:#FFFFFF; --ink:#0B2545; --text:#1B2B44; --muted:#5B6B82; --line:#DDE3EC; --line-2:#C7D0DD;
+  --accent:#1D4ED8; --accent-ink:#FFFFFF; --soft:#EAF0FD; --mark:#C9A227; --marksoft:#F7EFD5;
+  --hero:#0B2545; --hero-ink:#FFFFFF; --hero-muted:#A9B8CF; --hero-line:#26446E;
+  --ok:#1F7A4D; --oksoft:#E3F3EA; --warn:#9A6400; --bad:#B42318; --badsoft:#FDECEA;
+  --serif:"Source Serif 4",Georgia,serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  --display:var(--serif); --mono:var(--body);
+  --shadow:0 1px 2px rgba(11,37,69,.06),0 6px 20px -12px rgba(11,37,69,.22);
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
-  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
-  --hero:#081C19; --hero-ink:#E8F3F0; --hero-muted:#8FB3AA; --hero-line:#1E423C;
-  --ok:#5BCB8A; --warn:#F0B740; --bad:#F28B82; --badsoft:#3A1D1A; color-scheme:dark}}
+  --paper:#0A1628; --card:#0F1F38; --ink:#EEF2F8; --text:#D5DDEA; --muted:#93A3BA; --line:#1E3150; --line-2:#2A4268;
+  --accent:#6B9BFF; --accent-ink:#071226; --soft:#14284A; --marksoft:#2E2710; --hero:#071226; --hero-line:#1E3150;
+  --ok:#5CC48E; --oksoft:#12301F; --warn:#E3B54A; --bad:#F28B82; --badsoft:#3A1D1A; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
-  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
-  --hero:#081C19; --hero-ink:#E8F3F0; --hero-muted:#8FB3AA; --hero-line:#1E423C;
-  --ok:#5BCB8A; --warn:#F0B740; --bad:#F28B82; --badsoft:#3A1D1A; color-scheme:dark}
+  --paper:#0A1628; --card:#0F1F38; --ink:#EEF2F8; --text:#D5DDEA; --muted:#93A3BA; --line:#1E3150; --line-2:#2A4268;
+  --accent:#6B9BFF; --accent-ink:#071226; --soft:#14284A; --marksoft:#2E2710; --hero:#071226; --hero-line:#1E3150;
+  --ok:#5CC48E; --oksoft:#12301F; --warn:#E3B54A; --bad:#F28B82; --badsoft:#3A1D1A; --shadow:none; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+body{background:var(--paper);color:var(--text);font-family:var(--body);font-size:16.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 a{color:var(--accent)}
-:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px;border-radius:4px}
 header.top{background:var(--hero);color:var(--hero-ink)}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px;flex-wrap:wrap}
-.brand{font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--hero-ink);display:flex;align-items:center;gap:8px}
-.yearsel{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--hero-muted);flex-wrap:wrap}
-.yearsel select{background:var(--hero);color:var(--hero-ink);border-color:var(--hero-line)}
-select,input,textarea{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
-.badge{font-family:var(--mono);font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--hero-line);white-space:nowrap;color:var(--hero-ink)}
-.badge.full{border-color:var(--mark);background:var(--mark);color:#1b1300}
-nav.tabs{display:flex;gap:4px;flex-wrap:wrap;padding-block:12px}
-nav.tabs button{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:9px;padding:8px 12px;font:600 .95rem var(--body);cursor:pointer}
-nav.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);border-color:var(--line);box-shadow:0 2px 0 var(--accent)}
-.lock{font-size:.7rem;font-family:var(--mono);color:var(--warn);margin-left:4px}
-h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0;text-wrap:balance}
-h2{font-size:1.35rem}
-h3{font-size:1.05rem}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
-.grid{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);gap:18px;align-items:start}
+.brand{font-family:var(--serif);font-weight:700;font-size:1.2rem;text-decoration:none;color:#fff;display:flex;align-items:center;gap:10px}
+.brand small{font-family:var(--body);font-weight:500;font-size:.85rem;color:var(--hero-muted)}
+.yearsel{display:flex;align-items:center;gap:10px;font-size:.92rem;color:var(--hero-muted);flex-wrap:wrap}
+.yearsel select{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.22)}
+.yearsel select option{color:#0B2545}
+.yearsel button.ghost{color:#fff;border-color:rgba(255,255,255,.35);padding:6px 12px}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line-2);border-radius:10px;padding:9px 11px;min-width:0;transition:border-color .15s,box-shadow .15s}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 15%,transparent)}
+input[type=file]{padding:7px;background:var(--paper)}
+.badge{font-size:.8rem;font-weight:600;padding:4px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.25);white-space:nowrap;color:#fff}
+.badge.full{border-color:var(--mark);background:var(--mark);color:#1d1600}
+.tabbar{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;background:transparent;color:var(--muted);border:0;border-bottom:3px solid transparent;border-radius:0;padding:14px 14px 11px;font:600 .97rem var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+nav.tabs button svg{width:18px;height:18px;flex:none}
+nav.tabs button:hover{color:var(--ink);background:transparent}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.lock{font-size:.7rem;font-weight:700;color:var(--warn);background:var(--marksoft);padding:1px 6px;border-radius:99px;margin-left:2px;font-family:var(--body)}
+h1,h2,h3{font-family:var(--serif);color:var(--ink);line-height:1.2;margin:0;text-wrap:balance;font-weight:600}
+h2{font-size:1.4rem}
+h3{font-size:1.1rem}
+.intro{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding-top:22px}
+.intro h1{font-size:clamp(1.5rem,3vw,1.9rem)}
+.intro p{color:var(--muted);margin:4px 0 0;max-width:68ch}
+.next{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px;padding:12px 16px;border:1px solid var(--line);border-left:4px solid var(--mark);border-radius:0 12px 12px 0;background:var(--card);font-size:.98rem}
+.next strong{color:var(--ink)}
+.next .pill{margin-left:auto}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0;box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start}
 @media (max-width:880px){.grid{grid-template-columns:1fr}}
-.stack{display:grid;gap:14px}
-form.entry{display:grid;gap:10px}
-.fld{display:grid;gap:4px;font-size:.88rem;color:var(--muted)}
+.stack{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+form.entry{display:grid;gap:12px}
+.fld{display:grid;gap:5px;font-size:.92rem;font-weight:600;color:var(--ink)}
+.fld input,.fld select{font-weight:400}
 .row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 @media (max-width:420px){.row2{grid-template-columns:1fr}}
-button,.btn{font:600 .95rem var(--body);border-radius:9px;padding:9px 14px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-button:disabled{opacity:.5;cursor:not-allowed}
-button.ghost,.btn.ghost{background:transparent;color:var(--accent)}
-button.gold,.btn.gold{background:var(--mark);border-color:var(--mark);color:#1b1300}
-button.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+button,.btn{font:600 .97rem var(--body);border-radius:10px;padding:10px 16px;border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+button:hover,.btn:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.ghost,.btn.ghost{background:transparent;color:var(--accent);border-color:var(--line-2)}
+button.ghost:hover,.btn.ghost:hover{border-color:var(--accent);background:transparent}
+button.gold,.btn.gold{background:var(--ink);border-color:var(--ink);color:var(--card)}
+button.danger{background:transparent;color:var(--bad);border-color:color-mix(in srgb,var(--bad) 50%,transparent)}
 button.link{background:none;border:0;color:var(--accent);padding:2px 4px;font-weight:600}
 .btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.muted{color:var(--muted);font-size:.88rem}
-.banner{border:1px solid var(--mark);background:var(--soft);border-radius:12px;padding:10px 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-.banner.bad{border-color:var(--bad);background:var(--badsoft)}
-.upsell{border:1px dashed var(--mark);border-radius:12px;padding:14px;display:grid;gap:8px;background:var(--soft)}
+.muted{color:var(--muted);font-size:.92rem;font-weight:400}
+.banner{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--card);border-radius:0 12px 12px 0;padding:12px 16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.banner.bad{border-left-color:var(--bad);background:var(--badsoft)}
+.upsell{border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:8px;background:var(--soft)}
 .tablebox{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:.92rem}
-th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
-td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
-tr.total td{font-weight:700;background:var(--soft)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:hover td{background:color-mix(in srgb,var(--soft) 50%,transparent)}
+th{font-size:.84rem;color:var(--muted);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:700;background:var(--paper)}
 tr.flag td{background:var(--badsoft)}
-.pill{font-family:var(--mono);font-size:.7rem;padding:2px 8px;border-radius:99px;background:var(--soft);white-space:nowrap}
-.pill.inc{color:var(--ok)}
-.pill.next{background:var(--mark);color:#1b1300}
+.pill{font-size:.78rem;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--paper);color:var(--muted);white-space:nowrap}
+.pill.inc{color:var(--ok);background:var(--oksoft)}
+.pill.next{background:var(--marksoft);color:var(--warn)}
 .pill.bad{background:var(--badsoft);color:var(--bad)}
 .filters{display:flex;gap:8px;flex-wrap:wrap}
 .sumhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
-.empty{border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--muted)}
-textarea{width:100%;min-height:120px;font:500 .8rem var(--mono)}
+.empty{border:1.5px dashed var(--line-2);border-radius:12px;padding:22px;text-align:center;color:var(--muted)}
+textarea{width:100%;min-height:120px;font:500 .82rem ui-monospace,Menlo,monospace}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-weight:600;z-index:9;max-width:calc(100% - 32px)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--card);padding:11px 18px;border-radius:12px;font-weight:600;z-index:9;max-width:calc(100% - 32px);box-shadow:0 10px 30px -10px rgba(0,0,0,.4)}
 .check{display:flex;gap:8px;align-items:center}
 .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px}
-.feat div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.feat strong{display:block}
+.feat div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.feat strong{display:block;color:var(--ink)}
 .imp select{max-width:100%}
 .imp td select{width:100%;min-width:200px}
-footer{padding-block:24px;color:var(--muted);font-size:.85rem}
+.guide{display:grid;gap:14px}
+.guide ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:g}
+@media (max-width:760px){.guide ol{grid-template-columns:1fr}}
+.guide li{counter-increment:g;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+.guide li::before{content:counter(g);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;background:var(--ink);color:var(--card)}
+.guide li.done::before{content:"";background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat}
+.guide li strong{display:block;color:var(--ink)}
+.guide li span{color:var(--muted);font-size:.92rem}
+.guide li button{margin-top:8px;padding:6px 12px;font-size:.9rem}
+.guidehead{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+@media (max-width:640px){
+  #p-records thead{display:none}
+  #rows tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  #rows td{border:0;padding:0;text-align:left}
+  #rows td:nth-child(3){grid-column:1;grid-row:1;font-weight:600;color:var(--ink)}
+  #rows td:nth-child(4){grid-column:2;grid-row:1;text-align:right}
+  #rows td:nth-child(2){grid-column:1;grid-row:2;font-size:.9rem}
+  #rows td:nth-child(5){grid-column:2;grid-row:2;text-align:right;color:var(--muted);font-size:.9rem}
+  #rows td:nth-child(1){grid-column:1;grid-row:3;color:var(--muted);font-size:.9rem;text-align:left}
+  #rows td:nth-child(6){grid-column:2;grid-row:3;text-align:right}
+}
+section[role=tabpanel]{padding-block:16px 8px}
+footer{padding-block:28px;color:var(--muted);font-size:.88rem}
 #report{display:none}
 @media print{
   body{background:#fff;color:#000}
-  header.top,nav.tabs,main>*:not(#report),.toast{display:none!important}
+  header.top,.tabbar,.intro,.next,main>*:not(#report),.toast{display:none!important}
   #report{display:block!important}
   #report table{font-size:10pt}
 }
@@ -118,30 +159,48 @@ body{margin:0}
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" fill="var(--mark)"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="var(--hero)"/></svg>
-      QuarterReady Records
+    <a class="brand" href="index.html" title="Back to the QuarterReady website">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#13315C"/><circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="3.6" stroke-dasharray="12.14 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="9" fill="none" stroke="#C9A227" stroke-width="3.6" stroke-dasharray="12.14 44.41" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/></svg>
+      QuarterReady <small>Records</small>
     </a>
     <div class="yearsel">
       <label for="year">Tax year</label>
       <select id="year"></select>
       <span class="badge" id="plan">Free</span>
-      <button type="button" class="ghost" id="installBtn" hidden>Install app</button>
+      <button type="button" class="ghost" id="installBtn" hidden>Install the app</button>
     </div>
   </div>
 </header>
 
-<main class="wrap">
+<div class="tabbar"><div class="wrap">
   <nav class="tabs" role="tablist" aria-label="Sections">
-    <button role="tab" id="t-records" aria-controls="p-records" aria-selected="true">Records</button>
-    <button role="tab" id="t-import" aria-controls="p-import" aria-selected="false">Bank import<span class="lock" data-lock>FULL</span></button>
-    <button role="tab" id="t-mileage" aria-controls="p-mileage" aria-selected="false">Mileage<span class="lock" data-lock>FULL</span></button>
-    <button role="tab" id="t-summary" aria-controls="p-summary" aria-selected="false">Quarterly summary</button>
-    <button role="tab" id="t-deadlines" aria-controls="p-deadlines" aria-selected="false">Deadlines</button>
-    <button role="tab" id="t-settings" aria-controls="p-settings" aria-selected="false">Settings &amp; backup</button>
+    <button role="tab" id="t-records" aria-controls="p-records" aria-selected="true"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h7l3.5 3.5v11.5h-10.5z"/><path d="M8 9.5h5M8 13h5"/></svg>Records</button>
+    <button role="tab" id="t-import" aria-controls="p-import" aria-selected="false"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v9m-4-4 4 4 4-4"/><path d="M4 16h12"/></svg>Bank import<span class="lock" data-lock>Full</span></button>
+    <button role="tab" id="t-mileage" aria-controls="p-mileage" aria-selected="false"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M10 10l4-3"/></svg>Mileage<span class="lock" data-lock>Full</span></button>
+    <button role="tab" id="t-summary" aria-controls="p-summary" aria-selected="false"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V9M8.5 16V5M13 16v-5M17 16H3"/></svg>Quarterly totals</button>
+    <button role="tab" id="t-deadlines" aria-controls="p-deadlines" aria-selected="false"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M3 8h14M7 2.5v3M13 2.5v3"/></svg>Deadlines</button>
+    <button role="tab" id="t-settings" aria-controls="p-settings" aria-selected="false"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>Settings &amp; backup</button>
   </nav>
+</div></div>
+<main class="wrap">
+  <div class="intro">
+    <div>
+      <h1 id="introTitle">Records</h1>
+      <p id="introText">Every income and expense for this tax year. Add one with the form; it goes under the HMRC category you pick.</p>
+    </div>
+  </div>
+  <div class="next" id="nextStrip" role="status"></div>
 
-  <div class="stack">
+
+  <div class="stack" style="margin-top:16px">
+    <div class="panel guide" id="guide" hidden>
+      <div class="guidehead"><h2>Getting started</h2><button type="button" class="link" id="guideHide">Hide this guide</button></div>
+      <ol>
+        <li id="g1"><div><strong>Look around the examples</strong><span>The app opens with a few example records. Browse the tabs, then clear them to start your own.</span></div></li>
+        <li id="g2"><div><strong>Add your first record</strong><span>Pick the income source and category, enter the date and amount, then select Add record.</span></div></li>
+        <li id="g3"><div><strong>Check your quarterly totals</strong><span>Open Quarterly totals to see the figures to copy into your bridging software.</span><button type="button" class="ghost" data-show="summary">Open Quarterly totals</button></div></li>
+      </ol>
+    </div>
     <div class="banner" id="sampleBanner" hidden>
       <span><strong>You're looking at example records.</strong> They show how the app works. Clear them when you're ready to start your own.</span>
       <button type="button" id="clearSample">Clear examples and start</button>
@@ -314,15 +373,6 @@ body{margin:0}
         </div>
         <p class="muted" style="margin:0">HMRC expects a quarterly update for each self-employment and for your UK property business.</p>
       </div>
-      <div class="panel stack" id="installPanel">
-        <h2>Use it like an app</h2>
-        <p class="muted" style="margin:0">Add QuarterReady to your home screen: it gets its own icon, opens full screen and works offline. Nothing to download from an app store.</p>
-        <div class="btns"><button type="button" class="solid" id="installBtn2" hidden>Install QuarterReady</button></div>
-        <p style="margin:0"><strong>iPhone or iPad:</strong> open this page in Safari, tap Share, then <em>Add to Home Screen</em>.</p>
-        <p style="margin:0"><strong>Android:</strong> in Chrome, tap the ⋮ menu, then <em>Install app</em> or <em>Add to Home screen</em>.</p>
-        <p style="margin:0"><strong>Computer:</strong> in Chrome or Edge, click the install icon at the right of the address bar.</p>
-        <p class="muted" style="margin:0" id="installedNote" hidden>You're using the installed app.</p>
-      </div>
       <div class="stack">
         <div class="panel stack" id="licPanel">
           <h2>Full version</h2>
@@ -339,6 +389,15 @@ body{margin:0}
           <label class="fld" for="s-key">Licence key (from your receipt email)<input id="s-key" autocomplete="off" spellcheck="false"></label>
           <div class="btns"><button type="button" id="activate">Activate</button><button type="button" class="ghost" id="deactivate" hidden>Remove from this browser</button></div>
           <p class="muted" id="licMsg" role="status" style="margin:0"></p>
+        </div>
+        <div class="panel stack" id="installPanel">
+          <h2>Use it like an app</h2>
+          <p class="muted" style="margin:0">Add QuarterReady to your home screen: it gets its own icon, opens full screen and works offline. Nothing to download from an app store.</p>
+          <div class="btns"><button type="button" class="solid" id="installBtn2" hidden>Install QuarterReady</button></div>
+          <p style="margin:0"><strong>iPhone or iPad:</strong> open this page in Safari, tap Share, then <em>Add to Home Screen</em>.</p>
+          <p style="margin:0"><strong>Android:</strong> in Chrome, tap the ⋮ menu, then <em>Install app</em> or <em>Add to Home screen</em>.</p>
+          <p style="margin:0"><strong>Computer:</strong> in Chrome or Edge, click the install icon at the right of the address bar.</p>
+          <p class="muted" style="margin:0" id="installedNote" hidden>You're using the installed app.</p>
         </div>
         <div class="panel stack">
           <h2>Your data</h2>
@@ -410,8 +469,18 @@ function quarterEnds(year, qtype) {
     ? [d(year, 6, 30), d(year, 9, 30), d(year, 12, 31), d(year + 1, 3, 31)]
     : [d(year, 7, 5), d(year, 10, 5), d(year + 1, 1, 5), d(year + 1, 4, 5)];
 }
+// Rules come from rules.js (window.QR_RULES); the defaults below are used if it can't load.
+const RULES = (typeof window !== "undefined" && window.QR_RULES) || {
+  deadlines: { quarters: [[8, 7], [11, 7], [2, 7], [5, 7]], finalReturn: [1, 31] },
+  mileage: [{ from: 2026, car1: 55, car2: 25, moto: 24, band: 10000 }, { from: 0, car1: 45, car2: 25, moto: 24, band: 10000 }],
+  consolidatedExpensesLimit: 90000, checked: ""
+};
 function deadlines(year) {
-  return [d(year, 8, 7), d(year, 11, 7), d(year + 1, 2, 7), d(year + 1, 5, 7), d(year + 2, 1, 31)];
+  // Each quarter's deadline is the first [month, day] after that quarter ends (standard quarters); the return is due in year + 2.
+  const ends = [d(year, 7, 5), d(year, 10, 5), d(year + 1, 1, 5), d(year + 1, 4, 5)];
+  const q = RULES.deadlines.quarters.map(([m, dd], i) => { let x = d(ends[i].getUTCFullYear(), m, dd); if (x <= ends[i]) x = d(ends[i].getUTCFullYear() + 1, m, dd); return x; });
+  const [fm, fd] = RULES.deadlines.finalReturn;
+  return [...q, d(year + 2, fm, fd)];
 }
 function quarterOf(dateStr, year, qtype) {
   const dt = parseISO(dateStr), b = yearBounds(year, qtype);
@@ -453,7 +522,7 @@ function findIssues(book) {
   return issues;
 }
 // HMRC simplified mileage rates, pence per mile. From 6 April 2026 the first-10,000-mile rate for cars and goods vehicles is 55p (previously 45p).
-function mileageRates(year) { return { car1: year >= 2026 ? 55 : 45, car2: 25, moto: 24 }; }
+function mileageRates(year) { const r = RULES.mileage.find(x => x.from <= year) || RULES.mileage[RULES.mileage.length - 1]; return { car1: r.car1, car2: r.car2, moto: r.moto, band: r.band || 10000 }; }
 // Allowance per trip, in date order; the 10,000-mile band is counted per vehicle across the tax year.
 function mileageClaims(trips, year) {
   const r = mileageRates(year), used = {}, out = {};
@@ -461,7 +530,7 @@ function mileageClaims(trips, year) {
     if (t.vehicle === "moto") { out[t.id] = Math.round(t.miles * r.moto); return; }
     const k = (t.vname || "car").trim().toLowerCase();
     const before = used[k] || 0, after = before + t.miles; used[k] = after;
-    const first = Math.max(0, Math.min(after, 10000) - before), rest = t.miles - first;
+    const first = Math.max(0, Math.min(after, r.band) - before), rest = t.miles - first;
     out[t.id] = Math.round(first * r.car1 + rest * r.car2);
   });
   return out;
@@ -683,12 +752,46 @@ function icsCalendar(year, name) {
 
   // ---------- Tabs ----------
   const tabs = ["records", "import", "mileage", "summary", "deadlines", "settings"];
+  let currentTab = "records";
   function show(name) {
+    currentTab = name;
     tabs.forEach(t => { $("t-" + t).setAttribute("aria-selected", String(t === name)); $("p-" + t).hidden = t !== name; });
     if (name === "summary") renderSummary();
     if (name === "settings") renderSettings();
     if (name === "mileage") renderTrips();
     if (name === "import") renderImportLock();
+    const it = INTRO[name]; $("introTitle").textContent = it[0]; $("introText").textContent = it[1];
+    if (name === "summary") { guideState.sawSummary = true; saveGuide(); }
+    renderGuide();
+  }
+  const INTRO = {
+    records: ["Records", "Every income and expense for this tax year. Add one with the form; it goes under the HMRC category you pick."],
+    import: ["Bank import", "Turn a bank statement into records in a few clicks. You choose which lines are business; the file never leaves your device."],
+    mileage: ["Mileage", "Log business journeys by car, van or motorcycle. HMRC's flat rate is worked out for you and added to your travel expenses."],
+    summary: ["Quarterly totals", "The year-to-date figures for each quarterly update, per HMRC category. Copy them or download the CSV for your bridging software."],
+    deadlines: ["Deadlines", "When each quarterly update and your tax return are due for this tax year. Add them to your calendar so you get a reminder."],
+    settings: ["Settings & backup", "Your income sources, the full version, installing the app, and backups of your records."]
+  };
+  const GKEY = "qr-guide-v1";
+  let guideState = {}; try { guideState = JSON.parse(localStorage.getItem(GKEY) || "{}"); } catch (e) {}
+  function saveGuide() { try { localStorage.setItem(GKEY, JSON.stringify(guideState)); } catch (e) {} }
+  function renderGuide() {
+    const real = !state.sample, has = real && Object.values(state.books).some(b => b.tx.length > 0);
+    const steps = [real, has, !!guideState.sawSummary && has];
+    ["g1", "g2", "g3"].forEach((id, i) => $(id).classList.toggle("done", steps[i]));
+    $("guide").hidden = !!guideState.hidden || steps.every(Boolean) || currentTab !== "records";
+  }
+  $("guideHide").addEventListener("click", () => { guideState.hidden = true; saveGuide(); renderGuide(); });
+  document.addEventListener("click", e => { const b = e.target.closest("[data-show]"); if (b) show(b.dataset.show); });
+  function renderNext() {
+    const today = new Date(), t0 = d(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const y = book().year, dls = deadlines(y), names = ["Quarter 1 update", "Quarter 2 update", "Quarter 3 update", "Quarter 4 update", "Tax return"];
+    const i = dls.findIndex(x => x >= t0), el = $("nextStrip");
+    const long = x => x.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+    if (i < 0) { el.innerHTML = `<span>All deadlines for ${y}–${String(y + 1).slice(2)} have passed.</span>`; return; }
+    const days = Math.round((dls[i] - t0) / 864e5);
+    const started = t0 >= yearBounds(y, book().qtype).start;
+    el.innerHTML = `<span><strong>Next for ${y}–${String(y + 1).slice(2)}: ${names[i]}</strong>, due ${long(dls[i])}${started ? "" : " (if you use MTD this year)"}.</span><span class="pill next">${days === 0 ? "Due today" : days === 1 ? "In 1 day" : "In " + days + " days"}</span>`;
   }
   tabs.forEach(t => $("t-" + t).addEventListener("click", () => show(t)));
 
@@ -883,7 +986,7 @@ function icsCalendar(year, name) {
   function renderTrips() {
     const b = book(); fillSources($("m-source"), false, "se");
     const r = mileageRates(b.year);
-    $("rateNote").textContent = `HMRC flat rates for ${b.year}–${String(b.year + 1).slice(2)}: cars and vans ${r.car1}p a mile for the first 10,000 business miles, then ${r.car2}p; motorcycles ${r.moto}p.`;
+    $("rateNote").textContent = `HMRC flat rates for ${b.year}–${String(b.year + 1).slice(2)}: cars and vans ${r.car1}p a mile for the first ${r.band.toLocaleString("en-GB")} business miles, then ${r.car2}p; motorcycles ${r.moto}p.`;
     const claims = mileageClaims(b.trips, b.year);
     const list = [...b.trips].sort((x, y) => y.date.localeCompare(x.date));
     $("tripRows").innerHTML = list.map(t => `<tr><td class="num">${fmtDate(parseISO(t.date))}</td><td>${esc(t.purpose || "")}</td><td>${t.vehicle === "moto" ? "Motorcycle" : "Car/van"}${t.vname ? " · " + esc(t.vname) : ""}</td><td class="num">${t.miles}</td><td class="num">${fmtGBP(claims[t.id])}</td><td><button type="button" class="link" data-tdel="${t.id}">Delete</button></td></tr>`).join("");
@@ -1061,7 +1164,7 @@ function icsCalendar(year, name) {
     const fsel = $("f-source"), prev = fsel.value; fillSources(fsel, false); if ([...fsel.options].some(o => o.value === prev)) fsel.value = prev; fillCats();
     fillSources($("flt-source"), true);
     if (!$("f-date").value || !quarterOf($("f-date").value, book().year, book().qtype)) { const b = book(), t = new Date(); const ts = iso(d(t.getFullYear(), t.getMonth() + 1, t.getDate())); $("f-date").value = quarterOf(ts, b.year, b.qtype) ? ts : iso(yearBounds(b.year, b.qtype).start); }
-    renderRecords(); renderDeadlines();
+    renderRecords(); renderDeadlines(); renderGuide(); renderNext();
     if (!$("p-summary").hidden) renderSummary();
     if (!$("p-mileage").hidden) renderTrips();
     if (!$("p-import").hidden) renderImportLock();
