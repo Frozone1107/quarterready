@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QuarterReady Records</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 28 28%27%3E%3Crect x=%271%27 y=%271%27 width=%2726%27 height=%2726%27 rx=%277%27 fill=%27%23E4A11B%27/%3E%3Cpath d=%27M14 5v9h9A9 9 0 1 1 14 5z%27 fill=%27%230B2B27%27/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="QuarterReady">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#06130F">
 <meta name="description" content="Keep Making Tax Digital records for self-employment and UK property in your browser: import bank statements, attach receipts, log mileage, and get quarterly totals per HMRC category.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,6 +126,7 @@ body{margin:0}
       <label for="year">Tax year</label>
       <select id="year"></select>
       <span class="badge" id="plan">Free</span>
+      <button type="button" class="ghost" id="installBtn" hidden>Install app</button>
     </div>
   </div>
 </header>
@@ -305,6 +313,15 @@ body{margin:0}
           <button type="button" class="ghost" id="addPr">Add UK property</button>
         </div>
         <p class="muted" style="margin:0">HMRC expects a quarterly update for each self-employment and for your UK property business.</p>
+      </div>
+      <div class="panel stack" id="installPanel">
+        <h2>Use it like an app</h2>
+        <p class="muted" style="margin:0">Add QuarterReady to your home screen: it gets its own icon, opens full screen and works offline. Nothing to download from an app store.</p>
+        <div class="btns"><button type="button" class="solid" id="installBtn2" hidden>Install QuarterReady</button></div>
+        <p style="margin:0"><strong>iPhone or iPad:</strong> open this page in Safari, tap Share, then <em>Add to Home Screen</em>.</p>
+        <p style="margin:0"><strong>Android:</strong> in Chrome, tap the ⋮ menu, then <em>Install app</em> or <em>Add to Home screen</em>.</p>
+        <p style="margin:0"><strong>Computer:</strong> in Chrome or Edge, click the install icon at the right of the address bar.</p>
+        <p class="muted" style="margin:0" id="installedNote" hidden>You're using the installed app.</p>
       </div>
       <div class="stack">
         <div class="panel stack" id="licPanel">
@@ -1051,6 +1068,20 @@ function icsCalendar(year, name) {
   }
   renderAll(); revalidate();
   if (tabs.includes(location.hash.slice(1))) show(location.hash.slice(1));
+})();
+</script>
+
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+(() => {
+  let deferred = null;
+  const btns = ["installBtn", "installBtn2"].map(id => document.getElementById(id));
+  addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; btns.forEach(b => b && (b.hidden = false)); });
+  btns.forEach(b => b && b.addEventListener("click", async () => {
+    if (!deferred) return; deferred.prompt(); await deferred.userChoice.catch(() => {}); deferred = null; btns.forEach(x => x && (x.hidden = true));
+  }));
+  addEventListener("appinstalled", () => btns.forEach(b => b && (b.hidden = true)));
+  if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { const n = document.getElementById("installedNote"); if (n) n.hidden = false; }
 })();
 </script>
 

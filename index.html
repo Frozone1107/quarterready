@@ -8,6 +8,12 @@
 <meta name="description" content="Free Making Tax Digital for Income Tax start-date checker for UK sole traders and landlords, plus a simple records app that adds up your quarterly updates.">
 <meta name="theme-color" content="#06130F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 28 28%27%3E%3Crect x=%271%27 y=%271%27 width=%2726%27 height=%2726%27 rx=%277%27 fill=%27%23E4A11B%27/%3E%3Cpath d=%27M14 5v9h9A9 9 0 1 1 14 5z%27 fill=%27%230B2B27%27/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="QuarterReady">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:title" content="QuarterReady: your MTD start date and quarterly records">
 <meta property="og:description" content="Free Making Tax Digital checker for UK sole traders and landlords, plus a simple app that adds up your quarterly updates.">
 <meta property="og:type" content="website">
@@ -813,6 +819,10 @@ body{margin:0}
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("shown"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
   els.forEach(e => io.observe(e));
 })();
+</script>
+
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
 </script>
 
 </body>
