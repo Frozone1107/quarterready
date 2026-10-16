@@ -6,6 +6,7 @@
 <title>QuarterReady</title>
 <meta name="google-site-verification" content="6szakVAYHVct2T3IG15Cf6G6Dmr2TTid5tqatXc87DY">
 <meta name="description" content="Free Making Tax Digital for Income Tax start-date checker for UK sole traders and landlords, plus a simple records app that adds up your quarterly updates.">
+<meta name="theme-color" content="#06130F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 28 28%27%3E%3Crect x=%271%27 y=%271%27 width=%2726%27 height=%2726%27 rx=%277%27 fill=%27%23E4A11B%27/%3E%3Cpath d=%27M14 5v9h9A9 9 0 1 1 14 5z%27 fill=%27%230B2B27%27/%3E%3C/svg%3E">
 <meta property="og:title" content="QuarterReady: your MTD start date and quarterly records">
 <meta property="og:description" content="Free Making Tax Digital checker for UK sole traders and landlords, plus a simple app that adds up your quarterly updates.">
@@ -16,173 +17,276 @@
 <link rel="canonical" href="https://frozone1107.github.io/quarterready/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
+<script>document.documentElement.classList.add("js")</script>
 <style>
-/* Layout: a deep-teal hero carrying a live dial of the UK tax year; light working sections below; one marigold accent for "now". */
 :root{
-  --paper:#F3F6F5; --card:#FFFFFF; --ink:#102624; --muted:#4F625F; --line:#D3DDDA;
-  --accent:#0E6B5C; --accent-ink:#FFFFFF; --mark:#E4A11B; --soft:#E3EEEB;
-  --hero:#0B2B27; --hero-2:#0F3A34; --hero-ink:#E8F3F0; --hero-muted:#9FC3BA; --hero-line:#22524A;
+  --bg:#F5F6F2; --surface:#FFFFFF; --ink:#0B1D1A; --muted:#55635F; --line:#E1E5DF; --line-2:#CFD7D0;
+  --accent:#0E6B5C; --accent-ink:#FFFFFF; --mark:#F2B233; --mark-ink:#1E1400; --soft:#EDF3EF;
+  --hero:#06130F; --hero-2:#0E2a24; --hero-ink:#EEF6F3; --hero-muted:#93B3AB; --hero-line:#1D3E37;
   --ok:#1E7A46; --warn:#9A5B00; --info:#2A5D8F;
-  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
-  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --shadow:0 1px 2px rgba(6,19,15,.06),0 12px 32px -12px rgba(6,19,15,.18);
+  --font:"Geist",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
-  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
-  --hero:#081C19; --hero-2:#0C2723; --hero-ink:#E8F3F0; --hero-muted:#8FB3AA; --hero-line:#1E423C;
-  --ok:#5BCB8A; --warn:#F0B740; --info:#7FB2E5; color-scheme:dark}}
+  --bg:#060E0C; --surface:#0D1917; --ink:#E8F1EE; --muted:#97ACA7; --line:#1A2D29; --line-2:#264039;
+  --accent:#4FC2AC; --accent-ink:#04201B; --soft:#11221F; --ok:#5BCB8A; --warn:#F0B740; --info:#7FB2E5;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -16px rgba(0,0,0,.6); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0C1817; --card:#132322; --ink:#E6EFED; --muted:#9DB2AE; --line:#24403C;
-  --accent:#4FC2AC; --accent-ink:#06201C; --mark:#F0B740; --soft:#17302D;
-  --hero:#081C19; --hero-2:#0C2723; --hero-ink:#E8F3F0; --hero-muted:#8FB3AA; --hero-line:#1E423C;
-  --ok:#5BCB8A; --warn:#F0B740; --info:#7FB2E5; color-scheme:dark}
+  --bg:#060E0C; --surface:#0D1917; --ink:#E8F1EE; --muted:#97ACA7; --line:#1A2D29; --line-2:#264039;
+  --accent:#4FC2AC; --accent-ink:#04201B; --soft:#11221F; --ok:#5BCB8A; --warn:#F0B740; --info:#7FB2E5;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -16px rgba(0,0,0,.6); color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
-.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
 a{color:var(--accent)}
-:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
-h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0}
-h2{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:800;letter-spacing:-.01em}
-h3{font-size:1.15rem;font-weight:700}
-.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
-.notice{font-size:.9rem;color:var(--muted)}
+:focus-visible{outline:2px solid var(--mark);outline-offset:3px;border-radius:6px}
+h1,h2,h3{line-height:1.08;text-wrap:balance;margin:0;font-weight:700;letter-spacing:-.025em}
+h2{font-size:clamp(1.9rem,4vw,3rem);letter-spacing:-.035em}
+h3{font-size:1.12rem;letter-spacing:-.01em;font-weight:600}
+em.s{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.notice{font-size:.88rem;color:var(--muted)}
 
-/* ---------- Hero ---------- */
-.hero{background:radial-gradient(1200px 500px at 85% -10%, var(--hero-2), transparent 60%), var(--hero);color:var(--hero-ink)}
-.hero a{color:var(--hero-ink)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:16px;flex-wrap:wrap}
-.brand{font-family:var(--display);font-weight:800;font-size:1.2rem;text-decoration:none;display:flex;align-items:center;gap:10px}
-.toplinks{display:flex;gap:18px;flex-wrap:wrap;font-size:.95rem}
-.toplinks a{color:var(--hero-muted);text-decoration:none}
-.toplinks a:hover{color:var(--hero-ink)}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:36px;align-items:center;padding-block:36px 56px}
-@media (max-width:900px){.hero-grid{grid-template-columns:1fr;padding-block:20px 44px}}
-.hero h1{font-size:clamp(2.2rem,5.2vw,3.7rem);font-weight:800;letter-spacing:-.02em}
-.hero h1 em{font-style:normal;color:var(--mark)}
-.hero p.lead{color:var(--hero-muted);font-size:1.15rem;max-width:56ch;margin:16px 0 0}
-.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
-.btn{font:700 1rem var(--body);border-radius:12px;padding:13px 20px;border:1px solid var(--mark);background:var(--mark);color:#1b1300;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease, box-shadow .15s ease}
-.btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px -8px rgba(0,0,0,.45)}
-.btn.line{background:transparent;color:var(--hero-ink);border-color:var(--hero-line)}
-.facts{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;font-size:.9rem;color:var(--hero-muted)}
-.facts strong{display:block;font-family:var(--mono);font-size:1.05rem;color:var(--hero-ink)}
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .25s,border-color .25s,backdrop-filter .25s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(6,19,15,.72);backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);border-bottom-color:rgba(255,255,255,.08)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.08rem;letter-spacing:-.02em;color:#EEF6F3;text-decoration:none}
+.links{display:flex;gap:4px;align-items:center}
+.links a{color:#B4CCC5;text-decoration:none;font-size:.92rem;padding:8px 12px;border-radius:99px;transition:color .15s,background .15s}
+.links a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.navcta{display:flex;gap:8px;align-items:center}
+@media (max-width:860px){.links{display:none}}
+
+/* buttons */
+.btn{--b:var(--mark);font:600 .97rem var(--font);border-radius:99px;padding:12px 20px;border:1px solid var(--b);background:var(--b);color:var(--mark-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s,background .18s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px -10px color-mix(in srgb,var(--b) 75%,transparent)}
+.btn .ar{transition:transform .18s}
+.btn:hover .ar{transform:translateX(3px)}
+.btn.sm{padding:9px 16px;font-size:.9rem}
+.btn.glass{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#EEF6F3}
+.btn.glass:hover{background:rgba(255,255,255,.1);box-shadow:none}
+.btn.dark{--b:var(--ink);color:var(--bg)}
+.btn.outline{background:transparent;border-color:var(--line-2);color:var(--ink)}
+.btn.outline:hover{border-color:var(--ink);box-shadow:none}
+.btn.teal{--b:var(--accent);color:var(--accent-ink)}
+
+/* hero */
+.hero{position:relative;background:var(--hero);color:var(--hero-ink);padding-top:68px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(700px 420px at 78% 18%, rgba(79,194,172,.22), transparent 70%),
+  radial-gradient(520px 360px at 12% 92%, rgba(242,178,51,.14), transparent 70%),
+  radial-gradient(900px 500px at 50% 120%, rgba(14,107,92,.35), transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 30%,transparent 75%)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:48px;align-items:center;padding-block:56px 88px}
+@media (max-width:940px){.hero-grid{grid-template-columns:1fr;padding-block:28px 64px;gap:40px}}
+.pill-link{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#D6E7E2;text-decoration:none;font-size:.86rem}
+.pill-link b{background:var(--mark);color:var(--mark-ink);font-weight:600;font-size:.74rem;padding:3px 9px;border-radius:99px}
+.pill-link:hover{border-color:rgba(255,255,255,.24)}
+.hero h1{font-size:clamp(2.6rem,6.4vw,4.9rem);letter-spacing:-.045em;line-height:1;margin-top:22px;font-weight:700}
+.hero h1 em.s{color:var(--mark);font-size:1.06em}
+.hero .lead{color:var(--hero-muted);font-size:clamp(1.05rem,1.6vw,1.2rem);max-width:54ch;margin:22px 0 0}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+.micro{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:.85rem;color:var(--hero-muted)}
+.micro span{display:inline-flex;align-items:center;gap:6px}
+.micro svg{width:15px;height:15px;color:var(--accent)}
+.hero .micro svg{color:#4FC2AC}
 /* dial */
-.dialcard{background:color-mix(in srgb, var(--hero-2) 70%, transparent);border:1px solid var(--hero-line);border-radius:22px;padding:20px;display:grid;gap:14px;justify-items:center}
-.dial{width:min(100%,340px);aspect-ratio:1;max-width:100%}
+.dialcard{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:22px;display:grid;gap:16px;justify-items:center;backdrop-filter:blur(8px);box-shadow:0 40px 80px -40px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
+.dialcard .chip{position:absolute;top:16px;left:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--hero-muted);display:flex;align-items:center;gap:6px}
+.dialcard .chip i{width:7px;height:7px;border-radius:50%;background:#4FC2AC;box-shadow:0 0 0 0 rgba(79,194,172,.6);animation:live 2s infinite}
+@keyframes live{0%{box-shadow:0 0 0 0 rgba(79,194,172,.55)}70%{box-shadow:0 0 0 8px rgba(79,194,172,0)}100%{box-shadow:0 0 0 0 rgba(79,194,172,0)}}
+.dial{width:min(100%,340px);aspect-ratio:1}
 .dial text{font-family:var(--mono);fill:var(--hero-muted)}
-.count{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%;max-width:340px}
-.count div{background:var(--hero);border:1px solid var(--hero-line);border-radius:10px;padding:8px 4px;text-align:center}
-.count b{display:block;font-family:var(--mono);font-size:1.4rem;color:var(--hero-ink);font-variant-numeric:tabular-nums}
-.count span{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--hero-muted)}
-.dialnote{font-size:.85rem;color:var(--hero-muted);text-align:center;margin:0}
-.dialnote strong{color:var(--hero-ink)}
+.count{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%;max-width:360px}
+.count div{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 4px;text-align:center}
+.count b{display:block;font-family:var(--mono);font-weight:500;font-size:1.55rem;color:var(--hero-ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.count span{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--hero-muted)}
+.dialnote{font-size:.84rem;color:var(--hero-muted);text-align:center;margin:0;max-width:36ch}
+.dialnote strong{color:var(--hero-ink);font-weight:600}
+/* stats strip */
+.stats{position:relative;border-top:1px solid rgba(255,255,255,.08)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.stats div{padding:22px 18px;border-left:1px solid rgba(255,255,255,.08)}
+.stats div:first-child{border-left:0;padding-left:0}
+.stats strong{display:block;font-size:1.5rem;font-weight:600;letter-spacing:-.03em;color:var(--hero-ink)}
+.stats span{font-size:.84rem;color:var(--hero-muted)}
+@media (max-width:760px){.stats .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}.stats div{border-left:0;padding-left:0;border-top:1px solid rgba(255,255,255,.08)}.stats div:nth-child(-n+2){border-top:0}}
 
-/* ---------- Sections ---------- */
-section{padding-block:64px}
-section.alt{background:var(--card);border-block:1px solid var(--line)}
-.head{display:grid;gap:10px;max-width:720px;margin-bottom:28px}
-.head .eyebrow{color:var(--accent)}
-.head p{margin:0;color:var(--muted);font-size:1.08rem}
-.grid2{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:start}
-@media (max-width:860px){.grid2{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;min-width:0}
-section.alt .panel{background:var(--paper)}
-form{display:grid;gap:18px}
-fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
-legend{font-weight:700;margin-bottom:6px}
-.yr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
-.yr label{display:grid;gap:4px;font-size:.9rem;color:var(--muted)}
-.yrhead{font-family:var(--mono);font-size:.8rem;color:var(--ink);grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+/* sections */
+section{padding-block:clamp(72px,9vw,120px)}
+.head{display:grid;gap:14px;max-width:760px;margin-bottom:44px}
+.head.center{margin-inline:auto;text-align:center;justify-items:center}
+.head p{margin:0;color:var(--muted);font-size:1.1rem;max-width:62ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);min-width:0}
+
+/* how it works */
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;position:relative}
+.flow .bracket{grid-column:1 / span 2;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.flow .bracket::before,.flow .bracket::after{content:"";flex:1;height:10px;border-top:1.5px solid currentColor}
+.flow .bracket::before{border-left:1.5px solid currentColor;border-top-left-radius:8px}
+.flow .bracket::after{border-right:1.5px solid currentColor;border-top-right-radius:8px}
+.flow .bracket.b2{grid-column:3;color:var(--muted)}
+.fstep{padding:26px;display:grid;gap:10px;align-content:start;position:relative}
+.fstep .num{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-family:var(--mono);font-weight:600;background:var(--soft);color:var(--accent)}
+.fstep.ext{background:transparent;border-style:dashed;box-shadow:none}
+.fstep.ext .num{background:transparent;border:1px dashed var(--line-2);color:var(--muted)}
+.fstep p{margin:0;color:var(--muted)}
+.fstep .arrow{position:absolute;right:-17px;top:42px;width:18px;height:18px;z-index:2;color:var(--line-2)}
+@media (max-width:860px){.flow{grid-template-columns:1fr}.flow .bracket,.flow .bracket.b2{display:none}.fstep .arrow{right:auto;left:38px;top:auto;bottom:-17px;transform:rotate(90deg)}.fstep .tagm{display:inline-block}}
+.tagm{display:none;justify-self:start;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--accent)}
+.fstep.ext .tagm{background:transparent;border:1px dashed var(--line-2);color:var(--muted)}
+.flownote{margin:22px 0 0;color:var(--muted);font-size:.95rem;max-width:80ch}
+
+/* checker */
+.sec-alt{background:var(--surface);border-block:1px solid var(--line)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px;min-width:0;box-shadow:var(--shadow)}
+.sec-alt .panel{background:var(--bg)}
+form{display:grid;gap:22px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:12px}
+legend{font-weight:600;margin-bottom:8px;letter-spacing:-.01em}
+.yr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.yr label{display:grid;gap:6px;font-size:.86rem;color:var(--muted)}
+.yrhead{font-family:var(--mono);font-size:.78rem;color:var(--ink);grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .yrhead span{color:var(--muted)}
-.money{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--card);transition:border-color .15s}
-.money:focus-within{border-color:var(--accent)}
-.money b{padding:0 8px 0 12px;color:var(--muted);font-weight:600}
+.money{display:flex;align-items:center;border:1px solid var(--line-2);border-radius:12px;background:var(--bg);transition:border-color .15s,box-shadow .15s}
+.money:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 16%,transparent)}
+.money b{padding:0 6px 0 12px;color:var(--muted);font-weight:500}
 .money input{border:0;background:transparent;color:var(--ink);font:500 1rem var(--mono);padding:11px 10px 11px 0;width:100%;min-width:0;font-variant-numeric:tabular-nums;outline:none}
 .check{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}
-.check input{margin-top:4px;accent-color:var(--accent)}
+.check input{margin-top:5px;accent-color:var(--accent);width:16px;height:16px}
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-button.solid,a.solid{font:700 1rem var(--body);border-radius:11px;padding:11px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-button.ghost,a.ghost{font:700 1rem var(--body);border-radius:11px;padding:11px 18px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.result{display:grid;gap:16px}
-.stamp{border:2px solid var(--accent);border-radius:16px;padding:18px 20px;display:grid;gap:6px;background:var(--card);position:relative;overflow:hidden}
-.stamp::after{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--accent)}
-.stamp[data-tone="ok"]{border-color:var(--ok)} .stamp[data-tone="ok"]::after{background:var(--ok)}
-.stamp[data-tone="warn"]{border-color:var(--warn)} .stamp[data-tone="warn"]::after{background:var(--warn)}
-.stamp[data-tone="info"]{border-color:var(--info)} .stamp[data-tone="info"]::after{background:var(--info)}
-.stamp .label{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.stamp .big{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.1rem);font-weight:800}
-.stamp p{margin:0}
-.stamp.pop{animation:pop .35s ease}
-@keyframes pop{0%{transform:scale(.985)}60%{transform:scale(1.01)}100%{transform:none}}
-.sample{font-size:.82rem;font-family:var(--mono);color:var(--warn)}
-table{border-collapse:collapse;width:100%;font-size:.95rem}
+.result{display:grid;gap:14px;grid-template-columns:minmax(0,1fr);min-width:0}
+.stamp{border-radius:22px;padding:24px;display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.stamp::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 160px at 100% 0%,color-mix(in srgb,var(--tone,var(--accent)) 18%,transparent),transparent 70%);pointer-events:none}
+.stamp[data-tone="ok"]{--tone:var(--ok)} .stamp[data-tone="warn"]{--tone:var(--warn)} .stamp[data-tone="info"]{--tone:var(--info)}
+.stamp .label{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tone,var(--muted));display:flex;align-items:center;gap:8px}
+.stamp .label::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.stamp .big{font-size:clamp(1.8rem,3.4vw,2.5rem);font-weight:700;letter-spacing:-.035em;position:relative}
+.stamp p{margin:0;color:var(--muted);position:relative}
+.stamp.pop{animation:pop .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{0%{transform:scale(.98);opacity:.7}100%{transform:none;opacity:1}}
+.sample{font-size:.8rem;font-family:var(--mono);color:var(--warn)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
 .tablebox{overflow-x:auto}
-th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
 td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pill{font-family:var(--mono);font-size:.72rem;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--ink);white-space:nowrap}
-.pill.past{opacity:.6}
-.pill.next{background:var(--mark);color:#1b1300}
+.pill{font-family:var(--mono);font-size:.7rem;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--ink);white-space:nowrap}
+.pill.past{opacity:.55}
+.pill.next{background:var(--mark);color:var(--mark-ink)}
 .qi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.qi div{background:var(--soft);border-radius:10px;padding:8px 10px;min-width:0}
-.qi small{display:block;font-family:var(--mono);font-size:.7rem;color:var(--muted)}
-.qi strong{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.qi .over{background:color-mix(in srgb, var(--mark) 28%, var(--soft))}
+.qi div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;min-width:0}
+.qi small{display:block;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.qi strong{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
+.qi .over{border-color:color-mix(in srgb,var(--mark) 70%,var(--line));background:color-mix(in srgb,var(--mark) 14%,var(--surface))}
 @media (max-width:480px){.qi{grid-template-columns:1fr}.yr{grid-template-columns:1fr}}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px}
+@media (max-width:820px){.cols3{grid-template-columns:1fr}}
+.cols3 > div{padding:22px;border:1px solid var(--line);border-radius:18px}
+.cols3 p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
 
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;counter-reset:s}
-@media (max-width:820px){.steps{grid-template-columns:1fr}}
-.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:8px;align-content:start}
-.step .n{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:.85rem}
-.step p{margin:0;color:var(--muted)}
-.step svg{width:40px;height:40px}
+/* app window */
+.window{border-radius:22px;background:var(--surface);border:1px solid var(--line);overflow:hidden;box-shadow:0 50px 100px -50px rgba(6,19,15,.55),0 0 0 1px rgba(255,255,255,.02);position:relative}
+.winwrap{position:relative}
+.winwrap::before{content:"";position:absolute;inset:-40px -20px auto;height:70%;z-index:-1;background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 28%,transparent),transparent);filter:blur(30px)}
+.demo-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--soft) 70%,var(--surface));flex-wrap:wrap}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.dots i:nth-child(1){background:#F26B5B}.dots i:nth-child(2){background:#F2B233}.dots i:nth-child(3){background:#3FBF7F}
+.demo-tabs{display:flex;gap:2px;padding:3px;border-radius:12px;background:var(--bg);border:1px solid var(--line);flex-wrap:wrap}
+.demo-tabs button{font:500 .86rem var(--font);background:transparent;border:0;color:var(--muted);border-radius:9px;padding:6px 12px;cursor:pointer;transition:background .15s,color .15s}
+.demo-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.demo-body{padding:18px}
+.in{color:var(--ok);font-family:var(--mono);font-size:.7rem}
+tr.total td{font-weight:600;background:var(--soft)}
+.demo-pane{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.belowwin{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:32px}
 
-/* app demo */
-.demo{border:1px solid var(--line);border-radius:18px;background:var(--card);overflow:hidden;box-shadow:0 30px 60px -40px rgba(11,43,39,.55)}
-.demo-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--soft);flex-wrap:wrap}
-.demo-bar .dots{display:flex;gap:6px}
-.demo-bar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
-.demo-tabs{display:flex;gap:4px;flex-wrap:wrap}
-.demo-tabs button{font:600 .88rem var(--body);background:transparent;border:1px solid transparent;color:var(--muted);border-radius:8px;padding:6px 10px;cursor:pointer}
-.demo-tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);border-color:var(--line)}
-.demo-body{padding:16px}
-.demo-body .in{color:var(--ok);font-family:var(--mono);font-size:.7rem}
-tr.total td{font-weight:700;background:var(--soft)}
-@media (prefers-reduced-motion:no-preference){.demo-pane{animation:fade .3s ease}}
-@keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.tile{padding:24px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-content:start;overflow:hidden;position:relative;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.tile:hover{transform:translateY(-3px)}
+.tile p{margin:0;color:var(--muted);font-size:.95rem}
+.t-a{grid-column:span 4}.t-b{grid-column:span 2}.t-c{grid-column:span 2}.t-d{grid-column:span 2}.t-e{grid-column:span 2}.t-f{grid-column:span 6}
+@media (max-width:900px){.t-a,.t-b,.t-c,.t-d,.t-e{grid-column:span 3}.t-f{grid-column:span 6}}
+@media (max-width:620px){.bento{grid-template-columns:1fr}.t-a,.t-b,.t-c,.t-d,.t-e,.t-f{grid-column:auto}}
+.viz{margin-top:8px;border:1px solid var(--line);border-radius:16px;background:var(--bg);padding:12px;font-size:.86rem}
+.bank{display:grid;gap:6px}
+.bank div{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.bank .cb{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--line-2);display:grid;place-items:center}
+.bank .cb.on{background:var(--accent);border-color:var(--accent)}
+.bank .cb.on::after{content:"";width:7px;height:4px;border:2px solid var(--accent-ink);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.bank .d{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);font-size:.78rem}
+.bank .d small{display:block;font-family:var(--font);font-size:.74rem;color:var(--accent)}
+.bank .a{font-family:var(--mono);font-size:.8rem}
+.bank .off{opacity:.5}
+.big-n{font-size:3rem;font-weight:700;letter-spacing:-.05em;line-height:1}
+.big-n small{font-size:1rem;font-weight:500;color:var(--muted);letter-spacing:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-family:var(--mono);font-size:.76rem;padding:6px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+.bars{display:grid;gap:10px}
+.bars div{display:grid;gap:4px;font-size:.8rem}
+.bars i{display:block;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 50%,var(--mark)))}
+.rcpt{display:flex;gap:12px;align-items:center}
+.rcpt .doc{width:46px;height:58px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);position:relative;flex:none}
+.rcpt .doc::before{content:"";position:absolute;inset:12px 9px auto;height:22px;background:repeating-linear-gradient(var(--line-2) 0 2px,transparent 2px 7px)}
+.rcpt .doc::after{content:"PDF";position:absolute;bottom:5px;left:6px;font:600 .58rem var(--mono);color:var(--accent)}
+.t-f{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
+@media (max-width:720px){.t-f{grid-template-columns:1fr}}
 
 /* pricing */
-.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-@media (max-width:760px){.plans{grid-template-columns:1fr}}
-.plan{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:14px;align-content:start}
-.plan.best{border:2px solid var(--accent)}
-.plan .price{font-family:var(--display);font-size:2.4rem;font-weight:800}
-.plan .price small{font:500 .95rem var(--body);color:var(--muted)}
-.plan ul{margin:0;padding-left:0;list-style:none;display:grid;gap:8px}
-.plan li{display:flex;gap:10px;align-items:flex-start}
-.plan li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%230E6B5C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
-.plan li.no{color:var(--muted)}
-.plan li.no::before{background:var(--soft)}
-.tag{justify-self:start;font-family:var(--mono);font-size:.72rem;padding:3px 10px;border-radius:99px;background:var(--accent);color:var(--accent-ink)}
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:960px;margin-inline:auto}
+@media (max-width:780px){.plans{grid-template-columns:1fr}}
+.plan{padding:clamp(22px,4vw,30px);display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-content:start;position:relative}
+.plan.best{border:1px solid transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(140deg,var(--mark),var(--accent) 55%,var(--line)) border-box}
+.plan .price{font-size:3rem;font-weight:700;letter-spacing:-.05em;line-height:1}
+.plan .price small{font-size:.9rem;font-weight:400;color:var(--muted);letter-spacing:0;display:block;margin-top:8px}
+.plan ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.plan li{position:relative;padding-left:28px;font-size:.96rem}
+.plan li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%230E6B5C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.tag{justify-self:start;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:var(--mark);color:var(--mark-ink)}
+.plan .btn{justify-content:center}
 
 /* faq */
-details{border-bottom:1px solid var(--line);padding-block:14px}
-summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq{max-width:820px;margin-inline:auto;display:grid;gap:10px}
+details{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:0 20px;transition:border-color .2s}
+details[open]{border-color:var(--line-2)}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:18px;letter-spacing:-.01em}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-family:var(--mono);color:var(--accent);transition:transform .2s}
+summary::after{content:"";flex:none;width:22px;height:22px;border-radius:50%;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 4v8M4 8h8' stroke='%230E6B5C' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center/12px no-repeat;transition:transform .25s}
 details[open] summary::after{transform:rotate(45deg)}
-details p{margin:8px 0 0;color:var(--muted);max-width:70ch}
-.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px}
-@media (max-width:820px){.cols3{grid-template-columns:1fr}}
-.cols3 p{margin:6px 0 0;color:var(--muted)}
-footer{background:var(--hero);color:var(--hero-muted)}
-footer .wrap{padding-block:30px;display:grid;gap:10px;font-size:.88rem}
-footer nav{display:flex;gap:16px;flex-wrap:wrap}
-footer a{color:var(--hero-ink)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+details p{margin:0 0 18px;color:var(--muted);max-width:70ch}
+
+/* final cta */
+.final{padding-block:0 clamp(72px,9vw,120px)}
+.finalbox{position:relative;overflow:hidden;border-radius:32px;background:var(--hero);color:var(--hero-ink);padding:clamp(40px,7vw,80px) clamp(24px,6vw,72px);text-align:center;display:grid;justify-items:center;gap:18px;isolation:isolate}
+.finalbox::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(600px 300px at 50% 0%,rgba(79,194,172,.28),transparent 70%),radial-gradient(400px 260px at 90% 100%,rgba(242,178,51,.18),transparent 70%)}
+.finalbox h2 em.s{color:var(--mark)}
+.finalbox p{margin:0;color:var(--hero-muted);max-width:56ch;font-size:1.08rem}
+
+footer{border-top:1px solid var(--line)}
+footer .wrap{padding-block:36px;display:grid;gap:14px;font-size:.86rem;color:var(--muted)}
+.foottop{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.foottop .brand{color:var(--ink)}
+footer nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+footer a{color:var(--ink);text-decoration:none}
+footer a:hover{color:var(--accent)}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+.js .rv.shown{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -193,37 +297,48 @@ body{margin:0}
 
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"QuarterReady Records","applicationCategory":"FinanceApplication","operatingSystem":"Web browser","description":"Keep Making Tax Digital for Income Tax records and see quarterly totals per HMRC category.","offers":[{"@type":"Offer","price":"0","priceCurrency":"GBP","name":"Free"},{"@type":"Offer","price":"19","priceCurrency":"GBP","name":"Full version"}]}</script>
-<header class="hero">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M3 8h10m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-logo" viewBox="0 0 28 28"><rect x="1" y="1" width="26" height="26" rx="8" fill="#F2B233"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="#06130F"/></symbol>
+</svg>
+
+<nav class="nav" id="nav" aria-label="Main">
   <div class="wrap">
-    <div class="topbar">
-      <a class="brand" href="#top" aria-label="QuarterReady home">
-        <svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" fill="var(--mark)"/><path d="M14 5v9h9A9 9 0 1 1 14 5z" fill="var(--hero)"/></svg>
-        QuarterReady
-      </a>
-      <nav class="toplinks" aria-label="Main">
-        <a href="#checker">Checker</a>
-        <a href="#app">The app</a>
-        <a href="#pricing">Pricing</a>
-        <a href="guides.html">Guides</a>
-        <a href="app.html">Open the app →</a>
-      </nav>
+    <a class="brand" href="#top" aria-label="QuarterReady home"><svg width="28" height="28" aria-hidden="true"><use href="#i-logo"/></svg>QuarterReady</a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#checker">Checker</a>
+      <a href="#app">The app</a>
+      <a href="#pricing">Pricing</a>
+      <a href="guides.html">Guides</a>
     </div>
-    <div class="hero-grid" id="top">
+    <div class="navcta">
+      <a class="btn sm" href="app.html">Open the app <svg class="ar" width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
       <div>
-        <span class="eyebrow" style="color:var(--mark)">Making Tax Digital for Income Tax · UK</span>
-        <h1 style="margin-top:12px">Four updates a year. <em>Zero guesswork.</em></h1>
-        <p class="lead">Find out when MTD starts for you, then keep your records in a simple app that adds them up the way HMRC asks, quarter by quarter. Built for UK sole traders and landlords.</p>
-        <div class="cta">
-          <a class="btn" href="#checker">Check my start date</a>
-          <a class="btn line" href="app.html">Open the app free</a>
+        <a class="pill-link rv" href="#checker"><b>April 2027</b>MTD reaches incomes over £30,000 <svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <h1 class="rv" style="--d:.06s">Four updates a year. <em class="s">Zero guesswork.</em></h1>
+        <p class="lead rv" style="--d:.12s">Find out when Making Tax Digital starts for you, then keep your records in a simple app that adds them up the way HMRC asks, quarter by quarter. Built for UK sole traders and landlords.</p>
+        <div class="cta rv" style="--d:.18s">
+          <a class="btn" href="app.html">Open the app, free <svg class="ar" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn glass" href="#checker">Check my start date</a>
         </div>
-        <div class="facts">
-          <div><strong>£30,000</strong>threshold from April 2027</div>
-          <div><strong>4 + 1</strong>quarterly updates + tax return</div>
-          <div><strong>£0</strong>to check, no sign-up</div>
+        <div class="micro rv" style="--d:.24s">
+          <span><svg aria-hidden="true"><use href="#i-check"/></svg>No sign-up</span>
+          <span><svg aria-hidden="true"><use href="#i-check"/></svg>Records stay on your device</span>
+          <span><svg aria-hidden="true"><use href="#i-check"/></svg>Free up to 30 records</span>
         </div>
       </div>
-      <div class="dialcard" aria-label="The UK tax year, with today's position and the next quarterly deadline">
+      <div class="dialcard rv" style="--d:.15s" aria-label="The UK tax year, with today's position and the next quarterly deadline">
+        <span class="chip"><i></i>Live</span>
         <svg class="dial" id="dial" viewBox="0 0 340 340" role="img" aria-labelledby="dialTitle">
           <title id="dialTitle">Tax year dial</title>
         </svg>
@@ -237,18 +352,61 @@ body{margin:0}
       </div>
     </div>
   </div>
+  <div class="stats">
+    <div class="wrap">
+      <div><strong>£30,000</strong><span>threshold from April 2027</span></div>
+      <div><strong>4 + 1</strong><span>quarterly updates + tax return</span></div>
+      <div><strong>0</strong><span>records sent to our servers</span></div>
+      <div><strong>£0</strong><span>to check and to start</span></div>
+    </div>
+  </div>
 </header>
 
 <main>
-  <section id="checker">
+  <section id="how">
     <div class="wrap">
-      <div class="head">
+      <div class="head rv">
+        <span class="eyebrow">How it works</span>
+        <h2>You keep the records. <em class="s">We do the sums.</em></h2>
+        <p>MTD has three jobs: record, add up, send. QuarterReady does the first two, which is where the time goes. The last step takes a few minutes in HMRC-recognised bridging software.</p>
+      </div>
+      <div class="flow">
+        <div class="bracket rv">Done in QuarterReady</div>
+        <div class="bracket b2 rv">Bridging software</div>
+        <div class="fstep card rv">
+          <span class="num">01</span>
+          <span class="tagm">QuarterReady</span>
+          <h3>Record</h3>
+          <p>Type each income and expense, or import your bank statement and tick the business lines. Attach receipts, log business miles.</p>
+          <svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </div>
+        <div class="fstep card rv" style="--d:.08s">
+          <span class="num">02</span>
+          <span class="tagm">QuarterReady</span>
+          <h3>Add up</h3>
+          <p>Every line lands in the right HMRC category. You get year-to-date totals for each quarter, a consolidated expenses figure and duplicate warnings.</p>
+          <svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </div>
+        <div class="fstep card ext rv" style="--d:.16s">
+          <span class="num">03</span>
+          <span class="tagm">Bridging software</span>
+          <h3>Send</h3>
+          <p>Copy the totals, or upload the CSV export, into HMRC-recognised bridging software, which submits them. HMRC lists free options for simple affairs.</p>
+        </div>
+      </div>
+      <p class="flownote rv">Why two tools? Only software recognised by HMRC may connect to its systems. QuarterReady is independent and isn't on that list, so it prepares your figures and leaves the sending to a recognised tool.</p>
+    </div>
+  </section>
+
+  <section id="checker" class="sec-alt">
+    <div class="wrap">
+      <div class="head rv">
         <span class="eyebrow">Free checker · 60 seconds</span>
-        <h2>When does MTD start for you?</h2>
+        <h2>When does MTD start <em class="s">for you?</em></h2>
         <p>Enter your gross self-employment and property income for each tax year. The checker applies HMRC's published thresholds. Nothing you type leaves your browser.</p>
       </div>
       <div class="grid2">
-        <div class="panel">
+        <div class="panel rv">
           <form id="f" novalidate>
             <fieldset>
               <legend>1. Your situation</legend>
@@ -275,12 +433,12 @@ body{margin:0}
               </div>
             </fieldset>
             <div class="btnrow">
-              <button type="submit" class="solid">Check my start date</button>
-              <button type="button" class="ghost" id="clear">Clear figures</button>
+              <button type="submit" class="btn teal">Check my start date</button>
+              <button type="button" class="btn outline" id="clear">Clear figures</button>
             </div>
           </form>
         </div>
-        <div class="result" aria-live="polite">
+        <div class="result rv" style="--d:.08s" aria-live="polite">
           <div class="sample" id="sampleNote">Showing an example: £24,000 self-employment + £9,000 rent in 2025–26.</div>
           <div class="stamp" id="stamp" data-tone="warn">
             <span class="label">Your result</span>
@@ -295,93 +453,125 @@ body{margin:0}
               <thead><tr><th>Period</th><th>Covers</th><th>Send by</th><th></th></tr></thead>
               <tbody id="dl"></tbody>
             </table></div>
-            <div class="btnrow" style="margin-top:12px"><button type="button" class="ghost" id="copy">Copy these dates</button><span class="notice" id="copied" hidden>Copied.</span></div>
+            <div class="btnrow" style="margin-top:14px"><button type="button" class="btn outline sm" id="copy">Copy these dates</button><a class="btn teal sm" href="app.html">Start my records <svg class="ar" width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg></a><span class="notice" id="copied" hidden>Copied.</span></div>
           </div>
           <p class="notice" style="margin:0">Not affiliated with HMRC, not tax advice. Confirm with <a href="https://tax.service.gov.uk/guidance/check-if-you-need-to-use-making-tax-digital-for-income-tax" rel="noopener" target="_blank">HMRC's own checker</a>.</p>
         </div>
       </div>
       <div class="cols3">
-        <div><h3>What counts</h3><p>Self-employment turnover and property income, before expenses. Only your share of a jointly owned property.</p></div>
-        <div><h3>What doesn't</h3><p>Employment (PAYE), pensions, dividends, and your profit share as a partner in a partnership.</p></div>
-        <div><h3>Spreadsheets are allowed</h3><p>You can keep records outside MTD software, as long as HMRC-recognised bridging software sends your updates.</p></div>
+        <div class="rv"><h3>What counts</h3><p>Self-employment turnover and property income, before expenses. Only your share of a jointly owned property.</p></div>
+        <div class="rv" style="--d:.06s"><h3>What doesn't</h3><p>Employment (PAYE), pensions, dividends, and your profit share as a partner in a partnership.</p></div>
+        <div class="rv" style="--d:.12s"><h3>Spreadsheets are allowed</h3><p>You can keep records outside MTD software, as long as HMRC-recognised bridging software sends your updates.</p></div>
       </div>
-      <p class="notice" style="margin-top:18px">Sources: <a href="https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax" target="_blank" rel="noopener">When you need MTD</a> · <a href="https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Qualifying income</a> · <a href="https://www.gov.uk/guidance/find-out-if-you-can-get-an-exemption-from-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Exemptions</a> · <a href="https://makingtaxdigital.campaign.gov.uk/quarterly-updates/" target="_blank" rel="noopener">Quarterly updates</a>. Checked 15 October 2026.</p>
+      <p class="notice" style="margin-top:20px">Sources: <a href="https://www.gov.uk/guidance/find-out-if-and-when-you-need-to-use-making-tax-digital-for-income-tax" target="_blank" rel="noopener">When you need MTD</a> · <a href="https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Qualifying income</a> · <a href="https://www.gov.uk/guidance/find-out-if-you-can-get-an-exemption-from-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Exemptions</a> · <a href="https://makingtaxdigital.campaign.gov.uk/quarterly-updates/" target="_blank" rel="noopener">Quarterly updates</a>. Checked 15 October 2026.</p>
     </div>
   </section>
 
-  <section class="alt" id="app">
+  <section id="app">
     <div class="wrap">
-      <div class="head">
+      <div class="head center rv">
         <span class="eyebrow">QuarterReady Records</span>
-        <h2>Your MTD records, added up for you.</h2>
+        <h2>Your MTD records, <em class="s">added up for you.</em></h2>
         <p>Type in each income and expense once. The app files it under the right HMRC category and keeps a running total for every quarterly update.</p>
       </div>
-      <div class="steps">
-        <div class="step">
-          <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="5" width="28" height="30" rx="5" fill="var(--soft)"/><path d="M13 14h14M13 20h14M13 26h8" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/></svg>
-          <span class="n">STEP 1</span><h3>Record</h3>
-          <p>Type it in, or import your bank statement and tick the business lines. Attach the receipt, log business miles.</p>
-        </div>
-        <div class="step">
-          <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="var(--soft)"/><path d="M20 5v15h15A15 15 0 0 0 20 5z" fill="var(--accent)"/></svg>
-          <span class="n">STEP 2</span><h3>See your quarter</h3>
-          <p>Year-to-date totals per category for Q1 to Q4, a consolidated expenses figure, and warnings for duplicates.</p>
-        </div>
-        <div class="step">
-          <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="9" width="30" height="22" rx="5" fill="var(--soft)"/><path d="M14 20h12m-4-4 4 4-4 4" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="n">STEP 3</span><h3>Send</h3>
-          <p>Export to CSV and pass the totals to your HMRC-recognised bridging software. HMRC lists free options for simple affairs.</p>
-        </div>
-      </div>
-
-      <div class="demo" style="margin-top:28px">
-        <div class="demo-bar">
-          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
-          <div class="demo-tabs" role="tablist" aria-label="App preview">
-            <button role="tab" aria-selected="true" data-pane="records">Records</button>
-            <button role="tab" aria-selected="false" data-pane="summary">Quarterly summary</button>
-            <button role="tab" aria-selected="false" data-pane="deadlines">Deadlines</button>
+      <div class="winwrap rv">
+        <div class="window">
+          <div class="demo-bar">
+            <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="demo-tabs" role="tablist" aria-label="App preview">
+              <button role="tab" aria-selected="true" data-pane="records">Records</button>
+              <button role="tab" aria-selected="false" data-pane="summary">Quarterly summary</button>
+              <button role="tab" aria-selected="false" data-pane="deadlines">Deadlines</button>
+            </div>
+            <span class="notice">Example data</span>
           </div>
-          <span class="notice">Example data</span>
-        </div>
-        <div class="demo-body">
-          <div class="demo-pane" data-pane="records"><div class="tablebox"><table>
-            <thead><tr><th>Date</th><th>Source · category</th><th>Description</th><th>Amount</th><th>Qtr</th></tr></thead>
-            <tbody>
-              <tr><td class="num">28 Apr</td><td>UK property<br><span class="notice">Total rental income from property</span></td><td>Rent – 12 Mill Lane, April</td><td class="num"><span class="in">in</span> £950.00</td><td>Q1</td></tr>
-              <tr><td class="num">2 May</td><td>UK property<br><span class="notice">Legal, management and other professional fees</span></td><td>Letting agent fee</td><td class="num">£114.00</td><td>Q1</td></tr>
-              <tr><td class="num">15 May</td><td>UK property<br><span class="notice">Property repairs and maintenance</span></td><td>Boiler service</td><td class="num">£90.00</td><td>Q1</td></tr>
-              <tr><td class="num">1 Jun</td><td>UK property<br><span class="notice">Residential property finance costs</span></td><td>Mortgage interest (residential)</td><td class="num">£310.00</td><td>Q1</td></tr>
-            </tbody></table></div></div>
-          <div class="demo-pane" data-pane="summary" hidden><div class="tablebox"><table>
-            <thead><tr><th>UK property</th><th>Q1 to 5 Jul</th><th>Q2 to 5 Oct</th></tr></thead>
-            <tbody>
-              <tr><td>Total rental income from property</td><td class="num">£1,900.00</td><td class="num">£1,900.00</td></tr>
-              <tr><td>Property repairs and maintenance</td><td class="num">£90.00</td><td class="num">£90.00</td></tr>
-              <tr><td>Legal, management and other professional fees</td><td class="num">£114.00</td><td class="num">£114.00</td></tr>
-              <tr class="total"><td>Consolidated expenses</td><td class="num">£204.00</td><td class="num">£204.00</td></tr>
-              <tr><td>Residential property finance costs (reported separately)</td><td class="num">£310.00</td><td class="num">£310.00</td></tr>
-            </tbody></table></div></div>
-          <div class="demo-pane" data-pane="deadlines" hidden><div class="tablebox"><table>
-            <thead><tr><th>Update</th><th>Covers (year to date)</th><th>Send by</th></tr></thead>
-            <tbody id="demoDl"></tbody></table></div></div>
+          <div class="demo-body">
+            <div class="demo-pane" data-pane="records"><div class="tablebox"><table>
+              <thead><tr><th>Date</th><th>Source · category</th><th>Description</th><th>Amount</th><th>Qtr</th></tr></thead>
+              <tbody>
+                <tr><td class="num">28 Apr</td><td>UK property<br><span class="notice">Total rental income from property</span></td><td>Rent – 12 Mill Lane, April</td><td class="num"><span class="in">in</span> £950.00</td><td>Q1</td></tr>
+                <tr><td class="num">2 May</td><td>UK property<br><span class="notice">Legal, management and other professional fees</span></td><td>Letting agent fee</td><td class="num">£114.00</td><td>Q1</td></tr>
+                <tr><td class="num">15 May</td><td>UK property<br><span class="notice">Property repairs and maintenance</span></td><td>Boiler service</td><td class="num">£90.00</td><td>Q1</td></tr>
+                <tr><td class="num">1 Jun</td><td>UK property<br><span class="notice">Residential property finance costs</span></td><td>Mortgage interest (residential)</td><td class="num">£310.00</td><td>Q1</td></tr>
+              </tbody></table></div></div>
+            <div class="demo-pane" data-pane="summary" hidden><div class="tablebox"><table>
+              <thead><tr><th>UK property</th><th>Q1 to 5 Jul</th><th>Q2 to 5 Oct</th></tr></thead>
+              <tbody>
+                <tr><td>Total rental income from property</td><td class="num">£1,900.00</td><td class="num">£1,900.00</td></tr>
+                <tr><td>Property repairs and maintenance</td><td class="num">£90.00</td><td class="num">£90.00</td></tr>
+                <tr><td>Legal, management and other professional fees</td><td class="num">£114.00</td><td class="num">£114.00</td></tr>
+                <tr class="total"><td>Consolidated expenses</td><td class="num">£204.00</td><td class="num">£204.00</td></tr>
+                <tr><td>Residential property finance costs (reported separately)</td><td class="num">£310.00</td><td class="num">£310.00</td></tr>
+              </tbody></table></div></div>
+            <div class="demo-pane" data-pane="deadlines" hidden><div class="tablebox"><table>
+              <thead><tr><th>Update</th><th>Covers (year to date)</th><th>Send by</th></tr></thead>
+              <tbody id="demoDl"></tbody></table></div></div>
+          </div>
         </div>
       </div>
-      <div class="btnrow" style="margin-top:20px"><a class="solid" href="app.html">Try it free, no sign-up</a><span class="notice">Your records stay on your device. Download a backup any time.</span></div>
+      <div class="belowwin rv">
+        <a class="btn dark" href="app.html">Try it free, no sign-up <svg class="ar" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <span class="notice">Opens with example data. Your records stay on your device.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="sec-alt">
+    <div class="wrap">
+      <div class="head rv">
+        <span class="eyebrow">Full version</span>
+        <h2>Hours of admin, <em class="s">down to minutes.</em></h2>
+        <p>The free version shows you how it works. The full version does the tedious parts for you.</p>
+      </div>
+      <div class="bento">
+        <div class="tile card t-a rv">
+          <h3>Bank statement import</h3>
+          <p>Drop in your bank's CSV, tick the business lines, pick a category once. Next time, the app remembers and skips duplicates. The file never leaves your device.</p>
+          <div class="viz bank" aria-hidden="true">
+            <div><span class="cb on"></span><span class="d">STRIPE PAYOUT<small>Turnover</small></span><span class="a">+£640.00</span></div>
+            <div><span class="cb on"></span><span class="d">TRAINLINE 0451<small>Car, van and travel expenses</small></span><span class="a">−£48.20</span></div>
+            <div class="off"><span class="cb"></span><span class="d">SUPERMARKET<small>Personal, not imported</small></span><span class="a">−£62.15</span></div>
+          </div>
+        </div>
+        <div class="tile card t-b rv" style="--d:.06s">
+          <h3>Mileage log</h3>
+          <p>Log business trips. HMRC's flat rates are applied for you, per vehicle, from 2026–27.</p>
+          <div class="viz"><div class="big-n">55p <small>a mile</small></div><p class="notice" style="margin-top:6px">first 10,000 miles by car or van, then 25p. Motorcycles 24p.</p></div>
+        </div>
+        <div class="tile card t-c rv">
+          <h3>Receipts attached</h3>
+          <p>A photo or PDF kept with each record, ready if HMRC ever asks.</p>
+          <div class="viz rcpt" aria-hidden="true"><span class="doc"></span><span><strong>Boiler service</strong><br><span class="notice">£90.00 · receipt attached</span></span></div>
+        </div>
+        <div class="tile card t-d rv" style="--d:.06s">
+          <h3>Per-property totals</h3>
+          <p>Landlords see each property separately, as well as the total HMRC needs.</p>
+          <div class="viz bars" aria-hidden="true"><div>12 Mill Lane<i style="width:82%"></i></div><div>Flat 3, Park Road<i style="width:56%"></i></div></div>
+        </div>
+        <div class="tile card t-e rv" style="--d:.12s">
+          <h3>Exports and report</h3>
+          <p>CSV files for bridging software, and a year-end report for your accountant.</p>
+          <div class="viz chips" aria-hidden="true"><span>summary.csv</span><span>records.csv</span><span>year-end report</span></div>
+        </div>
+        <div class="tile card t-f rv">
+          <div><h3>Unlimited records, every tax year</h3><p>No cap on records, on up to 2 browsers. One payment, no subscription.</p></div>
+          <a class="btn teal" href="#pricing">See pricing <svg class="ar" width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="pricing">
     <div class="wrap">
-      <div class="head">
+      <div class="head center rv">
         <span class="eyebrow">Pricing</span>
-        <h2>Free to start. One payment for the full year.</h2>
+        <h2>Free to start. <em class="s">One payment</em> for the rest.</h2>
         <p>No subscription, no account. The free version shows you how it works; the full version saves you the hours.</p>
       </div>
       <div class="plans">
-        <div class="plan">
+        <div class="plan card rv">
           <h3>Free</h3>
-          <div class="price">£0</div>
+          <div class="price">£0<small>forever, no sign-up</small></div>
           <ul>
             <li>Start-date checker</li>
             <li>Up to 30 records per tax year</li>
@@ -389,11 +579,11 @@ body{margin:0}
             <li>Deadlines, with a calendar file for reminders</li>
             <li>Backup and restore</li>
           </ul>
-          <a class="ghost" href="app.html">Open the app</a>
+          <a class="btn outline" href="app.html">Open the app</a>
         </div>
-        <div class="plan best">
+        <div class="plan card best rv" style="--d:.08s">
           <span class="tag">Full version</span>
-          <div class="price">£19 <small>one-time, VAT included where it applies</small></div>
+          <div class="price">£19<small>one-time, VAT included where it applies</small></div>
           <ul>
             <li>Everything in Free, with unlimited records</li>
             <li><strong>Bank statement import</strong>: months of records in minutes, categories remembered</li>
@@ -403,33 +593,53 @@ body{margin:0}
             <li><strong>CSV exports</strong> for bridging software and a <strong>year-end report</strong> for your accountant</li>
             <li>Every tax year, on up to 2 browsers</li>
           </ul>
-          <a class="solid" id="buy" href="app.html#settings">Get the full version</a>
+          <a class="btn" id="buy" href="app.html#settings">Get the full version <svg class="ar" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <p class="notice" style="margin:0">Payment by our payment partner. Your licence key arrives by email straight away.</p>
         </div>
       </div>
-      <p class="notice" style="margin-top:16px">QuarterReady keeps records and adds them up. It doesn't submit to HMRC or calculate your tax; you'll also need HMRC-recognised bridging software to send updates.</p>
+      <p class="notice" style="margin:20px auto 0;text-align:center;max-width:70ch">QuarterReady keeps records and adds them up. It doesn't submit to HMRC or calculate your tax; you'll also need HMRC-recognised bridging software to send updates.</p>
     </div>
   </section>
 
-  <section class="alt" id="faq">
-    <div class="wrap" style="max-width:860px">
-      <div class="head"><span class="eyebrow">Questions</span><h2>Good to know</h2></div>
-      <details><summary>Will HMRC tell me if I need to start?</summary><p>HMRC reviews your Self Assessment return and writes to you if your qualifying income is over the threshold. If no letter arrives, it is still your responsibility to check and sign up.</p></details>
-      <details><summary>Which year's income decides my start date?</summary><p>Over £50,000 in 2024–25 means 6 April 2026. Over £30,000 in 2025–26 means 6 April 2027. Over £20,000 in 2026–27 means 6 April 2028, according to current GOV.UK guidance.</p></details>
-      <details><summary>What if I'm under £20,000?</summary><p>You're automatically exempt while your qualifying income stays at £20,000 or less. Check again each year.</p></details>
-      <details><summary>Do quarterly updates replace my tax return?</summary><p>No. Quarterly updates are summaries of income and expenses. You still finalise the year with a tax return from your MTD software by 31 January after the tax year ends.</p></details>
-      <details><summary>Where are my records stored?</summary><p>Only in your browser, on your device. We never receive them. Download a backup from Settings regularly, because clearing your browser data deletes them.</p></details>
-      <details><summary>What happens after I buy?</summary><p>Our payment partner emails you a receipt with your licence key straight away. In the app, open Settings, paste the key and press Activate. See the <a href="help.html">help page</a> if anything goes wrong.</p></details>
-      <details><summary>What's the difference between free and full?</summary><p>Free keeps up to 30 records a tax year and shows your quarterly totals and deadlines. The full version (£19 once) removes the limit and adds bank statement import, receipt attachments, the mileage log, a per-property breakdown, CSV exports and a year-end report.</p></details>
-      <details><summary>Is my bank statement uploaded anywhere?</summary><p>No. The file is read inside your browser and never leaves your device. Only the lines you tick become records.</p></details>
-      <details><summary>Is this official?</summary><p>No. QuarterReady is independent and not affiliated with HMRC. It applies published rules to the figures you enter; your situation may involve rules it doesn't cover.</p></details>
+  <section id="faq" class="sec-alt">
+    <div class="wrap">
+      <div class="head center rv"><span class="eyebrow">Questions</span><h2>Good to know</h2></div>
+      <div class="faq">
+        <details class="rv"><summary>Will HMRC tell me if I need to start?</summary><p>HMRC reviews your Self Assessment return and writes to you if your qualifying income is over the threshold. If no letter arrives, it is still your responsibility to check and sign up.</p></details>
+        <details class="rv"><summary>Which year's income decides my start date?</summary><p>Over £50,000 in 2024–25 means 6 April 2026. Over £30,000 in 2025–26 means 6 April 2027. Over £20,000 in 2026–27 means 6 April 2028, according to current GOV.UK guidance.</p></details>
+        <details class="rv"><summary>What if I'm under £20,000?</summary><p>You're automatically exempt while your qualifying income stays at £20,000 or less. Check again each year.</p></details>
+        <details class="rv"><summary>Does QuarterReady send my updates to HMRC?</summary><p>No. QuarterReady prepares the figures. To send them, you use HMRC-recognised bridging software: you copy in the totals or upload the CSV export, and it submits them for you.</p></details>
+        <details class="rv"><summary>Do quarterly updates replace my tax return?</summary><p>No. Quarterly updates are summaries of income and expenses. You still finalise the year with a tax return from your MTD software by 31 January after the tax year ends.</p></details>
+        <details class="rv"><summary>Where are my records stored?</summary><p>Only in your browser, on your device. We never receive them. Download a backup from Settings regularly, because clearing your browser data deletes them.</p></details>
+        <details class="rv"><summary>What happens after I buy?</summary><p>Our payment partner emails you a receipt with your licence key straight away. In the app, open Settings, paste the key and press Activate. See the <a href="help.html">help page</a> if anything goes wrong.</p></details>
+        <details class="rv"><summary>What's the difference between free and full?</summary><p>Free keeps up to 30 records a tax year and shows your quarterly totals and deadlines. The full version (£19 once) removes the limit and adds bank statement import, receipt attachments, the mileage log, a per-property breakdown, CSV exports and a year-end report.</p></details>
+        <details class="rv"><summary>Is my bank statement uploaded anywhere?</summary><p>No. The file is read inside your browser and never leaves your device. Only the lines you tick become records.</p></details>
+        <details class="rv"><summary>Is this official?</summary><p>No. QuarterReady is independent and not affiliated with HMRC. It applies published rules to the figures you enter; your situation may involve rules it doesn't cover.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap" style="padding-top:clamp(72px,9vw,120px)">
+      <div class="finalbox rv">
+        <span class="eyebrow" style="color:var(--mark)">Over £30,000 in 2025–26?</span>
+        <h2>Your first update is due <em class="s">7 August 2027.</em></h2>
+        <p>Start keeping records the MTD way now, and your first quarter adds itself up.</p>
+        <div class="cta" style="justify-content:center;margin-top:8px">
+          <a class="btn" href="app.html">Open the app, free <svg class="ar" width="16" height="16" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn glass" href="#checker">Check my start date</a>
+        </div>
+      </div>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <nav aria-label="Footer"><a href="app.html">The app</a><a href="guides.html">Guides</a><a href="help.html">Help</a><a href="about.html">About</a><a href="legal.html#notice">Legal notice</a><a href="legal.html#privacy">Privacy</a><a href="legal.html#terms">Terms</a><a href="legal.html#contact">Contact</a></nav>
+    <div class="foottop">
+      <a class="brand" href="#top"><svg width="24" height="24" aria-hidden="true"><use href="#i-logo"/></svg>QuarterReady</a>
+      <nav aria-label="Footer"><a href="app.html">The app</a><a href="guides.html">Guides</a><a href="help.html">Help</a><a href="about.html">About</a><a href="legal.html#notice">Legal notice</a><a href="legal.html#privacy">Privacy</a><a href="legal.html#terms">Terms</a><a href="legal.html#contact">Contact</a></nav>
+    </div>
     <div>QuarterReady is an independent tool. Not affiliated with HM Revenue &amp; Customs. General information, not tax advice. Contains public sector information licensed under the Open Government Licence v3.0.</div>
   </div>
 </footer>
@@ -590,6 +800,18 @@ body{margin:0}
   }));
   const ty = taxYearStart(new Date()).getFullYear();
   $("demoDl").innerHTML = quarters(ty).map(r => `<tr><td>${r.p}</td><td>${r.c}</td><td class="num">${fmt(r.due)}</td></tr>`).join("");
+})();
+</script>
+
+<script>
+(() => {
+  const nav = document.getElementById("nav");
+  const onScroll = () => nav.classList.toggle("scrolled", scrollY > 12);
+  onScroll(); addEventListener("scroll", onScroll, { passive: true });
+  const els = document.querySelectorAll(".rv");
+  if (!("IntersectionObserver" in window)) { els.forEach(e => e.classList.add("shown")); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("shown"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  els.forEach(e => io.observe(e));
 })();
 </script>
 
