@@ -7,9 +7,9 @@
 <meta name="google-site-verification" content="6szakVAYHVct2T3IG15Cf6G6Dmr2TTid5tqatXc87DY">
 <meta name="description" content="Check when Making Tax Digital for Income Tax starts for you, then keep your records in a simple app that adds them up for each quarterly update. For UK sole traders and landlords.">
 <meta name="theme-color" content="#081630">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon-v3.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="QuarterReady">
@@ -315,6 +315,22 @@ footer nav{display:flex;gap:6px 22px;flex-wrap:wrap}
 footer a{color:var(--t);text-decoration:none}
 footer a:hover{color:var(--gold-2)}
 
+.yearhelp{margin-top:18px;font-size:.92rem;color:var(--t2)}
+.hint{padding:10px 14px;border-radius:10px;background:#F7EFD5;color:#5C4300;font-size:.95rem}
+.hint strong{color:#3D2D00}
+.todo h3{margin-bottom:10px}
+.todo ol{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:t}
+.todo li{counter-increment:t;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:start;color:var(--text)}
+.todo li::before{content:counter(t);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.9rem;background:var(--ink);color:var(--gold-2)}
+.todo li.anim{animation:rise .45s var(--ease) both}
+.gloss{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:0}
+@media (max-width:900px){.gloss{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.gloss{grid-template-columns:1fr}}
+.gloss > div{padding:20px;border:1px solid var(--edge);border-radius:16px;background:rgba(255,255,255,.03);transition:border-color .25s,transform .25s var(--ease)}
+.gloss > div:hover{border-color:var(--gold);transform:translateY(-2px)}
+.gloss dt{font-family:var(--serif);font-weight:600;font-size:1.12rem;color:var(--gold-2);margin-bottom:6px}
+.gloss dd{margin:0;color:var(--t2)}
+
 /* reveal on scroll (only when JS runs and motion is allowed) */
 .js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .js .rv.seen{opacity:1;transform:none}
@@ -337,7 +353,7 @@ body{margin:0}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"QuarterReady Records","applicationCategory":"FinanceApplication","operatingSystem":"Web browser","description":"Keep Making Tax Digital for Income Tax records and see quarterly totals per HMRC category.","offers":[{"@type":"Offer","price":"0","priceCurrency":"GBP","name":"Free"},{"@type":"Offer","price":"19","priceCurrency":"GBP","name":"Full version"}]}</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="logo" viewBox="0 0 32 32"><rect x=".5" y=".5" width="31" height="31" rx="8" fill="#0F2547" stroke="#C9A227" stroke-opacity=".55"/><circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="3.6" stroke-dasharray="12.14 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="9" fill="none" stroke="#C9A227" stroke-width="3.6" stroke-dasharray="12.14 44.41" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/></symbol>
+  <symbol id="logo" viewBox="0 0 32 32"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13305E"/><stop offset="1" stop-color="#081630"/></linearGradient></defs><rect x=".5" y=".5" width="31" height="31" rx="7.5" fill="url(#lg)" stroke="#D4AF37" stroke-opacity=".35"/><circle cx="16" cy="16" r="10" fill="none" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="3" stroke-dasharray="13.71 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="10" fill="none" stroke="#D4AF37" stroke-width="3" stroke-dasharray="13.71 49.12" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><path d="M11.6 16.4l3 3 5.9-6.6" fill="none" stroke="#D4AF37" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="tick" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -345,11 +361,11 @@ body{margin:0}
   <div class="wrap">
     <a class="brand" href="#top" aria-label="QuarterReady home"><svg width="30" height="30" aria-hidden="true"><use href="#logo"/></svg>QuarterReady</a>
     <nav class="links" aria-label="Main">
-      <a href="#changes">What's changed</a>
       <a href="#how">How it works</a>
-      <a href="#checker">Start-date checker</a>
+      <a href="#checker">Do I need MTD?</a>
       <a href="#pricing">Pricing</a>
-      <a href="guides.html">Guides</a>
+      <a href="#changes">What's changed</a>
+      <a href="help.html">Help</a>
     </nav>
     <a class="btn sm" href="app.html">Open the app</a>
   </div>
@@ -361,14 +377,15 @@ body{margin:0}
       <div class="hero-grid">
         <h1 class="rv">Making Tax Digital, <span class="line2">kept simple.</span></h1>
         <div>
-          <p class="lead rv" style="--d:.1s">Check when MTD starts for you, then keep your income and expenses in an app that adds them up the way HMRC asks, quarter by quarter. For UK sole traders and landlords.</p>
+          <p class="lead rv" style="--d:.1s">From April 2027, sole traders and landlords with more than £30,000 of business or rental income must send HMRC an update every three months. QuarterReady tells you if that's you, and adds up your figures for each update.</p>
           <div class="cta rv" style="--d:.18s">
             <a class="btn" href="app.html">Open the app for free</a>
-            <a class="btn line" href="#checker">Check my start date</a>
+            <a class="btn line" href="#checker">Do I need MTD?</a>
           </div>
           <div class="assure rv" style="--d:.24s">
             <span><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>No sign-up</span>
             <span><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>Your records stay on your device</span>
+            <span><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>For sole traders and landlords</span>
           </div>
         </div>
       </div>
@@ -389,28 +406,19 @@ body{margin:0}
         <div class="track" id="track" aria-hidden="true"></div>
         <div class="months" id="months" aria-hidden="true"></div>
         <div class="dlist" id="dlist"></div>
+        <p class="yearhelp">The UK tax year runs from 6 April to 5 April and is split into four quarters. Each quarter's update is due about a month after the quarter ends.</p>
       </div>
     </div>
   </div>
 
-  <section id="changes" class="alt">
-    <div class="wrap news">
-      <div class="head rv" style="margin:0">
-        <span class="rule rv" style="--d:.15s"></span>
-        <h2>What's changed, and what's coming.</h2>
-        <p class="lead">MTD rules change with each Budget. QuarterReady checks HMRC's guidance every month and updates the checker, the deadlines and the rates in the app.</p>
-        <div class="checked"><svg width="18" height="18" aria-hidden="true"><use href="#tick"/></svg><span id="checkedNote">Rules last checked against GOV.UK on 16 October 2026.</span></div>
-      </div>
-      <ul class="feed rv" id="feed" style="--d:.1s"></ul>
-    </div>
-  </section>
+
 
   <section id="how">
     <div class="wrap">
       <div class="head rv">
         <span class="rule rv" style="--d:.15s"></span>
-        <h2>Three jobs each quarter. QuarterReady does two of them.</h2>
-        <p class="lead">Recording and adding up is where the hours go. Sending is a few minutes in software HMRC recognises.</p>
+        <h2>How it works, in three steps.</h2>
+        <p class="lead">Making Tax Digital means three jobs every quarter. QuarterReady does the first two, which is where the time goes.</p>
       </div>
       <ol class="steps" id="steps">
         <li><span class="who">In QuarterReady</span><h3>Record</h3><p>Type in each income and expense, or import your bank statement and tick the business lines. Attach receipts and log business miles.</p></li>
@@ -425,8 +433,8 @@ body{margin:0}
     <div class="wrap">
       <div class="head rv">
         <span class="rule rv" style="--d:.15s"></span>
-        <h2>When does MTD start for you?</h2>
-        <p class="lead">Enter your gross self-employment and property income for each tax year. The checker applies HMRC's published thresholds. Nothing you type leaves your browser.</p>
+        <h2>Do you need MTD, and from when?</h2>
+        <p class="lead">Type in your income before expenses and get your answer straight away, with your deadlines and what to do next. Nothing you type leaves your browser.</p>
       </div>
       <div class="grid2">
         <div class="panel white rv">
@@ -439,6 +447,7 @@ body{margin:0}
             <fieldset>
               <legend>Gross income before expenses, your share</legend>
               <p class="small">Self-employment turnover and property income only. Leave out PAYE wages, pensions, dividends and partnership profit shares.</p>
+              <p class="hint"><strong>Not sure where to start?</strong> Fill in 2025–26 only. If it's over £30,000, you start in April 2027.</p>
               <div class="yr">
                 <div class="yrhead">2024–25 <span>over £50,000 means April 2026</span></div>
                 <label for="se2024">Self-employment<span class="money"><b>£</b><input id="se2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
@@ -469,6 +478,10 @@ body{margin:0}
             <p id="why">Your qualifying income for 2025–26 is £33,000, which is over £30,000.</p>
           </div>
           <div class="qi" id="qi"></div>
+          <div class="panel white todo">
+            <h3>What to do next</h3>
+            <ol id="todo"></ol>
+          </div>
           <div class="panel white" id="deadlines">
             <h3 id="dlTitle">Your first year of quarterly updates</h3>
             <p class="small" style="margin:6px 0 10px">Standard quarters. With calendar quarters the periods end on the last day of the month; the deadlines are the same.</p>
@@ -606,6 +619,35 @@ body{margin:0}
     </div>
   </section>
 
+  <section id="changes" class="alt">
+    <div class="wrap news">
+      <div class="head rv" style="margin:0">
+        <span class="rule rv" style="--d:.15s"></span>
+        <h2>What's changed, and what's coming.</h2>
+        <p class="lead">MTD rules change with each Budget. QuarterReady checks HMRC's guidance every month and updates the checker, the deadlines and the rates in the app.</p>
+        <div class="checked"><svg width="18" height="18" aria-hidden="true"><use href="#tick"/></svg><span id="checkedNote">Rules last checked against GOV.UK on 16 October 2026.</span></div>
+      </div>
+      <ul class="feed rv" id="feed" style="--d:.1s"></ul>
+    </div>
+  </section>
+
+  <section id="words">
+    <div class="wrap">
+      <div class="head rv">
+        <span class="rule rv" style="--d:.15s"></span>
+        <h2>The words you'll see, in plain English.</h2>
+      </div>
+      <dl class="gloss">
+        <div class="rv"><dt>Making Tax Digital (MTD)</dt><dd>HMRC's new way of doing Income Tax: you keep your records digitally and send a short summary every three months, instead of only once a year.</dd></div>
+        <div class="rv" style="--d:.05s"><dt>Qualifying income</dt><dd>Your self-employment turnover plus your rental income, before expenses. This is the figure that decides whether, and when, MTD applies to you.</dd></div>
+        <div class="rv" style="--d:.1s"><dt>Tax year</dt><dd>6 April to 5 April. "2027–28" means 6 April 2027 to 5 April 2028.</dd></div>
+        <div class="rv"><dt>Quarterly update</dt><dd>A summary of your income and expenses so far this tax year, by category. You send one every quarter for each business and for your property income.</dd></div>
+        <div class="rv" style="--d:.05s"><dt>Bridging software</dt><dd>A program recognised by HMRC that takes figures you prepared elsewhere, like in QuarterReady, and sends them to HMRC.</dd></div>
+        <div class="rv" style="--d:.1s"><dt>Tax return</dt><dd>You still finish each year with a tax return, due by 31 January after the tax year ends. Your quarterly updates feed into it.</dd></div>
+      </dl>
+    </div>
+  </section>
+
   <section id="faq" class="alt">
     <div class="wrap">
       <div class="head c rv"><span class="rule rv" style="--d:.15s"></span><h2>Questions</h2></div>
@@ -729,6 +771,17 @@ body{margin:0}
     const rows = quarters(start);
     const next = rows.find(r => r.due >= today);
     lastRows = rows;
+    // Plain-English next steps for this result
+    const signUp = '<a href="https://www.gov.uk/guidance/sign-up-for-making-tax-digital-for-income-tax" target="_blank" rel="noopener">GOV.UK</a>';
+    const sw = '<a href="https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax" target="_blank" rel="noopener">HMRC\'s list</a>';
+    const first = rows[0].due.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    let todo;
+    if (!input.registered) todo = ["If you start working for yourself or letting property, register for Self Assessment first.", "Then come back and check again with your income figures."];
+    else if (res.start && res.tone === "warn") todo = [`Sign up for MTD for Income Tax now on ${signUp}.`, `Keep your income and expenses digitally from today. <a href="app.html">QuarterReady</a> does this for you.`, `Send each quarterly update on time; the next dates are in the table below.`, `Choose bridging software to send them, from ${sw}.`];
+    else if (res.start) todo = [`Sign up for MTD for Income Tax on ${signUp} before 6 April ${start}.`, `From 6 April ${start}, keep your income and expenses digitally. <a href="app.html">QuarterReady</a> does this, and you can start now to get used to it.`, `Send your first quarterly update by ${first}.`, `Choose bridging software to send your updates, from ${sw}.`];
+    else todo = ["You don't need MTD on these figures. Nothing to do for now.", `Check again after each tax year. If ${yy(RULES[RULES.length - 1].year)} goes over ${gbp(RULES[RULES.length - 1].limit)}, you'd start in April ${RULES[RULES.length - 1].start}.`];
+    if (input.exempt) todo.push(`You ticked a possible exemption: read <a href="https://www.gov.uk/guidance/find-out-if-you-can-get-an-exemption-from-making-tax-digital-for-income-tax" target="_blank" rel="noopener">HMRC's exemptions guidance</a> before relying on this.`);
+    $("todo").innerHTML = todo.map((t, i) => `<li class="${animate ? "anim" : ""}" style="animation-delay:${(i * .07).toFixed(2)}s"><span>${t}</span></li>`).join("");
     $("dl").innerHTML = rows.map(r => {
       const tag = r.due < today ? '<span class="pill past">Passed</span>' : r === next ? '<span class="pill next">Next</span>' : "";
       return `<tr><td>${r.p}</td><td>${r.c}</td><td class="num">${fmt(r.due)}</td><td>${tag}</td></tr>`;
