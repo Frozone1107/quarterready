@@ -331,6 +331,12 @@ footer a:hover{color:var(--gold-2)}
 .gloss dt{font-family:var(--serif);font-weight:600;font-size:1.12rem;color:var(--gold-2);margin-bottom:6px}
 .gloss dd{margin:0;color:var(--t2)}
 
+.inshort{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(32px,4vw,48px)}
+@media (max-width:760px){.inshort{grid-template-columns:1fr}}
+.inshort > div{padding:18px 20px;border:1px solid var(--edge);border-radius:16px;background:rgba(255,255,255,.04)}
+.inshort .k{display:block;font-family:var(--serif);font-weight:600;font-size:1.05rem;color:var(--gold-2);margin-bottom:6px}
+.inshort p{color:var(--t2);font-size:1rem}
+.inshort strong{color:var(--white)}
 /* reveal on scroll (only when JS runs and motion is allowed) */
 .js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .js .rv.seen{opacity:1;transform:none}
@@ -379,7 +385,7 @@ body{margin:0}
         <div>
           <p class="lead rv" style="--d:.1s">From April 2027, sole traders and landlords with more than £30,000 of business or rental income must send HMRC an update every three months. QuarterReady tells you if that's you, and adds up your figures for each update.</p>
           <div class="cta rv" style="--d:.18s">
-            <a class="btn" href="app.html">Open the app for free</a>
+            <a class="btn" href="app.html">Try the app for free</a>
             <a class="btn line" href="#checker">Do I need MTD?</a>
           </div>
           <div class="assure rv" style="--d:.24s">
@@ -388,6 +394,12 @@ body{margin:0}
             <span><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>For sole traders and landlords</span>
           </div>
         </div>
+      </div>
+
+      <div class="inshort rv" style="--d:.28s">
+        <div><span class="k">What it is</span><p>An app to keep your income and expenses, sorted the way HMRC asks, with your totals ready every quarter.</p></div>
+        <div><span class="k">Who it's for</span><p>UK sole traders and landlords who must send Making Tax Digital updates.</p></div>
+        <div><span class="k">What it costs</span><p><strong>Free</strong> up to 30 records. <strong>£19 a year</strong> for everything, cancel any time.</p></div>
       </div>
 
       <div class="year rv" style="margin-top:clamp(36px,5vw,56px);--d:.3s" aria-labelledby="yearTitle">
@@ -800,7 +812,8 @@ body{margin:0}
     const done = () => { $("copied").hidden = false; setTimeout(() => $("copied").hidden = true, 2000); };
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done).catch(() => {});
   });
-  if (BUY_URL) { const b = $("buy"); b.href = BUY_URL; b.target = "_blank"; b.rel = "noopener"; }
+  // Buying starts inside the app, so the full version can unlock itself straight after payment.
+  if (BUY_URL) { const b = $("buy"); b.href = "app.html?buy=1"; }
   window.__qrDecide = decide;
   render(true, false);
 
