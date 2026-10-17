@@ -930,7 +930,7 @@ function icsCalendar(year, name) {
 
 (() => {
   // CONFIG: fill in after creating the product on Lemon Squeezy.
-  const APP_VERSION = "2026.10.17.3";
+  const APP_VERSION = "2026.10.17.4";
   const CHECKOUT_URL = "https://quarterready.lemonsqueezy.com/checkout/buy/2a11b022-ce97-4409-9414-4a0142921d3a";            // hosted checkout link
   const LS_STORE_ID = 499789;              // your store ID
   const LS_PRODUCT_ID = 1447142;            // the product ID of "QuarterReady Records"
@@ -1600,6 +1600,24 @@ function icsCalendar(year, name) {
     } catch (e) { $("updTitle").textContent = "Couldn't check right now"; $("updText").textContent = "Try again in a moment. Your records are safe on this device."; }
   }
   $("checkUpd").addEventListener("click", checkForUpdates);
+  // Automatic: on every launch (when online), if a newer version is published, wipe the old saved copy and reload,
+  // so no device keeps running an outdated version. A session flag prevents reload loops.
+  async function autoUpdate() {
+    if (!navigator.onLine) return;
+    try {
+      const v = await fetch("version.json?t=" + Date.now(), { cache: "no-store" }).then(r => r.json());
+      if (!v.app || v.app === APP_VERSION) { try { sessionStorage.removeItem("qr-auto-upd"); } catch (e) {} return; }
+      let tried = null; try { tried = sessionStorage.getItem("qr-auto-upd"); } catch (e) {}
+      if (tried === v.app) return;
+      try { sessionStorage.setItem("qr-auto-upd", v.app); } catch (e) {}
+      const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+      if (reg) await reg.update().catch(() => {});
+      if (window.caches) { const ks = await caches.keys(); await Promise.all(ks.map(k => caches.delete(k))); }
+      location.replace("app.html?updated=" + encodeURIComponent(v.app) + location.hash);
+    } catch (e) {}
+  }
+  autoUpdate();
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") autoUpdate(); });
   $("updClose").addEventListener("click", () => sheetClose($("updSheet")));
   if (params.get("updated")) toast("Updated to version " + params.get("updated") + ".");
 
