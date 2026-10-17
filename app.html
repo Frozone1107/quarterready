@@ -227,9 +227,9 @@ body{margin:0}
     <span class="grab" aria-hidden="true"></span>
     <h2 id="offerTitle">You're on the free version</h2>
     <div class="usage"><span class="muted" id="offerUse"></span><span class="bar"><i id="offerBar" style="width:0%"></i></span></div>
-    <p class="muted" style="margin:0">The full version is a single £19 payment. It adds:</p>
+    <p class="muted" style="margin:0">The full version is £19 a year, cancel any time. It adds:</p>
     <ul>
-      <li>Unlimited records, every tax year</li>
+      <li>Unlimited records</li>
       <li>Bank statement import, so you don't retype anything</li>
       <li>Receipts attached and a mileage log</li>
       <li>CSV exports and a year-end report</li>
@@ -456,7 +456,7 @@ body{margin:0}
           <p class="muted" style="margin:0" id="licState"></p>
           <div class="usage" id="fullUsage"><span class="muted" id="fullUse"></span><span class="bar"><i id="fullBar" style="width:0%"></i></span></div>
         </div>
-        <div class="price" id="fullPrice">£19<small>once, no subscription</small></div>
+        <div class="price" id="fullPrice">£19<small>per year, cancel any time</small></div>
       </div>
       <div class="grid fullgrid">
         <div class="panel stack">
@@ -475,17 +475,17 @@ body{margin:0}
               <tr><td>CSV exports and year-end report</td><td><span class="no" aria-label="Not included">–</span></td><td><span class="yes" aria-label="Included"></span></td></tr>
             </tbody>
           </table></div>
-          <p class="muted" style="margin:0">One licence covers every tax year, on up to 2 browsers.</p>
+          <p class="muted" style="margin:0">One licence works on up to 2 browsers. Renews yearly; if you cancel, the full version stays on until the end of the year you paid for.</p>
         </div>
         <div class="stack">
           <div class="panel stack" id="buyPanel">
             <h2>Get the full version</h2>
             <ol class="steps3">
-              <li>Pay £19 through our payment partner.</li>
+              <li>Subscribe for £19 a year through our payment partner.</li>
               <li>Your licence key arrives by email straight away.</li>
               <li>Paste it below and select Activate.</li>
             </ol>
-            <div class="btns" id="buyRow"><a class="btn gold" id="buyLink" href="index.html#pricing">Get the full version · £19</a></div>
+            <div class="btns" id="buyRow"><a class="btn gold" id="buyLink" href="index.html#pricing">Get the full version · £19/year</a></div>
             <p class="muted" style="margin:0" id="buyNote">Your records stay on this device; the payment partner never sees them.</p>
           </div>
           <div class="panel stack" id="licPanel">
@@ -806,10 +806,10 @@ function icsCalendar(year, name) {
 
 (() => {
   // CONFIG: fill in after creating the product on Lemon Squeezy.
-  const APP_VERSION = "2026.10.16";
-  const CHECKOUT_URL = "";            // hosted checkout link
-  const LS_STORE_ID = 0;              // your store ID
-  const LS_PRODUCT_ID = 0;            // the product ID of "QuarterReady Records"
+  const APP_VERSION = "2026.10.17";
+  const CHECKOUT_URL = "https://quarterready.lemonsqueezy.com/checkout/buy/2a11b022-ce97-4409-9414-4a0142921d3a";            // hosted checkout link
+  const LS_STORE_ID = 499789;              // your store ID
+  const LS_PRODUCT_ID = 1447142;            // the product ID of "QuarterReady Records"
   const LICENSE_PROXY = "";           // optional: URL of a proxy if the browser blocks direct calls (see README)
   const KEY = "qr-records-v1";
 
@@ -940,7 +940,7 @@ function icsCalendar(year, name) {
 
   // ---------- Banners ----------
   function upsellHTML(what) {
-    return `<span>${what} The full version also adds bank statement import, receipt attachments, a mileage log and exports.</span><button type="button" class="gold" data-go-full>Unlock for £19</button>`;
+    return `<span>${what} The full version also adds bank statement import, receipt attachments, a mileage log and exports.</span><button type="button" class="gold" data-go-full>Unlock for £19/year</button>`;
   }
   function renderBanners() {
     $("sampleBanner").hidden = !state.sample;
@@ -1173,7 +1173,7 @@ function icsCalendar(year, name) {
         const bp = byProperty(b, s.id), names = Object.keys(bp);
         extra = canUse()
           ? (names.length ? `<h3>By property, whole year so far</h3><div class="tablebox"><table><thead><tr><th>Property</th><th class="num">Income</th><th class="num">Expenses</th><th class="num">Income − expenses</th><th class="num">Residential finance costs</th></tr></thead><tbody>${names.map(n => `<tr><td>${esc(n)}</td><td class="num">${fmtGBP(bp[n].income)}</td><td class="num">${fmtGBP(bp[n].expense)}</td><td class="num">${fmtGBP(bp[n].income - bp[n].expense)}</td><td class="num">${fmtGBP(bp[n].rfc)}</td></tr>`).join("")}</tbody></table></div><p class="muted" style="margin:0">For your own tracking. HMRC receives one combined update for all your UK properties.</p>` : "")
-          : `<div class="upsell"><strong>See profit for each property</strong><span class="muted">The full version breaks your UK property totals down by let, so you know which one earns its keep.</span><div><button type="button" class="gold" data-go-full>Unlock for £19</button></div></div>`;
+          : `<div class="upsell"><strong>See profit for each property</strong><span class="muted">The full version breaks your UK property totals down by let, so you know which one earns its keep.</span><div><button type="button" class="gold" data-go-full>Unlock for £19/year</button></div></div>`;
       }
       return `<div class="panel stack"><div class="sumhead"><h2>${esc(s.name)}</h2><span class="muted">${s.type === "se" ? "Self-employment" : "UK property"} · year-to-date totals</span></div><div class="tablebox"><table><thead>${head}</thead><tbody>${body}</tbody></table></div>${extra}</div>`;
     }).join("") || '<div class="empty">Add an income source in Settings.</div>';
@@ -1228,7 +1228,7 @@ function icsCalendar(year, name) {
       return `<li>${esc(s.name)} <span class="muted">(${s.type === "se" ? "self-employment" : "UK property"}, ${n} entries)</span> ${n === 0 && b.sources.length > 1 ? `<button type="button" class="link" data-rm="${s.id}">Remove</button>` : ""}</li>`;
     }).join("");
     $("addPr").hidden = b.sources.some(s => s.type === "pr");
-    $("setPlan").textContent = isFull() ? "Active in this browser. Everything is unlocked for every tax year." : "You're on the free version, up to " + FREE_LIMIT + " records per tax year.";
+    $("setPlan").textContent = isFull() ? "Active in this browser. Everything is unlocked while your yearly plan is active." : "You're on the free version, up to " + FREE_LIMIT + " records per tax year.";
     $("verApp").textContent = "App version " + APP_VERSION;
     $("verRules").textContent = RULES.checked ? "Rules checked " + new Date(RULES.checked + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Rules: built-in";
     $("backupText").value = JSON.stringify(state);
@@ -1239,7 +1239,7 @@ function icsCalendar(year, name) {
   function renderFull() {
     const L = state.licence, full = isFull();
     $("fullTitle").textContent = full ? "Full version active" : "You're on the free version";
-    $("licState").textContent = full ? "Unlocked in this browser" + (L.email ? " for " + L.email : "") + ", for every tax year." : "Everything ticked in the Free column stays free. The full version unlocks the rest for a single payment.";
+    $("licState").textContent = full ? "Unlocked in this browser" + (L.email ? " for " + L.email : "") + ", while your yearly plan is active." : "Everything ticked in the Free column stays free. The full version unlocks the rest for £19 a year.";
     $("fullUsage").hidden = full; $("fullUse").textContent = usedText();
     requestAnimationFrame(() => { $("fullBar").style.width = usedPct() + "%"; });
     $("fullPrice").hidden = full; $("buyPanel").hidden = full;
