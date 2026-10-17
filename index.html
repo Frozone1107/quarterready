@@ -205,7 +205,7 @@ legend{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin-bottom:
 @keyframes rise{from{transform:translateY(8px);opacity:.3}to{transform:none;opacity:1}}
 .stamp p{color:var(--t2)}
 .sample{font-size:.9rem;color:var(--gold-2)}
-.qi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.qi{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
 .qi div{border:1px solid var(--edge-2);border-radius:12px;padding:10px 12px 12px;min-width:0;background:rgba(255,255,255,.04)}
 .qi small{display:block;font-size:.8rem;color:var(--t2)}
 .qi strong{font-variant-numeric:tabular-nums;color:#fff}
@@ -337,6 +337,29 @@ footer a:hover{color:var(--gold-2)}
 .inshort .k{display:block;font-family:var(--serif);font-weight:600;font-size:1.05rem;color:var(--gold-2);margin-bottom:6px}
 .inshort p{color:var(--t2);font-size:1rem}
 .inshort strong{color:var(--white)}
+.qn{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--gold-2);font-family:var(--sans);font-size:.85rem;font-weight:700;margin-right:8px;vertical-align:2px}
+.yr.one{border-top:0;padding-top:0}
+details.more{border:1px solid var(--line);border-radius:12px;padding:0 14px;background:var(--mist)}
+details.more summary{font-family:var(--sans);font-size:.98rem;font-weight:600;color:var(--ink);padding:12px 0}
+details.more summary::after{border-color:var(--muted)}
+details.more[open]{padding-bottom:14px}
+details.more .yr{border-top-color:var(--line-2)}
+.seeit{margin:48px 0 16px;font-size:1.3rem}
+.ptable{max-width:860px;margin-inline:auto;padding:clamp(16px,3vw,28px);overflow-x:auto}
+.ptable table{font-size:1rem}
+.ptable th,.ptable td{text-align:center;vertical-align:middle;padding:13px 10px}
+.ptable th:first-child,.ptable td:first-child{text-align:left}
+.ptable .pname{display:block;font-family:var(--serif);font-size:1.15rem;color:var(--ink)}
+.ptable .pprice{display:block;font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--ink);line-height:1.1}
+.ptable .pprice small{font-family:var(--sans);font-size:.9rem;font-weight:500;color:var(--muted)}
+.ptable .full{background:#FBF6E6}
+.ptable th.full .pprice{color:#8A6400}
+.ptable tfoot td{border-bottom:0;padding-top:18px}
+.ptable tfoot .btn{width:100%;white-space:normal}
+.ptable .yes{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23E3C35A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.ptable .no{color:var(--line-2);font-weight:700}
+.pnote{margin-top:14px;text-align:center;color:var(--muted);font-size:.95rem}
+@media (max-width:560px){.ptable th,.ptable td{padding:10px 6px;font-size:.92rem}.ptable .pprice{font-size:1.5rem}}
 /* reveal on scroll (only when JS runs and motion is allowed) */
 .js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
 .js .rv.seen{opacity:1;transform:none}
@@ -369,9 +392,8 @@ body{margin:0}
     <nav class="links" aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#checker">Do I need MTD?</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#changes">What's changed</a>
-      <a href="help.html">Help</a>
+      <a href="#pricing">Price</a>
+      <a href="#faq">Questions</a>
     </nav>
     <a class="btn sm" href="app.html">Open the app</a>
   </div>
@@ -429,99 +451,15 @@ body{margin:0}
     <div class="wrap">
       <div class="head rv">
         <span class="rule rv" style="--d:.15s"></span>
-        <h2>How it works, in three steps.</h2>
-        <p class="lead">Making Tax Digital means three jobs every quarter. QuarterReady does the first two, which is where the time goes.</p>
+        <h2>How does it work?</h2>
+        <p class="lead">Every three months, you send HMRC a summary of your income and expenses. QuarterReady does the first two steps for you.</p>
       </div>
       <ol class="steps" id="steps">
         <li><span class="who">In QuarterReady</span><h3>Record</h3><p>Type in each income and expense, or import your bank statement and tick the business lines. Attach receipts and log business miles.</p></li>
         <li><span class="who">In QuarterReady</span><h3>Add up</h3><p>Every line goes under the right HMRC category. You see year-to-date totals for each quarter, ready to send, with warnings for duplicates.</p></li>
         <li class="ext"><span class="who">In HMRC-recognised bridging software</span><h3>Send</h3><p>Copy in the totals or upload the CSV file. The bridging software submits them to HMRC. HMRC lists free options for simple affairs.</p></li>
       </ol>
-      <p class="why rv">Only software on HMRC's recognised list may connect to its systems. QuarterReady is independent, so it prepares your figures and leaves the sending to a recognised tool.</p>
-    </div>
-  </section>
-
-  <section id="checker" class="alt">
-    <div class="wrap">
-      <div class="head rv">
-        <span class="rule rv" style="--d:.15s"></span>
-        <h2>Do you need MTD, and from when?</h2>
-        <p class="lead">Type in your income before expenses and get your answer straight away, with your deadlines and what to do next. Nothing you type leaves your browser.</p>
-      </div>
-      <div class="grid2">
-        <div class="panel white rv">
-          <form id="f" novalidate>
-            <fieldset>
-              <legend>Your situation</legend>
-              <label class="check"><input type="checkbox" id="sa" checked> I'm a sole trader or landlord registered for Self Assessment</label>
-              <label class="check"><input type="checkbox" id="exempt"> I think an exemption may apply (no National Insurance number, digitally excluded, certain reliefs or supplementary pages)</label>
-            </fieldset>
-            <fieldset>
-              <legend>Gross income before expenses, your share</legend>
-              <p class="small">Self-employment turnover and property income only. Leave out PAYE wages, pensions, dividends and partnership profit shares.</p>
-              <p class="hint"><strong>Not sure where to start?</strong> Fill in 2025–26 only. If it's over £30,000, you start in April 2027.</p>
-              <div class="yr">
-                <div class="yrhead">2024–25 <span>over £50,000 means April 2026</span></div>
-                <label for="se2024">Self-employment<span class="money"><b>£</b><input id="se2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
-                <label for="pr2024">Property<span class="money"><b>£</b><input id="pr2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
-              </div>
-              <div class="yr">
-                <div class="yrhead">2025–26 <span>over £30,000 means April 2027</span></div>
-                <label for="se2025">Self-employment<span class="money"><b>£</b><input id="se2025" inputmode="numeric" autocomplete="off" value="24000"></span></label>
-                <label for="pr2025">Property<span class="money"><b>£</b><input id="pr2025" inputmode="numeric" autocomplete="off" value="9000"></span></label>
-              </div>
-              <div class="yr">
-                <div class="yrhead">2026–27, estimate <span>over £20,000 means April 2028</span></div>
-                <label for="se2026">Self-employment<span class="money"><b>£</b><input id="se2026" inputmode="numeric" autocomplete="off" value="25000"></span></label>
-                <label for="pr2026">Property<span class="money"><b>£</b><input id="pr2026" inputmode="numeric" autocomplete="off" value="9000"></span></label>
-              </div>
-            </fieldset>
-            <div class="btnrow">
-              <button type="submit" class="btn">Check my start date</button>
-              <button type="button" class="btn lined" id="clear">Clear figures</button>
-            </div>
-          </form>
-        </div>
-        <div class="result rv" style="--d:.1s" aria-live="polite">
-          <p class="sample" id="sampleNote">Showing an example: £24,000 self-employment and £9,000 rent in 2025–26.</p>
-          <div class="stamp" id="stamp" data-tone="warn">
-            <span class="label">Your result</span>
-            <span class="big" id="big">From 6 April 2027</span>
-            <p id="why">Your qualifying income for 2025–26 is £33,000, which is over £30,000.</p>
-          </div>
-          <div class="qi" id="qi"></div>
-          <div class="panel white todo">
-            <h3>What to do next</h3>
-            <ol id="todo"></ol>
-          </div>
-          <div class="panel white" id="deadlines">
-            <h3 id="dlTitle">Your first year of quarterly updates</h3>
-            <p class="small" style="margin:6px 0 10px">Standard quarters. With calendar quarters the periods end on the last day of the month; the deadlines are the same.</p>
-            <div class="tablebox"><table>
-              <thead><tr><th>Update</th><th>Covers</th><th>Send by</th><th><span class="sr">Status</span></th></tr></thead>
-              <tbody id="dl"></tbody>
-            </table></div>
-            <div class="btnrow" style="margin-top:16px"><a class="btn sm" href="app.html">Start my records</a><button type="button" class="btn lined sm" id="copy">Copy these dates</button><span class="small" id="copied" hidden>Copied.</span></div>
-          </div>
-          <p class="small">Not affiliated with HMRC, not tax advice. Confirm with <a href="https://tax.service.gov.uk/guidance/check-if-you-need-to-use-making-tax-digital-for-income-tax" rel="noopener" target="_blank">HMRC's own checker</a>.</p>
-        </div>
-      </div>
-      <div class="counts">
-        <div class="rv"><h3>What counts</h3><p>Self-employment turnover and property income, before expenses. Only your share of a jointly owned property.</p></div>
-        <div class="rv" style="--d:.08s"><h3>What doesn't</h3><p>Employment (PAYE), pensions, dividends, and your profit share as a partner in a partnership.</p></div>
-        <div class="rv" style="--d:.16s"><h3>Spreadsheets are allowed</h3><p>You can keep records outside MTD software, as long as HMRC-recognised bridging software sends your updates.</p></div>
-      </div>
-      <p class="sources" id="sources"></p>
-    </div>
-  </section>
-
-  <section id="app">
-    <div class="wrap">
-      <div class="head rv">
-        <span class="rule rv" style="--d:.15s"></span>
-        <h2>Your records, added up for each quarter.</h2>
-        <p class="lead">Type in each income and expense once. The app files it under the right HMRC category and keeps a running total for every quarterly update.</p>
-      </div>
+      <h3 class="seeit rv">Here's what the app looks like</h3>
       <div class="window white rv" id="window">
         <div class="wbar">
           <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -562,70 +500,102 @@ body{margin:0}
     </div>
   </section>
 
-  <section id="features" class="alt">
-    <div class="wrap fv">
-      <div>
-        <div class="head rv">
-          <span class="rule rv" style="--d:.15s"></span>
-          <h2>The full version does the tedious parts.</h2>
-          <p class="lead">The free version shows you how it all works. The full version saves you the hours.</p>
+  <section id="checker" class="alt">
+    <div class="wrap">
+      <div class="head rv">
+        <span class="rule rv" style="--d:.15s"></span>
+        <h2>Do I need MTD?</h2>
+        <p class="lead">Answer two questions and get your start date, your deadlines and what to do next. Nothing you type leaves your browser.</p>
+      </div>
+      <div class="grid2">
+        <div class="panel white rv">
+          <form id="f" novalidate>
+            <fieldset>
+              <legend><span class="qn">1</span> Are you self-employed or a landlord?</legend>
+              <label class="check"><input type="checkbox" id="sa" checked> Yes, I'm a sole trader and/or a landlord, and I fill in a Self Assessment tax return</label>
+            </fieldset>
+            <fieldset>
+              <legend><span class="qn">2</span> What did you earn in 2025–26?</legend>
+              <p class="small">From 6 April 2025 to 5 April 2026, <strong>before expenses</strong>. Count only business turnover and rent (your share). Don't count wages, pensions or dividends.</p>
+              <div class="yr one">
+                <label for="se2025">Self-employment turnover<span class="money"><b>£</b><input id="se2025" inputmode="numeric" autocomplete="off" value="24000"></span></label>
+                <label for="pr2025">Rental income<span class="money"><b>£</b><input id="pr2025" inputmode="numeric" autocomplete="off" value="9000"></span></label>
+              </div>
+            </fieldset>
+            <details class="more">
+              <summary>More options: other years, exemptions</summary>
+              <div class="yr">
+                <div class="yrhead">2024–25 <span>over £50,000 means April 2026</span></div>
+                <label for="se2024">Self-employment<span class="money"><b>£</b><input id="se2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
+                <label for="pr2024">Rental income<span class="money"><b>£</b><input id="pr2024" inputmode="numeric" autocomplete="off" value="0"></span></label>
+              </div>
+              <div class="yr">
+                <div class="yrhead">2026–27, estimate <span>over £20,000 means April 2028</span></div>
+                <label for="se2026">Self-employment<span class="money"><b>£</b><input id="se2026" inputmode="numeric" autocomplete="off" value="0"></span></label>
+                <label for="pr2026">Rental income<span class="money"><b>£</b><input id="pr2026" inputmode="numeric" autocomplete="off" value="0"></span></label>
+              </div>
+              <label class="check" style="margin-top:12px"><input type="checkbox" id="exempt"> I think an exemption may apply (no National Insurance number, digitally excluded, certain reliefs)</label>
+            </details>
+            <div class="btnrow">
+              <button type="submit" class="btn">Show my answer</button>
+              <button type="button" class="btn lined" id="clear">Clear figures</button>
+            </div>
+          </form>
         </div>
-        <ul class="flist" id="flist">
-          <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><h3>Bank statement import</h3><p>Choose your bank's CSV file, tick the business lines and pick a category once. Next time the app remembers, and skips lines you already have.</p></div></li>
-          <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h7l3.5 3.5v11.5h-10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10h5M8 13.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><h3>Receipts kept with each record</h3><p>Attach a photo or PDF, so it's there if HMRC ever asks.</p></div></li>
-          <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10l4-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><h3>Mileage log</h3><p>Log business journeys. The app applies HMRC's flat rate, <span data-r="car1">55</span>p a mile for the first <span data-r="band">10,000</span> miles by car or van, then <span data-r="car2">25</span>p.</p></div></li>
-          <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9.5L10 4l7 5.5V17H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><div><h3>Totals for each property</h3><p>Landlords see each let separately, alongside the total HMRC needs.</p></div></li>
-          <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-4-4 4 4 4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3>Exports and a year-end report</h3><p>CSV files for bridging software, and a printable report for your accountant.</p></div></li>
-          <li><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10c0-2.5 2-4 4-2.6L11 9c2 1.4 4 .1 4-2.5M5 13.5c0 2.6 2 4 4 2.6L11 14.5c2-1.4 4 0 4 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><h3>Unlimited records</h3><p>No limit while you're subscribed, on up to two browsers.</p></div></li>
-        </ul>
+        <div class="result rv" style="--d:.1s" aria-live="polite">
+          <p class="sample" id="sampleNote">Showing an example: £24,000 self-employment and £9,000 rent in 2025–26.</p>
+          <div class="stamp" id="stamp" data-tone="warn">
+            <span class="label">Your result</span>
+            <span class="big" id="big">From 6 April 2027</span>
+            <p id="why">Your qualifying income for 2025–26 is £33,000, which is over £30,000.</p>
+          </div>
+          <div class="qi" id="qi"></div>
+          <div class="panel white todo">
+            <h3>What to do next</h3>
+            <ol id="todo"></ol>
+          </div>
+          <div class="panel white" id="deadlines">
+            <h3 id="dlTitle">Your first year of quarterly updates</h3>
+            <p class="small" style="margin:6px 0 10px">Standard quarters. With calendar quarters the periods end on the last day of the month; the deadlines are the same.</p>
+            <div class="tablebox"><table>
+              <thead><tr><th>Update</th><th>Covers</th><th>Send by</th><th><span class="sr">Status</span></th></tr></thead>
+              <tbody id="dl"></tbody>
+            </table></div>
+            <div class="btnrow" style="margin-top:16px"><a class="btn sm" href="app.html">Start my records</a><button type="button" class="btn lined sm" id="copy">Copy these dates</button><span class="small" id="copied" hidden>Copied.</span></div>
+          </div>
+          <p class="small">Not affiliated with HMRC, not tax advice. Confirm with <a href="https://tax.service.gov.uk/guidance/check-if-you-need-to-use-making-tax-digital-for-income-tax" rel="noopener" target="_blank">HMRC's own checker</a>.</p>
+        </div>
       </div>
-      <div class="panel white stmt rv" id="stmt" aria-label="Example of a bank statement import">
-        <h3 style="margin-bottom:6px">Import from your bank</h3>
-        <p class="small" style="margin-bottom:8px">Example: three lines from a statement.</p>
-        <div class="row"><span class="cb"></span><span class="d"><b>STRIPE PAYOUT</b><small>Turnover, takings, fees, sales</small></span><span class="a">+£640.00</span></div>
-        <div class="row"><span class="cb"></span><span class="d"><b>TRAINLINE</b><small>Car, van and travel expenses</small></span><span class="a">−£48.20</span></div>
-        <div class="row skip"><span class="cb"></span><span class="d"><b>SUPERMARKET</b><small>Personal, left out</small></span><span class="a">−£62.15</span></div>
-        <div class="done" id="stmtDone"><svg width="16" height="16" aria-hidden="true"><use href="#tick"/></svg>2 lines added to your records</div>
-        <p class="cap">The file is read in your browser and never uploaded.</p>
-      </div>
+      <p class="sources" id="sources"></p>
     </div>
   </section>
+
+
 
   <section id="pricing">
     <div class="wrap">
       <div class="head c rv">
         <span class="rule rv" style="--d:.15s"></span>
-        <h2>Free to start. £19 a year for the full version.</h2>
-        <p class="lead">No account needed. Cancel the yearly plan any time; your records stay yours.</p>
+        <h2>How much does it cost?</h2>
+        <p class="lead">Free to start, no account needed. £19 a year when you want everything.</p>
       </div>
-      <div class="plans">
-        <div class="plan rv">
-          <h3>Free</h3>
-          <div class="price">£0<small>No sign-up, no time limit</small></div>
-          <ul>
-            <li>Start-date checker</li>
-            <li>Up to 30 records per tax year</li>
-            <li>Quarterly totals per HMRC category</li>
-            <li>Deadlines, with calendar reminders</li>
-            <li>Backup and restore</li>
-          </ul>
-          <a class="btn line" href="app.html">Open the app</a>
-        </div>
-        <div class="plan full rv" style="--d:.1s">
-          <h3>Full version</h3>
-          <div class="price">£19<small>per year, VAT included where it applies. Renews yearly, cancel any time.</small></div>
-          <ul>
-            <li>Everything in Free, with <strong>unlimited records</strong></li>
-            <li><strong>Bank statement import</strong> with remembered categories</li>
-            <li><strong>Receipt attachments</strong>, a photo or PDF with each record</li>
-            <li><strong>Mileage log</strong> with HMRC flat rates applied</li>
-            <li><strong>Totals for each property</strong></li>
-            <li><strong>CSV exports</strong> and a <strong>year-end report</strong></li>
-            <li>All updates while subscribed, on up to two browsers</li>
-          </ul>
-          <a class="btn" id="buy" href="app.html#settings">Get the full version</a>
-          <p class="small">Paid through our payment partner. Your licence key arrives by email straight away.</p>
-        </div>
+      <div class="ptable white rv">
+        <table>
+          <thead><tr><th><span class="sr">Feature</span></th><th><span class="pname">Free</span><span class="pprice">£0</span></th><th class="full"><span class="pname">Full version</span><span class="pprice">£19<small>/year</small></span></th></tr></thead>
+          <tbody>
+            <tr><td>Do I need MTD? checker</td><td><span class="yes" aria-label="Included"></span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>Records per tax year</td><td>30</td><td class="full"><strong>Unlimited</strong></td></tr>
+            <tr><td>Quarterly totals per HMRC category</td><td><span class="yes" aria-label="Included"></span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>Deadlines and calendar reminders</td><td><span class="yes" aria-label="Included"></span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>Bank statement import</td><td><span class="no" aria-label="Not included">–</span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>Receipt photos and PDFs</td><td><span class="no" aria-label="Not included">–</span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>Mileage log with HMRC rates</td><td><span class="no" aria-label="Not included">–</span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>Totals for each property</td><td><span class="no" aria-label="Not included">–</span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+            <tr><td>CSV exports and year-end report</td><td><span class="no" aria-label="Not included">–</span></td><td class="full"><span class="yes" aria-label="Included"></span></td></tr>
+          </tbody>
+          <tfoot><tr><td></td><td><a class="btn lined" href="app.html">Start free</a></td><td class="full"><a class="btn" id="buy" href="app.html#settings">Get the full version</a></td></tr></tfoot>
+        </table>
+        <p class="pnote">£19 a year, VAT included where it applies. Renews yearly, cancel any time. The full version unlocks straight after payment.</p>
       </div>
       <p class="small" style="text-align:center;max-width:68ch;margin:24px auto 0">QuarterReady keeps records and adds them up. It doesn't send to HMRC or calculate your tax. To send updates you'll also need HMRC-recognised bridging software.</p>
     </div>
@@ -643,36 +613,21 @@ body{margin:0}
     </div>
   </section>
 
-  <section id="words">
-    <div class="wrap">
-      <div class="head rv">
-        <span class="rule rv" style="--d:.15s"></span>
-        <h2>The words you'll see, in plain English.</h2>
-      </div>
-      <dl class="gloss">
-        <div class="rv"><dt>Making Tax Digital (MTD)</dt><dd>HMRC's new way of doing Income Tax: you keep your records digitally and send a short summary every three months, instead of only once a year.</dd></div>
-        <div class="rv" style="--d:.05s"><dt>Qualifying income</dt><dd>Your self-employment turnover plus your rental income, before expenses. This is the figure that decides whether, and when, MTD applies to you.</dd></div>
-        <div class="rv" style="--d:.1s"><dt>Tax year</dt><dd>6 April to 5 April. "2027–28" means 6 April 2027 to 5 April 2028.</dd></div>
-        <div class="rv"><dt>Quarterly update</dt><dd>A summary of your income and expenses so far this tax year, by category. You send one every quarter for each business and for your property income.</dd></div>
-        <div class="rv" style="--d:.05s"><dt>Bridging software</dt><dd>A program recognised by HMRC that takes figures you prepared elsewhere, like in QuarterReady, and sends them to HMRC.</dd></div>
-        <div class="rv" style="--d:.1s"><dt>Tax return</dt><dd>You still finish each year with a tax return, due by 31 January after the tax year ends. Your quarterly updates feed into it.</dd></div>
-      </dl>
-    </div>
-  </section>
 
   <section id="faq" class="alt">
     <div class="wrap">
       <div class="head c rv"><span class="rule rv" style="--d:.15s"></span><h2>Questions</h2></div>
       <div class="faq rv">
+        <details><summary>What counts as income for MTD?</summary><p>Your self-employment turnover and your rental income, before expenses, your share only. Wages (PAYE), pensions, dividends and a partner's share of partnership profit don't count.</p></details>
+        <details><summary>Why do I need another tool to send my updates?</summary><p>Only software on HMRC's recognised list may connect to its systems. QuarterReady is independent, so it prepares your figures; you then copy them into HMRC-recognised bridging software, which sends them. HMRC lists free options for simple affairs.</p></details>
+        <details><summary>What do the words mean?</summary><p><strong>MTD</strong>: keeping digital records and sending a summary every three months. <strong>Qualifying income</strong>: turnover plus rent, before expenses. <strong>Tax year</strong>: 6 April to 5 April. <strong>Quarterly update</strong>: your income and expenses so far this tax year, by category. <strong>Bridging software</strong>: an HMRC-recognised program that sends figures prepared elsewhere. <strong>Tax return</strong>: still due by 31 January after the tax year.</p></details>
         <details><summary>Will HMRC tell me if I need to start?</summary><p>HMRC reviews your Self Assessment return and writes to you if your qualifying income is over the threshold. If no letter arrives, it's still your responsibility to check and sign up.</p></details>
-        <details><summary>Which year's income decides my start date?</summary><p>Over £50,000 in 2024–25 means 6 April 2026. Over £30,000 in 2025–26 means 6 April 2027. Over £20,000 in 2026–27 means 6 April 2028, according to current GOV.UK guidance.</p></details>
-        <details><summary>What if I'm under £20,000?</summary><p>You don't need MTD while your qualifying income stays at £20,000 or less. Check again each year.</p></details>
         <details><summary>Does QuarterReady send my updates to HMRC?</summary><p>No. QuarterReady prepares the figures. To send them, use HMRC-recognised bridging software: copy in the totals or upload the CSV export, and it submits them for you.</p></details>
-        <details><summary>How do you keep up with rule changes?</summary><p>We check HMRC's guidance every month and after each Budget, and update the thresholds, deadlines and rates in the checker and the app. The date of the last check is shown above under "What's changed".</p></details>
+        <details><summary>How do you keep up with rule changes?</summary><p>We check HMRC's guidance every month and after each Budget, and update the thresholds, deadlines and rates in the checker and the app. The date of the last check is shown under "What's changed".</p></details>
         <details><summary>Do quarterly updates replace my tax return?</summary><p>No. Quarterly updates are summaries of income and expenses. You still finish the year with a tax return from MTD software by 31 January after the tax year ends.</p></details>
         <details><summary>Where are my records stored?</summary><p>Only in your browser, on your device. We never receive them. Download a backup from Settings regularly, because clearing your browser data deletes them.</p></details>
         <details><summary>Can I put it on my phone like an app?</summary><p>Yes. Open the app, then use "Add to Home Screen" (iPhone, in Safari) or "Install app" (Android and computer, in Chrome or Edge). It gets its own icon, opens with its own start screen and works offline. On Android and computers, a long press (or right-click) on the icon gives shortcuts: add a record, quarterly totals, the full version and check for updates.</p></details>
-        <details><summary>What happens after I buy?</summary><p>Our payment partner emails you a receipt with your licence key straight away. In the app, open the Full version tab, paste the key and select Activate. Your plan renews each year; you can cancel any time from the link in your receipt, and the full version stays on until the end of the year you paid for. The <a href="help.html">help page</a> covers anything that goes wrong.</p></details>
+        <details><summary>What happens after I buy?</summary><p>Our payment partner emails you a receipt with your licence key straight away. The full version unlocks by itself straight after payment; the licence key in your receipt is a backup. Your plan renews each year; you can cancel any time from the link in your receipt, and the full version stays on until the end of the year you paid for. The <a href="help.html">help page</a> covers anything that goes wrong.</p></details>
         <details><summary>What if I cancel?</summary><p>Cancel any time from the link in your receipt email. The full version stays on until the end of the year you paid for, then the app goes back to the free version. Your records stay on your device, and you can still view, back up and export what you need.</p></details>
         <details><summary>Is this official?</summary><p>No. QuarterReady is independent and not affiliated with HMRC. It applies published rules to the figures you enter; your situation may involve rules it doesn't cover.</p></details>
       </div>
@@ -776,7 +731,7 @@ body{margin:0}
     if (animate) { st.classList.remove("pop"); void st.offsetWidth; st.classList.add("pop"); }
     $("big").textContent = res.big;
     $("why").textContent = res.why + (input.exempt ? " You ticked a possible exemption: check HMRC's exemptions guidance before relying on this." : "");
-    $("qi").innerHTML = res.qi.map(r => `<div class="${r.total > r.limit ? "over" : ""}"><small>${yy(r.year)}, over ${gbp(r.limit)}?</small><strong>${gbp(r.total)}</strong><span class="bar" aria-hidden="true"><i style="--p:0%" data-p="${Math.min(100, r.total / r.limit * 100).toFixed(1)}%"></i></span></div>`).join("");
+    $("qi").innerHTML = res.qi.filter(r => r.total > 0 || r.year === 2025).map(r => `<div class="${r.total > r.limit ? "over" : ""}"><small>${yy(r.year)}, over ${gbp(r.limit)}?</small><strong>${gbp(r.total)}</strong><span class="bar" aria-hidden="true"><i style="--p:0%" data-p="${Math.min(100, r.total / r.limit * 100).toFixed(1)}%"></i></span></div>`).join("");
     requestAnimationFrame(() => requestAnimationFrame(() => $("qi").querySelectorAll(".bar i").forEach(i => i.style.setProperty("--p", i.dataset.p))));
     const start = res.start ?? RULES[RULES.length - 1].start;
     $("dlTitle").textContent = res.start ? "Your first year of quarterly updates, " + yy(start) : "If you start in April " + start + ", your first year looks like this";
@@ -908,10 +863,10 @@ body{margin:0}
   };
 
   // ---------- Scroll reveals and one-off plays ----------
-  const once = new Map([[$("track"), playYear], [$("stmt"), playStmt]]);
+  const once = new Map([[$("track"), playYear]].concat($("stmt") ? [[$("stmt"), playStmt]] : []));
   if (reduce || !("IntersectionObserver" in window)) {
     document.querySelectorAll(".rv").forEach(e => e.classList.add("seen"));
-    playYear(); $("stmt").querySelectorAll(".row").forEach(r => r.classList.contains("skip") ? r.classList.add("off") : (r.querySelector(".cb").classList.add("on"), r.classList.add("picked"))); $("stmt").classList.add("finished");
+    playYear(); if ($("stmt")) { $("stmt").querySelectorAll(".row").forEach(r => r.classList.contains("skip") ? r.classList.add("off") : (r.querySelector(".cb").classList.add("on"), r.classList.add("picked"))); $("stmt").classList.add("finished"); }
   } else {
     const io = new IntersectionObserver(es => es.forEach(e => {
       if (!e.isIntersecting) return;
