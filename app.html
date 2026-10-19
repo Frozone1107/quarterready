@@ -266,13 +266,56 @@ body:not(.is-full) [data-premium-area]::after{content:"";position:absolute;inset
 .vline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 section[role=tabpanel]{padding-block:16px 8px}
 footer{padding-block:28px;color:var(--muted);font-size:.88rem}
+.grid2x{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:880px){.grid2x{grid-template-columns:1fr}}
+.dochead{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;align-items:start}
+.docic{width:52px;height:60px;border-radius:6px 14px 6px 6px;background:var(--hero);color:#E3C35A;display:grid;place-items:end center;padding-bottom:8px;font:700 .72rem var(--body);letter-spacing:.06em}
 #report{display:none}
 @media print{
   body{background:#fff;color:#000}
   header.top,.tabbar,.intro,.next,main>*:not(#report),.toast{display:none!important}
   #report{display:block!important}
-  #report table{font-size:10pt}
+  #report table{font-size:9.5pt}
 }
+@page{size:A4;margin:15mm 14mm 17mm;
+  @bottom-left{content:"Prepared with QuarterReady Records · not affiliated with HMRC";font:8pt "Source Sans 3",Arial,sans-serif;color:#666}
+  @bottom-right{content:"Page " counter(page) " of " counter(pages);font:8pt "Source Sans 3",Arial,sans-serif;color:#666}}
+.doc{font:10pt/1.45 "Source Sans 3","Segoe UI",Arial,sans-serif;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.doc h1,.doc h2,.doc h3{font-family:"Source Serif 4",Georgia,serif;color:#0B1E3F;margin:0;font-weight:700}
+.doc h1{font-size:20pt;line-height:1.15}
+.doc h2{font-size:13pt;margin:18pt 0 6pt;padding-bottom:3pt;border-bottom:1.5pt solid #C9A227}
+.doc h3{font-size:11pt;margin:12pt 0 4pt}
+.doc p{margin:0 0 6pt}
+.doc .dtop{display:flex;justify-content:space-between;align-items:flex-start;gap:16pt;padding-bottom:10pt;border-bottom:3pt solid #0B1E3F}
+.doc .kicker{font-size:8pt;letter-spacing:.12em;text-transform:uppercase;color:#8A6D10;font-weight:700;margin-bottom:3pt}
+.doc .brandline{font:700 9pt "Source Serif 4",Georgia,serif;color:#0B1E3F;text-align:right}
+.doc .brandline small{display:block;font:400 8pt "Source Sans 3",Arial,sans-serif;color:#666}
+.doc .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:10pt 0 4pt;border:1pt solid #CBD2DC;border-radius:4pt}
+.doc .facts div{padding:6pt 8pt;border-left:1pt solid #CBD2DC}
+.doc .facts div:first-child{border-left:0}
+.doc .facts span{display:block;font-size:7.5pt;text-transform:uppercase;letter-spacing:.06em;color:#5B6B82}
+.doc .facts b{font-size:10.5pt;color:#0B1E3F}
+.doc table{width:100%;border-collapse:collapse;margin:4pt 0 8pt;font-size:9.5pt}
+.doc thead{display:table-header-group}
+.doc th{text-align:left;font-size:7.5pt;text-transform:uppercase;letter-spacing:.05em;color:#3E4C61;background:#EEF1F6;padding:4pt 6pt;border-bottom:1pt solid #9AA6B8}
+.doc td{padding:3.5pt 6pt;border-bottom:.5pt solid #DDE3EC;vertical-align:top}
+.doc tr{break-inside:avoid}
+.doc tr.sec{break-after:avoid}.doc h2,.doc h3{break-after:avoid}
+.doc tbody.grp{break-inside:avoid}
+.doc .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.doc .ref{color:#5B6B82;font-size:8.5pt;white-space:nowrap}
+.doc .zero td{color:#9AA6B8}
+.doc tr.sec td{background:#F6F7FA;font-weight:700;color:#0B1E3F;font-size:8.5pt;text-transform:uppercase;letter-spacing:.05em}
+.doc tr.tot td{font-weight:700;border-top:1pt solid #0B1E3F;border-bottom:0}
+.doc tr.grand td{font-weight:700;background:#FBF6E6;border-top:1.5pt solid #C9A227;border-bottom:1.5pt solid #C9A227}
+.doc .note{font-size:8.5pt;color:#444}
+.doc .box{border:1pt solid #CBD2DC;border-left:3pt solid #C9A227;border-radius:3pt;padding:7pt 9pt;margin:6pt 0 8pt;break-inside:avoid}
+.doc ol.pts{margin:4pt 0;padding-left:16pt}.doc ol.pts li{margin:2pt 0}
+.doc .toc{columns:2;font-size:9pt;margin:6pt 0 0;padding-left:16pt}
+.doc .pb{break-before:page}
+.doc .sig{display:grid;grid-template-columns:1fr 1fr;gap:20pt;margin-top:14pt}
+.doc .sig div{border-top:1pt solid #999;padding-top:3pt;font-size:8pt;color:#555}
+.doc .tick{display:inline-block;width:9pt;height:9pt;border:1pt solid #555;border-radius:2pt;vertical-align:-1pt;margin-right:4pt}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -301,7 +344,7 @@ body{margin:0}
       <li>Unlimited records</li>
       <li>Bank statement import, so you don't retype anything</li>
       <li>Receipts attached and a mileage log</li>
-      <li>CSV exports and a year-end report</li>
+      <li>Quarterly update sheets and an accountant pack (PDF, Excel)</li>
     </ul>
     <div class="btns"><button type="button" class="ghost" id="offerLater">Not now</button><button type="button" class="gold" id="offerSee">See the full version</button></div>
   </div>
@@ -329,7 +372,7 @@ body{margin:0}
       <li>Receipt attachments</li>
       <li>Mileage log with HMRC rates</li>
       <li>Totals for each property</li>
-      <li>CSV exports and year-end report</li>
+      <li>Quarterly update sheets and an accountant pack (PDF, Excel)</li>
     </ul>
     <div class="btns" style="grid-template-columns:1fr"><button type="button" class="gold" id="welcomeGo">Start using it</button></div>
   </div>
@@ -542,18 +585,31 @@ body{margin:0}
   <section id="p-summary" role="tabpanel" aria-labelledby="t-summary" hidden style="padding-block:14px">
     <div class="stack">
       <div class="banner bad" id="checkBanner" hidden></div>
-      <div id="summaries" class="stack"></div>
-      <div class="panel stack">
-        <h3>Send it to HMRC</h3>
-        <p class="muted" style="margin:0">QuarterReady keeps your records and works out the totals. To send a quarterly update you need HMRC-recognised bridging software that accepts a spreadsheet or CSV file. <a href="https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax" target="_blank" rel="noopener">Find software on GOV.UK</a>.</p>
-        <div class="btns">
-          <button type="button" id="dlSummary">Download summary (CSV)</button>
-          <button type="button" class="ghost" id="dlRecords">Download all records (CSV)</button>
-          <button type="button" class="ghost" id="cpSummary">Copy summary</button>
-          <button type="button" class="ghost" id="yearReport">Year-end report for your accountant</button>
+      <div class="grid2x">
+        <div class="panel stack docpanel">
+          <div class="dochead"><span class="docic" aria-hidden="true">HMRC</span><div><h3>Your quarterly update</h3><p class="muted" style="margin:0">The year-to-date figures HMRC asks for, laid out category by category, ready to enter in your bridging software.</p></div></div>
+          <label class="fld" for="qSel">Which update<select id="qSel"></select></label>
+          <div class="btns">
+            <button type="button" id="qSheet">Update sheet (PDF)</button>
+            <button type="button" class="ghost" id="qCsv">Figures for bridging software (CSV)</button>
+          </div>
+          <p class="muted" style="margin:0">QuarterReady doesn't send to HMRC. Use <a href="https://www.gov.uk/guidance/find-software-that-works-with-making-tax-digital-for-income-tax" target="_blank" rel="noopener">HMRC-recognised bridging software</a> that accepts a spreadsheet or CSV file.</p>
         </div>
-        <p class="muted" id="exportNote" style="margin:0"></p>
+        <div class="panel stack docpanel">
+          <div class="dochead"><span class="docic" aria-hidden="true">ACC</span><div><h3>For your accountant</h3><p class="muted" style="margin:0">Everything they need for your tax return: totals with the tax-return box for each line, every record, your mileage log and points to check.</p></div></div>
+          <div class="btns">
+            <button type="button" id="yearReport">Year-end report (PDF)</button>
+            <button type="button" class="ghost" id="xlsxPack">Accountant workbook (Excel)</button>
+          </div>
+          <div class="btns">
+            <button type="button" class="ghost" id="dlRecords">All records (CSV)</button>
+            <button type="button" class="ghost" id="dlSummary">Year summary (CSV)</button>
+            <button type="button" class="ghost" id="cpSummary">Copy summary</button>
+          </div>
+        </div>
       </div>
+      <p class="muted" id="exportNote" style="margin:0"></p>
+      <div id="summaries" class="stack"></div>
     </div>
   </section>
 
@@ -596,7 +652,7 @@ body{margin:0}
               <tr><td>Receipt attachments<small>A photo or PDF with each record</small></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="yes" aria-label="Included"></span></td></tr>
               <tr><td>Mileage log<small>HMRC flat rates worked out</small></td><td><span class="no" aria-label="Not included">–</span></td><td><span class="yes" aria-label="Included"></span></td></tr>
               <tr><td>Totals for each property</td><td><span class="no" aria-label="Not included">–</span></td><td><span class="yes" aria-label="Included"></span></td></tr>
-              <tr><td>CSV exports and year-end report</td><td><span class="no" aria-label="Not included">–</span></td><td><span class="yes" aria-label="Included"></span></td></tr>
+              <tr><td>Quarterly update sheet and accountant pack (PDF, Excel, CSV)</td><td><span class="no" aria-label="Not included">–</span></td><td><span class="yes" aria-label="Included"></span></td></tr>
             </tbody>
           </table></div>
           <p class="muted" style="margin:0">One licence works on up to 2 browsers. Renews yearly; if you cancel, the full version stays on until the end of the year you paid for.</p>
@@ -629,6 +685,9 @@ body{margin:0}
       <div class="panel stack">
         <h2>This tax year</h2>
         <label class="fld" for="s-name">Name shown on exports and reports<input id="s-name" autocomplete="off"></label>
+        <label class="fld" for="s-basis">Accounting basis (shown on reports for your accountant)
+          <select id="s-basis"><option value="cash">Cash basis: money in and out when it's paid (HMRC's default)</option><option value="accruals">Traditional accounting: when invoiced or billed</option></select>
+        </label>
         <label class="fld" for="s-qtype">Quarters
           <select id="s-qtype"><option value="standard">Standard (end 5 Jul, 5 Oct, 5 Jan, 5 Apr)</option><option value="calendar">Calendar (end 30 Jun, 30 Sep, 31 Dec, 31 Mar)</option></select>
         </label>
@@ -922,15 +981,170 @@ function icsCalendar(year, name) {
     return ["BEGIN:VEVENT", "UID:qr-" + year + "-" + i + "@quarterready", "DTSTAMP:" + day(new Date()) + "T000000Z",
       "DTSTART;VALUE=DATE:" + day(dt), "DTEND;VALUE=DATE:" + day(next),
       "SUMMARY:" + labels[i] + " due (" + year + "-" + String(year + 1).slice(2) + ")" + (name ? " – " + name.replace(/[,;\\]/g, " ") : ""),
-      "BEGIN:VALARM", "TRIGGER:-P7D", "ACTION:DISPLAY", "DESCRIPTION:MTD deadline in 7 days", "END:VALARM", "END:VEVENT"].join("\r\n");
+      "DESCRIPTION:" + (i < 4 ? "Send your year-to-date quarterly update for each business through your MTD software. QuarterReady: Quarterly totals > Your quarterly update." : "Submit your tax return (final declaration) for " + year + "-" + String(year + 1).slice(2) + " and pay any tax due.") ,
+      "BEGIN:VALARM", "TRIGGER:-P7D", "ACTION:DISPLAY", "DESCRIPTION:MTD deadline in 7 days", "END:VALARM",
+      "BEGIN:VALARM", "TRIGGER:-P1D", "ACTION:DISPLAY", "DESCRIPTION:MTD deadline tomorrow", "END:VALARM", "END:VEVENT"].join("\r\n");
   });
-  return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//QuarterReady//MTD deadlines//EN", ...ev, "END:VCALENDAR"].join("\r\n");
+  const fold = line => { const out = []; while (line.length > 73) { out.push(line.slice(0, 73)); line = " " + line.slice(73); } out.push(line); return out.join("\r\n"); };
+  return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//QuarterReady//MTD deadlines//EN", "CALSCALE:GREGORIAN", "X-WR-CALNAME:MTD deadlines " + year + "-" + String(year + 1).slice(2), ...ev, "END:VCALENDAR"].join("\r\n").split("\r\n").map(fold).join("\r\n") + "\r\n";
+}
+// ---- Professional exports: references for HMRC, bridging software and accountants ----
+// "box" = box on the Self Assessment pages (SA103F self-employment full, SA105 UK property), 2025–26 edition, for reference.
+// "mtd" = the matching field name in HMRC's MTD Income Tax APIs, which many bridging tools use as column names.
+const FORM_EDITION = "2025–26";
+const REF = {
+  se: {
+    "Turnover, takings, fees, sales or money earned": { box: "SA103F 15", mtd: "turnover" },
+    "Other business income": { box: "SA103F 16", mtd: "other" },
+    "Cost of goods bought for resale or goods used": { box: "SA103F 17", mtd: "costOfGoods" },
+    "Payments to subcontractors": { box: "SA103F 18", mtd: "paymentsToSubcontractors" },
+    "Wages, salaries and other staff costs": { box: "SA103F 19", mtd: "wagesAndStaffCosts" },
+    "Car, van and travel expenses": { box: "SA103F 20", mtd: "carVanTravelExpenses" },
+    "Rent, rates, power and insurance costs": { box: "SA103F 21", mtd: "premisesRunningCosts" },
+    "Repairs and renewals of property and equipment": { box: "SA103F 22", mtd: "maintenanceCosts" },
+    "Phone, fax, stationery and other office costs": { box: "SA103F 23", mtd: "adminCosts" },
+    "Advertising costs": { box: "SA103F 24", mtd: "advertisingCosts" },
+    "Entertainment expenses": { box: "SA103F 24", mtd: "businessEntertainmentCosts" },
+    "Interest on bank and other loans": { box: "SA103F 25", mtd: "interestOnBankOtherLoans" },
+    "Bank, credit card and other financial charges": { box: "SA103F 26", mtd: "financeCharges" },
+    "Irrecoverable debts written off": { box: "SA103F 27", mtd: "irrecoverableDebts" },
+    "Accountancy, legal and other professional fees": { box: "SA103F 28", mtd: "professionalFees" },
+    "Depreciation and loss or profit on sale of assets": { box: "SA103F 29", mtd: "depreciation" },
+    "Other business expenses": { box: "SA103F 30", mtd: "otherExpenses" },
+    "Consolidated expenses": { box: "SA103F 31", mtd: "consolidatedExpenses" }
+  },
+  pr: {
+    "Total rental income from property": { box: "SA105 20", mtd: "periodAmount" },
+    "Premiums for the grant of a lease": { box: "SA105 22", mtd: "premiumsOfLeaseGrant" },
+    "Reverse premiums and inducements": { box: "SA105 23", mtd: "reversePremiums" },
+    "Other rental income": { box: "SA105 20", mtd: "otherIncome" },
+    "Rent a Room income": { box: "SA105 Rent a Room", mtd: "rentARoom.rentsReceived" },
+    "Rent, rates, insurance and ground rents": { box: "SA105 24", mtd: "premisesRunningCosts" },
+    "Property repairs and maintenance": { box: "SA105 25", mtd: "repairsAndMaintenance" },
+    "Non-residential property finance costs": { box: "SA105 26", mtd: "financialCosts" },
+    "Legal, management and other professional fees": { box: "SA105 27", mtd: "professionalFees" },
+    "Costs of services provided, including wages": { box: "SA105 28", mtd: "costOfServices" },
+    "Travelling costs": { box: "SA105 29", mtd: "travelCosts" },
+    "Other allowable property expenses": { box: "SA105 29", mtd: "other" },
+    "Rent a Room expenses": { box: "SA105 Rent a Room", mtd: "rentARoom.amountClaimed" },
+    "Residential property finance costs": { box: "SA105 44", mtd: "residentialFinancialCost" },
+    "Tax deducted from any income": { box: "SA105 21", mtd: "taxDeducted" },
+    "Consolidated expenses": { box: "–", mtd: "consolidatedExpenses" }
+  }
+};
+// Points an accountant will usually look at.
+const CAT_NOTES = {
+  "Entertainment expenses": "Business entertainment is usually not an allowable expense; your accountant may add it back.",
+  "Depreciation and loss or profit on sale of assets": "Depreciation is not allowable for tax; capital allowances are claimed instead.",
+  "Residential property finance costs": "Not deducted from profit: given as a basic-rate tax reduction instead.",
+  "Tax deducted from any income": "Tax already taken off rent, for example by a letting agent for a non-resident landlord."
+};
+function ref(type, cat) { return (REF[type] && REF[type][cat]) || { box: "", mtd: "" }; }
+function sourceLabel(type) { return type === "se" ? "Self-employment" : "UK property"; }
+function taxYearLabel(y) { return y + "–" + String(y + 1).slice(2); }
+function fmtD(dt) { return dt.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }); }
+function fmtUK(dt) { return iso(dt).split("-").reverse().join("/"); }
+function quarterPeriod(book, qi) {
+  const start = yearBounds(book.year, book.qtype).start, end = quarterEnds(book.year, book.qtype)[qi];
+  return { start, end, due: deadlines(book.year)[qi] };
+}
+// One quarterly update, per business: cumulative totals from the start of the tax year.
+function quarterPack(book, qi) {
+  const p = quarterPeriod(book, qi), limit = (RULES.consolidatedExpensesLimit || 90000) * 100;
+  const businesses = book.sources.map(s => {
+    const r = summarise(book, s.id), line = (cat, section) => ({ cat, section, ...ref(s.type, cat), pence: r.rows[cat][qi], note: CAT_NOTES[cat] || "" });
+    const lines = [...r.cats.income.map(k => line(k, "Income")), ...r.cats.expense.map(k => line(k, "Expenses")), ...r.cats.separate.map(k => line(k, "Reported separately"))];
+    const yearIncome = r.income[3];
+    return { id: s.id, name: s.name, type: s.type, lines, income: r.income[qi], expenses: r.expenses[qi], mileage: r.mileage[qi],
+      consolidatedAllowed: yearIncome < limit, consolidated: { cat: "Consolidated expenses", ...ref(s.type, "Consolidated expenses"), pence: r.expenses[qi] } };
+  });
+  return { qi, ...p, businesses };
+}
+function csvDoc(rows) { return "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n") + "\r\n"; }
+function quarterCSV(book, qi) {
+  const q = quarterPack(book, qi), rows = [
+    ["QuarterReady – quarterly update figures"],
+    ["Name", book.name || ""], ["Tax year", taxYearLabel(book.year)],
+    ["Update", "Quarter " + (qi + 1) + " (year to date)"], ["Period", fmtUK(q.start) + " to " + fmtUK(q.end)], ["Send by", fmtUK(q.due)],
+    ["Figures are cumulative from the start of the tax year, as HMRC asks. Enter them in your HMRC-recognised bridging software."], [],
+    ["Business", "Business type", "Section", "HMRC category", "MTD field", "Tax return box (" + FORM_EDITION + ")", "Amount year to date (£)"]];
+  for (const b of q.businesses) {
+    for (const l of b.lines) rows.push([b.name, sourceLabel(b.type), l.section, l.cat, l.mtd, l.box, money(l.pence)]);
+    rows.push([b.name, sourceLabel(b.type), "Total", "Total income", "", "", money(b.income)]);
+    rows.push([b.name, sourceLabel(b.type), "Total", "Total expenses", "", "", money(b.expenses)]);
+    if (b.consolidatedAllowed) rows.push([b.name, sourceLabel(b.type), "Alternative", "Consolidated expenses (instead of the expense lines above)", b.consolidated.mtd, "", money(b.consolidated.pence)]);
+  }
+  return csvDoc(rows);
+}
+// Full-year summary with all four cumulative quarters.
+function summaryCSVPro(book) {
+  const ends = quarterEnds(book.year, book.qtype), rows = [
+    ["QuarterReady – year summary"], ["Name", book.name || ""], ["Tax year", taxYearLabel(book.year)], ["Quarters", book.qtype === "calendar" ? "Calendar (to 30 Jun, 30 Sep, 31 Dec, 31 Mar)" : "Standard (to 5 Jul, 5 Oct, 5 Jan, 5 Apr)"], [],
+    ["Business", "Business type", "Section", "HMRC category", "MTD field", "Tax return box (" + FORM_EDITION + ")", ...ends.map((e, i) => "Q" + (i + 1) + " to " + fmtUK(e) + " (£)")]];
+  for (const s of book.sources) {
+    const r = summarise(book, s.id), add = (sec, k) => rows.push([s.name, sourceLabel(s.type), sec, k, ref(s.type, k).mtd, ref(s.type, k).box, ...r.rows[k].map(money)]);
+    r.cats.income.forEach(k => add("Income", k));
+    r.cats.expense.forEach(k => add("Expenses", k));
+    r.cats.separate.forEach(k => add("Reported separately", k));
+    rows.push([s.name, sourceLabel(s.type), "Total", "Total income", "", "", ...r.income.map(money)]);
+    rows.push([s.name, sourceLabel(s.type), "Total", "Total expenses (consolidated)", "consolidatedExpenses", "", ...r.expenses.map(money)]);
+    rows.push([s.name, sourceLabel(s.type), "Total", "Income minus expenses", "", "", ...r.income.map((v, i) => money(v - r.expenses[i]))]);
+  }
+  return csvDoc(rows);
+}
+// Every record and journey, one line each, with money in and money out in separate columns.
+function ledger(book) {
+  const name = id => (book.sources.find(s => s.id === id) || {}), out = [];
+  for (const t of book.tx) {
+    const s = name(t.source), k = s.type ? kindOf(s.type, t.cat) : null;
+    out.push({ date: t.date, q: quarterOf(t.date, book.year, book.qtype) || "", business: s.name || "", type: s.type || "", section: k === "income" ? "Income" : k === "expense" ? "Expenses" : "Reported separately",
+      cat: t.cat, box: ref(s.type, t.cat).box, desc: t.desc || "", prop: t.prop || "", ref: t.ref || "", receipt: t.receipt ? "Yes" : "No",
+      inP: k === "income" ? t.pence : 0, outP: k === "expense" ? t.pence : 0, sepP: k === "separate" ? t.pence : 0 });
+  }
+  const claims = mileageClaims(book.trips || [], book.year), r = mileageRates(book.year);
+  for (const t of book.trips || []) {
+    const s = name(t.source);
+    out.push({ date: t.date, q: quarterOf(t.date, book.year, book.qtype) || "", business: s.name || "", type: "se", section: "Expenses", cat: MILEAGE_CAT, box: ref("se", MILEAGE_CAT).box,
+      desc: "Mileage: " + t.miles + " miles" + (t.vname ? ", " + t.vname : "") + (t.purpose ? " – " + t.purpose : ""), prop: "", ref: "", receipt: "–", inP: 0, outP: claims[t.id] || 0, sepP: 0 });
+  }
+  return out.sort((a, b) => a.date.localeCompare(b.date) || a.business.localeCompare(b.business));
+}
+function recordsCSVPro(book) {
+  const rows = [["Date", "Quarter", "Business", "Business type", "Section", "HMRC category", "Tax return box (" + FORM_EDITION + ")", "Description", "Property", "Reference", "Receipt attached", "Money in (£)", "Money out (£)", "Reported separately (£)"]];
+  for (const l of ledger(book)) rows.push([fmtUK(parseISO(l.date)), l.q, l.business, sourceLabel(l.type), l.section, l.cat, l.box, l.desc, l.prop, l.ref, l.receipt, l.inP ? money(l.inP) : "", l.outP ? money(l.outP) : "", l.sepP ? money(l.sepP) : ""]);
+  return csvDoc(rows);
+}
+// HMRC-style mileage log: date, vehicle, journey and purpose, miles, rate, allowance.
+function mileageLog(book) {
+  const r = mileageRates(book.year), used = {}, claims = mileageClaims(book.trips || [], book.year);
+  return [...(book.trips || [])].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id)).map(t => {
+    const k = (t.vname || "car").trim().toLowerCase(), before = used[k] || 0; used[k] = before + t.miles;
+    const rate = t.vehicle === "moto" ? r.moto + "p" : (before + t.miles <= r.band ? r.car1 + "p" : before >= r.band ? r.car2 + "p" : r.car1 + "p / " + r.car2 + "p");
+    return { date: t.date, vehicle: (t.vehicle === "moto" ? "Motorcycle" : "Car or van") + (t.vname ? " (" + t.vname + ")" : ""), purpose: t.purpose || "", miles: t.miles, rate, pence: claims[t.id] || 0,
+      business: ((book.sources.find(s => s.id === t.source) || {}).name) || "" };
+  });
+}
+// Things an accountant (or the user) should check before the figures are relied on.
+function reviewPoints(book) {
+  const pts = [], issues = findIssues(book), n = book.tx.length;
+  const dups = issues.filter(i => i.type === "Possible duplicate").length, outside = issues.filter(i => i.type === "Outside tax year").length;
+  if (dups) pts.push(dups + " possible duplicate record" + (dups > 1 ? "s" : "") + " (same date, category and amount). Check they are not entered twice.");
+  if (outside) pts.push(outside + " record" + (outside > 1 ? "s are" : " is") + " dated outside this tax year and not counted.");
+  const noDesc = book.tx.filter(t => !String(t.desc || "").trim()).length;
+  if (noDesc) pts.push(noDesc + " record" + (noDesc > 1 ? "s have" : " has") + " no description.");
+  const withRc = book.tx.filter(t => t.receipt).length;
+  if (n) pts.push("Receipts attached in the app: " + withRc + " of " + n + " records. Keep the originals (or clear copies) for at least 5 years after the 31 January filing deadline.");
+  const used = new Set(book.tx.map(t => t.cat));
+  for (const [cat, note] of Object.entries(CAT_NOTES)) if (used.has(cat)) pts.push(cat + ": " + note);
+  if ((book.trips || []).length) pts.push("Mileage is claimed at HMRC's simplified flat rates. These can't be used for a vehicle that has had capital allowances, and once used for a vehicle they must be kept for it.");
+  pts.push("Totals are the records entered in QuarterReady. They are not a tax computation: accounting and tax adjustments, capital allowances, losses and other income are not included.");
+  return pts;
 }
 /* ===== LOGIC END ===== */
 
 (() => {
   // CONFIG: fill in after creating the product on Lemon Squeezy.
-  const APP_VERSION = "2026.10.17.4";
+  const APP_VERSION = "2026.10.19.1";
   const CHECKOUT_URL = "https://quarterready.lemonsqueezy.com/checkout/buy/2a11b022-ce97-4409-9414-4a0142921d3a";            // hosted checkout link
   const LS_STORE_ID = 499789;              // your store ID
   const LS_PRODUCT_ID = 1447142;            // the product ID of "QuarterReady Records"
@@ -1041,7 +1255,7 @@ function icsCalendar(year, name) {
     records: ["Records", "Every income and expense for this tax year. Add one with the form; it goes under the HMRC category you pick."],
     import: ["Bank import", "Turn a bank statement into records in a few clicks. You choose which lines are business; the file never leaves your device."],
     mileage: ["Mileage", "Log business journeys by car, van or motorcycle. HMRC's flat rate is worked out for you and added to your travel expenses."],
-    summary: ["Quarterly totals", "The year-to-date figures for each quarterly update, per HMRC category. Copy them or download the CSV for your bridging software."],
+    summary: ["Quarterly totals", "Your year-to-date figures per HMRC category, and the documents to send: the quarterly update sheet for HMRC and the year-end pack for your accountant."],
     deadlines: ["Deadlines", "When each quarterly update and your tax return are due for this tax year. Add them to your calendar so you get a reminder."],
     full: ["Full version", "What the free and full versions include, how to buy, and where to enter your licence key."],
     settings: ["Settings & backup", "Your income sources, installing the app, updates and backups of your records."]
@@ -1191,7 +1405,7 @@ function icsCalendar(year, name) {
     if (ed) {
       const t = b.tx.find(x => x.id === ed); editing = ed;
       $("f-source").value = t.source; fillCats(); $("f-cat").value = t.cat; $("f-date").value = t.date;
-      $("f-amount").value = money(t.pence); $("f-desc").value = t.desc; $("f-ref").value = t.ref; $("f-prop").value = t.prop || ""; $("optBox").open = !!(t.ref || t.prop || t.file);
+      $("f-amount").value = money(t.pence); $("f-desc").value = t.desc; $("f-ref").value = t.ref; $("f-prop").value = t.prop || ""; $("optBox").open = !!(t.ref || t.prop || t.receipt);
       $("formTitle").textContent = "Edit record"; $("saveBtn").textContent = "Save changes"; $("cancelEdit").hidden = false; hint();
       $("f-amount").focus();
     }
@@ -1324,8 +1538,8 @@ function icsCalendar(year, name) {
       }
       return `<div class="panel stack"><div class="sumhead"><h2>${esc(s.name)}</h2><span class="muted">${s.type === "se" ? "Self-employment" : "UK property"} · year-to-date totals</span></div><div class="tablebox"><table><thead>${head}</thead><tbody>${body}</tbody></table></div>${extra}</div>`;
     }).join("") || '<div class="empty">Add an income source in Settings.</div>';
-    $("exportNote").textContent = canUse() ? "" : "Downloads, copying and the year-end report are part of the full version. You can still read every total here.";
-    ["dlSummary", "dlRecords", "cpSummary", "yearReport"].forEach(id => $(id).disabled = !canUse());
+    $("exportNote").textContent = canUse() ? "" : "The update sheet, accountant pack and downloads are part of the full version. You can still read every total here.";
+    ["dlSummary", "dlRecords", "cpSummary", "yearReport", "qSheet", "qCsv", "xlsxPack"].forEach(id => $(id).disabled = !canUse()); fillQuarterSelect();
   }
   function download(name, text, type) {
     try {
@@ -1334,24 +1548,164 @@ function icsCalendar(year, name) {
       setTimeout(() => URL.revokeObjectURL(url), 4000); toast("Downloading " + name);
     } catch (e) { toast("Download blocked. Use Copy instead."); }
   }
-  const tag = () => book().year + "-" + String(book().year + 1).slice(2);
-  $("dlSummary").addEventListener("click", () => download("quarterready-summary-" + tag() + ".csv", summaryCSV(book()), "text/csv"));
-  $("dlRecords").addEventListener("click", () => download("quarterready-records-" + tag() + ".csv", recordsCSV(book()), "text/csv"));
-  $("cpSummary").addEventListener("click", () => {
-    const t = summaryCSV(book());
-    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(t).then(() => toast("Summary copied. Paste it into a spreadsheet."), () => toast("Copy blocked by the browser."));
-  });
-  $("yearReport").addEventListener("click", () => {
-    const b = book(), yr = b.year + "–" + String(b.year + 1).slice(2);
-    const parts = b.sources.map(s => {
-      const r = summarise(b, s.id), L = (k, v, bold) => `<tr><td>${bold ? "<strong>" + esc(k) + "</strong>" : esc(k)}</td><td class="num">${bold ? "<strong>" + fmtGBP(v) + "</strong>" : fmtGBP(v)}</td></tr>`;
-      const all = [...r.cats.income, ...r.cats.expense, ...r.cats.separate].filter(k => r.rows[k][3]);
-      return `<h2 style="margin-top:18px">${esc(s.name)} (${s.type === "se" ? "self-employment" : "UK property"})</h2><table>${all.map(k => L(k, r.rows[k][3])).join("")}${L("Total income", r.income[3], 1)}${L("Total expenses", r.expenses[3], 1)}${L("Income minus expenses (before adjustments)", r.income[3] - r.expenses[3], 1)}</table>`;
+  // ---------- Documents: quarterly update, accountant pack ----------
+  const gbp = p => fmtGBP(p).replace("£-", "-£");
+  const nowUK = () => new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const basisLabel = b => (b.basis === "accruals" ? "Traditional accounting" : "Cash basis");
+  const docTop = (kicker, title, b) => `<div class="dtop"><div><div class="kicker">${esc(kicker)}</div><h1>${title}</h1></div><div class="brandline">QuarterReady Records<small>Prepared ${esc(nowUK())}</small></div></div>`;
+  const facts = list => `<div class="facts">${list.map(([k, v]) => `<div><span>${esc(k)}</span><b>${v}</b></div>`).join("")}</div>`;
+  const bizTitle = (name, type) => esc(name) + (String(name).trim().toLowerCase() === sourceLabel(type).toLowerCase() ? "" : ' <span class="note" style="font-family:inherit;font-weight:400">· ' + sourceLabel(type) + "</span>");
+  function nextQuarterIndex(b) {
+    const t = new Date(), t0 = d(t.getFullYear(), t.getMonth() + 1, t.getDate()), dl = deadlines(b.year).slice(0, 4);
+    const i = dl.findIndex(x => x >= t0); return i < 0 ? 3 : i;
+  }
+  function fillQuarterSelect() {
+    const b = book(), sel = $("qSel"); if (!sel) return; const prev = sel.value;
+    sel.innerHTML = [0, 1, 2, 3].map(i => { const p = quarterPeriod(b, i); return `<option value="${i}">Quarter ${i + 1}: ${fmtD(p.start)} to ${fmtD(p.end)} · send by ${fmtD(p.due)}</option>`; }).join("");
+    sel.value = prev !== "" && prev != null && sel.querySelector(`option[value="${prev}"]`) ? prev : String(nextQuarterIndex(b));
+  }
+  function quarterDocHTML(b, qi) {
+    const q = quarterPack(b, qi), yr = taxYearLabel(b.year);
+    const parts = q.businesses.map((x, n) => {
+      let rows = "", sec = "";
+      for (const l of x.lines) {
+        if (l.section !== sec) { sec = l.section; rows += `<tr class="sec"><td colspan="4">${esc(sec)}</td></tr>`; }
+        rows += `<tr class="${l.pence ? "" : "zero"}"><td>${esc(l.cat)}${l.cat === MILEAGE_CAT && x.mileage ? ' <span class="note">(includes mileage ' + gbp(x.mileage) + ")</span>" : ""}</td><td class="ref">${esc(l.mtd)}</td><td class="ref">${esc(l.box)}</td><td class="n">${gbp(l.pence)}</td></tr>`;
+      }
+      rows += `<tr class="tot"><td colspan="3">Total income</td><td class="n">${gbp(x.income)}</td></tr><tr class="tot"><td colspan="3">Total expenses</td><td class="n">${gbp(x.expenses)}</td></tr>`;
+      const cons = x.consolidatedAllowed
+        ? `<div class="box"><strong>Simpler option.</strong> Your ${x.type === "se" ? "turnover" : "property income"} is under £${(RULES.consolidatedExpensesLimit || 90000).toLocaleString("en-GB")}, so you can send one figure for all expenses instead of the expense lines: <strong>consolidated expenses ${gbp(x.expenses)}</strong> (MTD field <span class="ref">consolidatedExpenses</span>). Income lines${x.type === "pr" ? " and residential finance costs" : ""} are still sent separately.</div>` : "";
+      return `<h2${n ? ' class="pb"' : ""}>${bizTitle(x.name, x.type)}</h2>
+        <table><thead><tr><th>HMRC category</th><th>MTD field</th><th>Tax return box*</th><th class="n">Year to date</th></tr></thead><tbody>${rows}</tbody></table>${cons}`;
     }).join("");
-    const trips = b.trips.length ? `<p>Business mileage: ${b.trips.reduce((a, t) => a + t.miles, 0)} miles over ${b.trips.length} journeys, flat-rate allowance ${fmtGBP(Object.values(mileageClaims(b.trips, b.year)).reduce((a, v) => a + v, 0))} (included above).</p>` : "";
-    $("report").innerHTML = `<h1>Year-end summary ${yr}</h1><p>${esc(b.name || "")} · prepared with QuarterReady Records on ${new Date().toLocaleDateString("en-GB")}. Records: ${b.tx.length}. Totals to ${fmtDate(yearBounds(b.year, b.qtype).end)}.</p>${parts}${trips}<p style="font-size:9pt">Totals of the records entered. Not a tax computation: accounting adjustments, allowances and other income are not included. Not affiliated with HMRC.</p>`;
+    return `<div class="doc">${docTop("Making Tax Digital for Income Tax · Quarterly update", "Quarterly update " + (qi + 1) + ", " + yr, b)}
+      ${facts([["Name", esc(b.name || "–")], ["Period (year to date)", fmtD(q.start) + " – " + fmtD(q.end)], ["Send by", "<span style=\"color:#8A6D10\">" + fmtD(q.due) + "</span>"], ["Quarters", b.qtype === "calendar" ? "Calendar" : "Standard"]])}
+      <div class="box"><strong>How to send it.</strong> Open your HMRC-recognised bridging software, choose quarter ${qi + 1} for each business below, and enter the year-to-date figures. Send an update for every business, even if a figure is £0. Keep this sheet with your records.</div>
+      ${parts}
+      <p class="note">* Box numbers on the ${FORM_EDITION} Self Assessment pages (SA103F self-employment, SA105 UK property), for reference. Figures are the records entered in QuarterReady; no accounting or tax adjustments are needed for quarterly updates. QuarterReady is not affiliated with HMRC.</p>
+      <div class="sig"><div>Sent on</div><div>Submission reference (from your software)</div></div></div>`;
+  }
+  function yearDocHTML(b) {
+    const yr = taxYearLabel(b.year), yb = yearBounds(b.year, b.qtype), ends = quarterEnds(b.year, b.qtype);
+    const sums = b.sources.map(s => ({ s, r: summarise(b, s.id) }));
+    const log = mileageLog(b), led = ledger(b), pts = reviewPoints(b);
+    // 1. Summary per business
+    const summary = sums.map(({ s, r }) => {
+      const row = (k) => `<tr><td>${esc(k)}${CAT_NOTES[k] ? ' <span class="note">†</span>' : ""}</td><td class="ref">${esc(ref(s.type, k).box)}</td><td class="n">${gbp(r.rows[k][3])}</td></tr>`;
+      const used = list => list.filter(k => r.rows[k][3]);
+      let body = `<tr class="sec"><td colspan="3">Income</td></tr>` + (used(r.cats.income).map(row).join("") || `<tr class="zero"><td colspan="3">No income recorded</td></tr>`) + `<tr class="tot"><td colspan="2">Total income</td><td class="n">${gbp(r.income[3])}</td></tr>`;
+      body += `<tr class="sec"><td colspan="3">Expenses</td></tr>` + (used(r.cats.expense).map(row).join("") || `<tr class="zero"><td colspan="3">No expenses recorded</td></tr>`) + `<tr class="tot"><td colspan="2">Total expenses</td><td class="n">${gbp(r.expenses[3])}</td></tr>`;
+      if (used(r.cats.separate).length) body += `<tr class="sec"><td colspan="3">Reported separately (not in profit)</td></tr>` + used(r.cats.separate).map(row).join("");
+      body += `<tr class="grand"><td colspan="2">Income minus expenses, before adjustments</td><td class="n">${gbp(r.income[3] - r.expenses[3])}</td></tr>`;
+      return `<h3>${bizTitle(s.name, s.type)}</h3><table><thead><tr><th>Category</th><th>Tax return box*</th><th class="n">${esc(yr)}</th></tr></thead><tbody>${body}</tbody></table>`;
+    }).join("");
+    // 2. Quarterly updates
+    const quarters = sums.map(({ s, r }) => `<tr><td>${esc(s.name)}</td><td>Income</td>${r.income.map(v => `<td class="n">${gbp(v)}</td>`).join("")}</tr><tr><td></td><td>Expenses</td>${r.expenses.map(v => `<td class="n">${gbp(v)}</td>`).join("")}</tr>`).join("");
+    // 3. Properties
+    const props = sums.filter(x => x.s.type === "pr").map(({ s }) => {
+      const bp = byProperty(b, s.id), names = Object.keys(bp); if (!names.length) return "";
+      return `<table><thead><tr><th>${esc(s.name)}: property</th><th class="n">Income</th><th class="n">Expenses</th><th class="n">Income − expenses</th><th class="n">Residential finance costs</th></tr></thead><tbody>${names.map(n => `<tr><td>${esc(n)}</td><td class="n">${gbp(bp[n].income)}</td><td class="n">${gbp(bp[n].expense)}</td><td class="n">${gbp(bp[n].income - bp[n].expense)}</td><td class="n">${gbp(bp[n].rfc)}</td></tr>`).join("")}</tbody></table>`;
+    }).join("");
+    // 4. Mileage
+    const mr = mileageRates(b.year);
+    const miles = log.length ? `<table><thead><tr><th>Date</th><th>Vehicle</th><th>Journey and business purpose</th><th class="n">Miles</th><th class="n">Rate</th><th class="n">Allowance</th></tr></thead><tbody>${log.map(t => `<tr><td>${fmtUK(parseISO(t.date))}</td><td>${esc(t.vehicle)}</td><td>${esc(t.purpose)}</td><td class="n">${t.miles}</td><td class="n">${t.rate}</td><td class="n">${gbp(t.pence)}</td></tr>`).join("")}<tr class="tot"><td colspan="3">Total business mileage</td><td class="n">${log.reduce((a, t) => a + t.miles, 0)}</td><td></td><td class="n">${gbp(log.reduce((a, t) => a + t.pence, 0))}</td></tr></tbody></table><p class="note">HMRC simplified flat rates for ${yr}: cars and vans ${mr.car1}p a mile for the first ${mr.band.toLocaleString("en-GB")} business miles, then ${mr.car2}p; motorcycles ${mr.moto}p. Included in "Car, van and travel expenses" above.</p>` : `<p class="note">No business journeys logged.</p>`;
+    // 5. Ledger by business and category
+    const groups = {}, secOrder = { "Income": 0, "Expenses": 1, "Reported separately": 2 };
+    for (const l of led) { const k = l.business + "|" + l.section + "|" + l.cat; (groups[k] = groups[k] || []).push(l); }
+    const catIdx = (bn, cat) => { const src = b.sources.find(x => x.name === bn) || {}, c = CATS[src.type] || { income: [], expense: [], separate: [] }; return [...c.income, ...c.expense, ...c.separate].indexOf(cat); };
+    const order = Object.keys(groups).sort((x, y) => { const [b1, s1, c1] = x.split("|"), [b2, s2, c2] = y.split("|");
+      return b.sources.findIndex(z => z.name === b1) - b.sources.findIndex(z => z.name === b2) || secOrder[s1] - secOrder[s2] || catIdx(b1, c1) - catIdx(b2, c2); });
+    const ledHTML = order.map(k => [k, groups[k]]).map(([k, list]) => {
+      const [bn, sec, cat] = k.split("|"), tot = list.reduce((a, l) => a + l.inP + l.outP + l.sepP, 0);
+      return `<tbody class="grp"><tr class="sec"><td colspan="5">${esc(bn)} · ${esc(cat)} <span style="font-weight:400;text-transform:none;letter-spacing:0">(${esc(sec.toLowerCase())})</span></td></tr>` +
+        list.map(l => `<tr><td>${fmtUK(parseISO(l.date))}</td><td>${l.q}</td><td>${esc(l.desc)}${l.prop ? ' <span class="note">· ' + esc(l.prop) + "</span>" : ""}${l.ref ? ' <span class="note">· ref ' + esc(l.ref) + "</span>" : ""}</td><td>${l.receipt === "Yes" ? "Yes" : l.receipt === "–" ? "–" : ""}</td><td class="n">${gbp(l.inP + l.outP + l.sepP)}</td></tr>`).join("") +
+        `<tr class="tot"><td colspan="4">Total</td><td class="n">${gbp(tot)}</td></tr></tbody>`;
+    }).join("");
+    const nRec = b.tx.length + (b.trips || []).length;
+    return `<div class="doc">${docTop("Self Assessment · records for your accountant", "Year-end records pack, " + esc(yr), b)}
+      ${facts([["Name", esc(b.name || "–")], ["Tax year", fmtD(yb.start) + " – " + fmtD(yb.end)], ["Accounting basis", basisLabel(b)], ["Records", String(nRec)]])}
+      <p class="note" style="margin-top:6pt">Contents: 1 Summary by business · 2 Quarterly updates · ${props ? "3 Property breakdown · " : ""}4 Mileage log · 5 Points to check · 6 All records</p>
+      <h2>1. Summary by business</h2>${summary}
+      <p class="note">* Box on the ${FORM_EDITION} Self Assessment pages (SA103F, SA105), for reference; your accountant will confirm the boxes for this year's return. † See points to check.</p>
+      <h2>2. Quarterly updates (year to date)</h2>
+      <table><thead><tr><th>Business</th><th></th>${ends.map((e, i) => `<th class="n">Q${i + 1} to ${fmtD(e).replace(/ \d{4}$/, "")}</th>`).join("")}</tr></thead><tbody>${quarters}</tbody></table>
+      <p class="note">The cumulative totals each quarterly update should show. Compare them with what was sent through your bridging software.</p>
+      ${props ? `<h2>3. Property breakdown</h2>${props}<p class="note">For information. HMRC receives one combined figure for all UK properties.</p>` : ""}
+      <h2>4. Mileage log</h2>${miles}
+      <h2>5. Points to check</h2><ol class="pts">${pts.map(p => `<li>${esc(p)}</li>`).join("")}</ol>
+      <h2 class="pb">6. All records</h2>
+      <table><thead><tr><th>Date</th><th>Qtr</th><th>Description</th><th>Receipt</th><th class="n">Amount</th></tr></thead>${ledHTML || '<tbody><tr class="zero"><td colspan="5">No records.</td></tr></tbody>'}</table>
+      <div class="sig"><div>Checked by (name)</div><div>Date</div></div></div>`;
+  }
+  function printDoc(html) {
+    $("report").innerHTML = html;
     try { window.print(); } catch (e) {}
-    toast("Opening the print dialog. Choose 'Save as PDF' to keep a copy.");
+    toast("Choose 'Save as PDF' in the print window to keep a copy.");
+  }
+  const tag = () => book().year + "-" + String(book().year + 1).slice(2);
+  const nameTag = () => (book().name || "").trim().replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30);
+  const fileName = (what, ext) => ["QuarterReady", nameTag(), what, tag()].filter(Boolean).join("_") + "." + ext;
+  $("qSheet").addEventListener("click", () => printDoc(quarterDocHTML(book(), Number($("qSel").value))));
+  $("qCsv").addEventListener("click", () => download(fileName("Q" + (Number($("qSel").value) + 1) + "-update", "csv"), quarterCSV(book(), Number($("qSel").value)), "text/csv;charset=utf-8"));
+  $("dlSummary").addEventListener("click", () => download(fileName("year-summary", "csv"), summaryCSVPro(book()), "text/csv;charset=utf-8"));
+  $("dlRecords").addEventListener("click", () => download(fileName("all-records", "csv"), recordsCSVPro(book()), "text/csv;charset=utf-8"));
+  $("cpSummary").addEventListener("click", () => {
+    const t = summaryCSVPro(book()).replace(/^﻿/, "").replace(/,/g, "\t");
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(summaryCSVPro(book()).replace(/^﻿/, "")).then(() => toast("Summary copied. Paste it into a spreadsheet."), () => toast("Copy blocked by the browser."));
+  });
+  $("yearReport").addEventListener("click", () => printDoc(yearDocHTML(book())));
+  // Excel workbook (SheetJS, loaded only when needed)
+  function loadScript(src) { return new Promise((ok, no) => { if (window.XLSX) return ok(); const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+  function sheet(rows, cols, moneyCols, headerRow) {
+    const ws = XLSX.utils.aoa_to_sheet(rows, { cellDates: true, dateNF: "dd/mm/yyyy" });
+    ws["!cols"] = cols.map(w => ({ wch: w }));
+    const range = XLSX.utils.decode_range(ws["!ref"]);
+    for (let r = (headerRow || 0) + 1; r <= range.e.r; r++) for (const c of moneyCols) { const cell = ws[XLSX.utils.encode_cell({ r, c })]; if (cell && typeof cell.v === "number") cell.z = '"£"#,##0.00;-"£"#,##0.00'; }
+    if (headerRow != null) ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: headerRow, c: 0 }, e: { r: range.e.r, c: range.e.c } }) };
+    return ws;
+  }
+  async function buildWorkbook(b) {
+    await loadScript("xlsx.mini.min.js");
+    const xd = isoStr => { const [y, m, dd] = isoStr.split("-").map(Number); return new Date(y, m - 1, dd, 12); };
+    const wb = XLSX.utils.book_new(), yr = taxYearLabel(b.year), yb = yearBounds(b.year, b.qtype), ends = quarterEnds(b.year, b.qtype), P = p => Math.round(p) / 100;
+    const head = [["QuarterReady – records for " + yr], ["Name", b.name || ""], ["Tax year", fmtUK(yb.start) + " to " + fmtUK(yb.end)], ["Accounting basis", basisLabel(b)], ["Prepared", fmtUK(new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())))], []];
+    // Summary
+    const sm = [...head, ["Business", "Business type", "Section", "HMRC category", "Tax return box (" + FORM_EDITION + ")", "Amount (£)", "Note"]], hr = head.length;
+    for (const s of b.sources) {
+      const r = summarise(b, s.id), add = (sec, k) => sm.push([s.name, sourceLabel(s.type), sec, k, ref(s.type, k).box, P(r.rows[k][3]), CAT_NOTES[k] || ""]);
+      r.cats.income.forEach(k => add("Income", k)); r.cats.expense.forEach(k => add("Expenses", k)); r.cats.separate.forEach(k => add("Reported separately", k));
+      sm.push([s.name, sourceLabel(s.type), "Total", "Total income", "", P(r.income[3]), ""], [s.name, sourceLabel(s.type), "Total", "Total expenses", "", P(r.expenses[3]), ""], [s.name, sourceLabel(s.type), "Total", "Income minus expenses, before adjustments", "", P(r.income[3] - r.expenses[3]), ""]);
+    }
+    XLSX.utils.book_append_sheet(wb, sheet(sm, [20, 16, 18, 46, 16, 14, 60], [5], hr), "Summary");
+    // Quarterly updates
+    const qu = [...head, ["Business", "Business type", "Section", "HMRC category", "MTD field", ...ends.map((e, i) => "Q" + (i + 1) + " to " + fmtUK(e) + " (£)"), "Send by"]];
+    for (const s of b.sources) {
+      const r = summarise(b, s.id), add = (sec, k) => qu.push([s.name, sourceLabel(s.type), sec, k, ref(s.type, k).mtd, ...r.rows[k].map(P), ""]);
+      r.cats.income.forEach(k => add("Income", k)); r.cats.expense.forEach(k => add("Expenses", k)); r.cats.separate.forEach(k => add("Reported separately", k));
+      qu.push([s.name, sourceLabel(s.type), "Total", "Consolidated expenses", "consolidatedExpenses", ...r.expenses.map(P), ""]);
+    }
+    qu.push([], ["Deadlines", "", "", "", "", ...deadlines(b.year).slice(0, 4).map(fmtUK)]);
+    XLSX.utils.book_append_sheet(wb, sheet(qu, [20, 16, 18, 46, 24, 15, 15, 15, 15, 12], [5, 6, 7, 8], hr), "Quarterly updates");
+    // Transactions
+    const tr = [["Date", "Quarter", "Business", "Business type", "Section", "HMRC category", "Tax return box", "Description", "Property", "Reference", "Receipt attached", "Money in (£)", "Money out (£)", "Reported separately (£)"]];
+    for (const l of ledger(b)) tr.push([xd(l.date), l.q, l.business, sourceLabel(l.type), l.section, l.cat, l.box, l.desc, l.prop, l.ref, l.receipt, l.inP ? P(l.inP) : "", l.outP ? P(l.outP) : "", l.sepP ? P(l.sepP) : ""]);
+    XLSX.utils.book_append_sheet(wb, sheet(tr, [11, 8, 18, 15, 18, 40, 13, 40, 18, 12, 9, 13, 13, 13], [11, 12, 13], 0), "Transactions");
+    // Mileage
+    const ml = [["Date", "Business", "Vehicle", "Journey and business purpose", "Miles", "Rate", "Allowance (£)"]];
+    for (const t of mileageLog(b)) ml.push([xd(t.date), t.business, t.vehicle, t.purpose, t.miles, t.rate, P(t.pence)]);
+    XLSX.utils.book_append_sheet(wb, sheet(ml, [11, 18, 20, 44, 8, 10, 13], [6], 0), "Mileage log");
+    // Properties
+    const pr = [["Business", "Property", "Income (£)", "Expenses (£)", "Income − expenses (£)", "Residential finance costs (£)"]];
+    for (const s of b.sources.filter(x => x.type === "pr")) for (const [n, v] of Object.entries(byProperty(b, s.id))) pr.push([s.name, n, P(v.income), P(v.expense), P(v.income - v.expense), P(v.rfc)]);
+    XLSX.utils.book_append_sheet(wb, sheet(pr, [18, 30, 13, 13, 18, 22], [2, 3, 4, 5], 0), "By property");
+    // Notes
+    const nt = [["Points to check"], ...reviewPoints(b).map(p => [p]), [], ["Tax return boxes refer to the " + FORM_EDITION + " SA103F and SA105 pages, for reference."], ["Prepared with QuarterReady Records. Not affiliated with HMRC. Not a tax computation."]];
+    XLSX.utils.book_append_sheet(wb, sheet(nt, [120], [], null), "Notes");
+    return XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  }
+  $("xlsxPack").addEventListener("click", async () => {
+    try { const out = await buildWorkbook(book()); download(fileName("accountant-workbook", "xlsx"), new Blob([out], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })); }
+    catch (e) { toast("Couldn't build the workbook. Check your connection and try again, or use the CSV files."); }
   });
 
   // ---------- Deadlines ----------
@@ -1369,7 +1723,7 @@ function icsCalendar(year, name) {
   // ---------- Settings ----------
   function renderSettings() {
     const b = book();
-    $("s-name").value = b.name || ""; $("s-qtype").value = b.qtype;
+    $("s-name").value = b.name || ""; $("s-qtype").value = b.qtype; $("s-basis").value = b.basis || "cash";
     $("srcList").innerHTML = b.sources.map(s => {
       const n = b.tx.filter(t => t.source === s.id).length + b.trips.filter(t => t.source === s.id).length;
       return `<li>${esc(s.name)} <span class="muted">(${s.type === "se" ? "self-employment" : "UK property"}, ${n} entries)</span> ${n === 0 && b.sources.length > 1 ? `<button type="button" class="link" data-rm="${s.id}">Remove</button>` : ""}</li>`;
@@ -1396,6 +1750,7 @@ function icsCalendar(year, name) {
     if (CHECKOUT_URL) { $("buyLink").href = CHECKOUT_URL; $("buyLink").target = "_blank"; $("buyLink").rel = "noopener"; }
   }
   $("s-name").addEventListener("input", e => { book().name = e.target.value; save(); });
+  $("s-basis").addEventListener("change", e => { book().basis = e.target.value; save(); toast("Saved."); });
   $("s-qtype").addEventListener("change", e => { book().qtype = e.target.value; save(); renderAll(); toast("Quarters updated."); });
   $("addSe").addEventListener("click", () => {
     const n = $("s-newname").value.trim() || "Self-employment " + (book().sources.filter(s => s.type === "se").length + 1);

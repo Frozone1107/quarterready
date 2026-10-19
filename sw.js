@@ -2,8 +2,8 @@
 // Pages are fetched fresh from the network first (so updates show at once) and
 // fall back to the saved copy only when offline. Other sites (licence checks,
 // fonts, payment) are never touched.
-const CACHE = "qr-v6";
-const SHELL = ["./", "index.html", "app.html", "help.html", "rules.js", "favicon.svg", "manifest.webmanifest", "icon-192-v3.png", "icon-512-v3.png"];
+const CACHE = "qr-v7";
+const SHELL = ["./", "index.html", "app.html", "help.html", "rules.js", "favicon.svg", "manifest.webmanifest", "icon-192-v3.png", "icon-512-v3.png", "xlsx.mini.min.js"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

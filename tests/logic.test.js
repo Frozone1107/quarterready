@@ -9,7 +9,7 @@ const R = ctx.window.QR_RULES;
 
 const app = fs.readFileSync(path.join(root, "app.html"), "utf8");
 const logic = app.slice(app.indexOf("/* ===== LOGIC START"), app.indexOf("/* ===== LOGIC END"));
-vm.runInContext(logic + "\nthis.__ = { deadlines, mileageRates, mileageClaims, quarterOf, parseAmount, summarise, parseCSV, icsCalendar, RULES };", ctx);
+vm.runInContext(logic + "\nthis.__ = { deadlines, mileageRates, mileageClaims, quarterOf, parseAmount, summarise, parseCSV, icsCalendar, RULES, CATS, REF, quarterCSV, quarterPack, recordsCSVPro, summaryCSVPro, mileageLog, reviewPoints };", ctx);
 const A = ctx.__;
 let n = 0; const t = (name, fn) => { fn(); n++; };
 const ymd = dt => dt.toISOString().slice(0, 10);
@@ -64,5 +64,20 @@ t("checker", () => {
     const at = { registered: true }; at[r.year] = { se: r.limit, pr: 0 };
     assert.notStrictEqual(dctx.decide(at).big, "From 6 April " + r.start, "exactly the limit is not over it");
   }
+});
+
+// --- professional exports
+t("every category has a tax-return box and MTD field", () => {
+  for (const ty of ["se", "pr"]) for (const k of [...A.CATS[ty].income, ...A.CATS[ty].expense, ...A.CATS[ty].separate]) assert.ok(A.REF[ty][k] && A.REF[ty][k].mtd, ty + ": " + k);
+});
+t("quarterly update pack", () => {
+  const b = { year: 2026, qtype: "standard", name: "Test", sources: [{ id: "se1", type: "se", name: "Design" }],
+    tx: [{ id: "a", source: "se1", date: "2026-04-10", cat: A.CATS.se.income[0], pence: 100000 }, { id: "b", source: "se1", date: "2026-08-01", cat: "Advertising costs", pence: 5000 }], trips: [] };
+  const q1 = A.quarterPack(b, 0), q2 = A.quarterPack(b, 1);
+  assert.strictEqual(q1.businesses[0].expenses, 0); assert.strictEqual(q2.businesses[0].expenses, 5000);
+  assert.strictEqual(q2.businesses[0].income, 100000, "cumulative from 6 April");
+  assert.strictEqual(ymd(q2.due), "2026-11-07"); assert.ok(q2.businesses[0].consolidatedAllowed);
+  const csv = A.quarterCSV(b, 1); assert.ok(csv.startsWith("\ufeff")); assert.ok(csv.includes("advertisingCosts,SA103F 24,50.00"));
+  const rec = A.recordsCSVPro(b).split("\r\n"); assert.ok(rec[1].startsWith("10/04/2026,Q1,Design") && rec[1].endsWith(",1000.00,,"));
 });
 console.log("All " + n + " logic checks passed (rules checked " + R.checked + ").");
