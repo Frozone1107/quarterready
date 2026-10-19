@@ -370,6 +370,15 @@ details.more .yr{border-top-color:var(--line-2)}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .rv{opacity:1;transform:none}
 }
+.gcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.gcards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.gcards{grid-template-columns:1fr}}
+.gcard{display:grid;gap:6px;padding:18px 20px;border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.gcard span{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8A6D10}
+.gcard strong{font-family:var(--serif,Georgia,serif);font-size:1.08rem;line-height:1.3;color:#0B1E3F;font-weight:600}
+.gcard:hover{transform:translateY(-3px)}
+a.more{color:#E3C35A;font-weight:600}
+@media (prefers-reduced-motion:reduce){.gcard{transition:none}.gcard:hover{transform:none}}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -379,7 +388,7 @@ body{margin:0}
 <body>
 
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"QuarterReady Records","applicationCategory":"FinanceApplication","operatingSystem":"Web browser","description":"Keep Making Tax Digital for Income Tax records and see quarterly totals per HMRC category.","offers":[{"@type":"Offer","price":"0","priceCurrency":"GBP","name":"Free"},{"@type":"Offer","price":"19","priceCurrency":"GBP","name":"Full version, yearly"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"QuarterReady Records","url":"https://frozone1107.github.io/quarterready/","applicationCategory":"FinanceApplication","operatingSystem":"Web browser","description":"Keep Making Tax Digital for Income Tax records and see quarterly totals per HMRC category.","offers":[{"@type":"Offer","price":"0","priceCurrency":"GBP","name":"Free"},{"@type":"Offer","price":"19","priceCurrency":"GBP","name":"Full version, yearly"}]}</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="logo" viewBox="0 0 32 32"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13305E"/><stop offset="1" stop-color="#081630"/></linearGradient></defs><rect x=".5" y=".5" width="31" height="31" rx="7.5" fill="url(#lg)" stroke="#D4AF37" stroke-opacity=".35"/><circle cx="16" cy="16" r="10" fill="none" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="3" stroke-dasharray="13.71 2" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="10" fill="none" stroke="#D4AF37" stroke-width="3" stroke-dasharray="13.71 49.12" stroke-dashoffset="-1" transform="rotate(-90 16 16)"/><path d="M11.6 16.4l3 3 5.9-6.6" fill="none" stroke="#D4AF37" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -393,6 +402,7 @@ body{margin:0}
       <a href="#how">How it works</a>
       <a href="#checker">Do I need MTD?</a>
       <a href="#pricing">Price</a>
+      <a href="#guides">Guides</a>
       <a href="#faq">Questions</a>
     </nav>
     <a class="btn sm" href="app.html">Open the app</a>
@@ -613,6 +623,14 @@ body{margin:0}
     </div>
   </section>
 
+
+  <section id="guides">
+    <div class="wrap">
+      <div class="head rv"><span class="rule rv" style="--d:.15s"></span><h2>MTD guides, in plain English.</h2><p class="lead">Short answers to the questions UK sole traders and landlords ask most, each checked against GOV.UK.</p></div>
+      <div class="gcards rv"><a class="gcard white" href="mtd-for-landlords.html"><span>Landlords</span><strong>MTD for landlords: start dates, joint property, mortgage interest.</strong></a><a class="gcard white" href="mtd-for-sole-traders.html"><span>Sole traders</span><strong>MTD for the self-employed: categories, mileage, what to do now.</strong></a><a class="gcard white" href="mtd-30000-april-2027.html"><span>April 2027</span><strong>Over £30,000 in 2025–26? Your first update is due 7 August 2027.</strong></a><a class="gcard white" href="mtd-qualifying-income.html"><span>Thresholds</span><strong>What counts as qualifying income, with examples.</strong></a><a class="gcard white" href="mtd-spreadsheet-bridging-software.html"><span>Spreadsheets</span><strong>Can I use a spreadsheet for MTD? Yes, with bridging software.</strong></a><a class="gcard white" href="mtd-penalties.html"><span>Penalties</span><strong>Points, the £200 penalty and the 2026–27 concession.</strong></a></div>
+      <p style="margin-top:20px"><a class="more" href="guides.html">All guides →</a></p>
+    </div>
+  </section>
 
   <section id="faq" class="alt">
     <div class="wrap">
