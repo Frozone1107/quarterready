@@ -1,0 +1,18 @@
+name: Ping IndexNow (Bing, DuckDuckGo, Yandex)
+on:
+  push:
+    branches: [main]
+    paths: ['**.html', 'sitemap.xml']
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for GitHub Pages to deploy
+        run: sleep 90
+      - name: Send all sitemap URLs to IndexNow
+        run: |
+          URLS=$(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//' | jq -R . | jq -s .)
+          jq -n --argjson urls "$URLS" '{host:"frozone1107.github.io",key:"f6eab6efd4734937ab547626f5144cf2",keyLocation:"https://frozone1107.github.io/quarterready/f6eab6efd4734937ab547626f5144cf2.txt",urlList:$urls}' > body.json
+          curl -sS -o /dev/null -w "IndexNow HTTP %{http_code}\n" -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' --data @body.json
